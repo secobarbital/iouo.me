@@ -1,5 +1,7 @@
 (function() {
-  var twitterSearchUrl = 'http://search.twitter.com/search.json?include_entities=true&callback=processResults'
+  var geoUrl = 'http://maps.googleapis.com/maps/api/geocode/json?sensor=false'
+    , jsonpadUrl = 'http://jsonpad.herokuapp.com'
+    , twitterSearchUrl = 'http://search.twitter.com/search.json?include_entities=true&callback=processResults'
     , query = parseQuery(document.location.search);
 
   function parseQuery(search) {
@@ -21,6 +23,7 @@
 
       if (m = tweet.text.match(/\b\$?([\d\.]+)\b/)) {
         p = document.createElement('p');
+        p.id = tweet.id;
 
         amount = parseFloat(m[1]).toFixed(2);
 
@@ -29,6 +32,12 @@
         } else {
           p.innerHTML = tweet.from_user_name + ' owed you $' + amount + ' on ' + tweet.created_at;
         }
+
+        if (tweet.geo) {
+          p.setAttribute('data-lat', tweet.geo.coordinates[0]);
+          p.setAttribute('data-lng', tweet.geo.coordinates[1]);
+          addGeo(p);
+        };
 
         document.body.appendChild(p);
       }
@@ -49,6 +58,24 @@
 
     script.src = twitterSearchUrl + '&q=' + encodeURIComponent(q);
     document.body.appendChild(script);
+  }
+
+  function addGeo(p) {
+    var callback = 'addGeo' + p.id
+      , lat = p.getAttribute('data-lat')
+      , lng = p.getAttribute('data-lng')
+      , script = document.createElement('script')
+      , url = geoUrl + '&latlng=' + lat + ',' + lng;
+
+    window[callback] = processGeo.bind(p);
+    script.src = jsonpadUrl + '?url=' + encodeURIComponent(url) + '&callback=' + callback;
+    document.body.appendChild(script);
+  }
+
+  function processGeo(data) {
+    if (data.status === 'OK') {
+      this.innerHTML += ' near ' + data.results[0].formatted_address;
+    }
   }
 
   if (Object.keys(query).length) {
