@@ -23,14 +23,14 @@
 
       if (m = tweet.text.match(/\b\$?([\d\.]+)\b/)) {
         p = document.createElement('p');
-        p.id = tweet.id;
+        p.id = tweet.id_str;
 
         amount = parseFloat(m[1]).toFixed(2);
 
         if (tweet.from_user === query['twitterId']) {
-          p.innerHTML = 'You owed ' + tweet.entities.user_mentions[0].name + ' $' + amount + ' on ' + tweet.created_at;
+          p.innerHTML = 'You owed ' + tweet.entities.user_mentions[0].name + ' $' + amount + ' on <a href="http://api.twitter.com/1/statuses/show/' + tweet.id_str + '.json" rel="nofollow">' + tweet.created_at + '</a>';
         } else {
-          p.innerHTML = tweet.from_user_name + ' owed you $' + amount + ' on ' + tweet.created_at;
+          p.innerHTML = tweet.from_user_name + ' owed you $' + amount + ' on <a href="http://api.twitter.com/1/statuses/show/' + tweet.id_str + '.json" rel="nofollow">' + tweet.created_at + '</a>';
         }
 
         if (tweet.geo) {
