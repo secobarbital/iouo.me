@@ -1,0 +1,20 @@
+{
+  "name": "iouo.me",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node_modules/.bin/coffee app"
+  },
+  "dependencies": {
+    "coffee-script": "1.5.0",
+    "express": "3.1.0",
+    "nano": "3.3.7",
+    "stylus": "0.32.0",
+    "teacup": "0.2.6",
+    "twit": "1.1.3"
+  },
+  "engines": {
+    "node": "0.8.x",
+    "npm": "1.1.x"
+  }
+}
