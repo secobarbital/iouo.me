@@ -1,4 +1,4 @@
-{renderable, doctype, html, head, meta, title, link, script, body, div, ul, li, text} = require 'teacup'
+{renderable, doctype, html, head, meta, title, link, script, body, div, ul, li, a} = require 'teacup'
 
 module.exports = renderable ({txns}) ->
   doctype 5
@@ -15,4 +15,4 @@ module.exports = renderable ({txns}) ->
           txns.forEach (txn) ->
             tweet = txn.doc.raw
             li ->
-              text "@#{tweet.user.screen_name}: #{tweet.text}"
+              a href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", "@#{tweet.user.screen_name}: #{tweet.text}"
