@@ -51,19 +51,12 @@ performSearch = (sinceId, maxId, cb) ->
 
 processTweet = (tweet, cb) ->
   doc =
-    id: "twitter/#{tweet.id_str}"
+    _id: "twitter/#{tweet.id_str}"
     raw: tweet
     ower: tweet.user.id_str
     owee: tweet.in_reply_to_user_id_str
-    amount: extractAmount tweet.text
+    amount: parseFloat m[1] if m = text.match /#iou\s+\$?([.\d]+)/
   if doc.ower && doc.owee && doc.amount
     db.insert doc, cb
   else
     cb()
-
-extractAmount = (text) ->
-  words = text.toLowerCase().split(/\s+/)
-  words = words.slice(words.indexOf('#iou') + 1)
-  for word in words
-    word = word.substr(1) unless word.indexOf('$')
-    return parseFloat(m[0]) if m = word.match /^[.\d]+$/
