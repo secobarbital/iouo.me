@@ -20,6 +20,15 @@ IOU.balances = (cb) ->
   db.view 'iouome', 'balances', group_level: 2, (err, res) ->
     cb err, res && res.rows
 
+IOU.ledger = (ower, owee, cb) ->
+  db.view 'iouome', 'balances',
+    reduce: false
+    startkey: [ower, owee]
+    endkey: [ower, owee, {}]
+    include_docs: true
+   , (err, res) ->
+    cb err, res && res.rows
+
 processTweet = (cb) ->
   (tweet) ->
     doc =
