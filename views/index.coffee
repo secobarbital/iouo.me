@@ -15,8 +15,8 @@ module.exports = renderable ({balances}) ->
           balances.forEach (balance, i) ->
             [ower, owee] = balance.key
             amount = balance.value
-            li 'data-role': 'list-divider', "@#{ower}" unless i && ower == balances[i-1].key[0]
+            li 'data-role': 'list-divider', "@#{ower} owes" unless i && ower == balances[i-1].key[0]
             li ->
               a href: "/transactions/#{ower}/#{owee}", ->
-                text "owes @#{owee}"
+                text "@#{owee}"
                 strong class: 'ui-li-aside', "$#{amount}"
