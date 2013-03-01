@@ -1,4 +1,4 @@
-{renderable, doctype, html, head, meta, title, link, script, body, div, ul, li, text} = require 'teacup'
+{renderable, doctype, html, head, meta, title, link, script, body, div, ul, li, strong, text} = require 'teacup'
 
 module.exports = renderable ({balances}) ->
   doctype 5
@@ -17,4 +17,5 @@ module.exports = renderable ({balances}) ->
             amount = balance.value
             li('data-role': 'list-divider', "@#{ower}") unless i && ower == balances[i-1].key[0]
             li ->
-              text "owes @#{owee} $#{amount}"
+              text "owes @#{owee}"
+              strong class: 'ui-li-aside', "$#{amount}"
