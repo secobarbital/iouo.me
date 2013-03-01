@@ -5,4 +5,5 @@ exports.index = (req, res, next) ->
     console.log "Error searching Twitter for IOUs: #{err}"
   IOU.balances (err, balances) ->
     return next err if err
-    res.render 'index', balances: balances
+    res.render 'index', balances: balances.filter (balance) ->
+      balance.value > 0
