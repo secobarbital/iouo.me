@@ -6,6 +6,7 @@
     "start": "node_modules/.bin/coffee app"
   },
   "dependencies": {
+    "async": "0.2.5",
     "coffee-script": "1.5.0",
     "express": "3.1.0",
     "nano": "3.3.7",
