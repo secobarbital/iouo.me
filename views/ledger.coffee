@@ -10,8 +10,8 @@ module.exports = renderable ({txns}) ->
       script src: '/javascripts/jquery-1.9.1.min.js', ''
       script src: '/javascripts/jquery.mobile-1.3.0.min.js', ''
     body ->
-      div 'data-role': 'content', ->
-        ul 'data-role': 'listview', ->
+      div data: role: 'content', ->
+        ul data: role: 'listview', ->
           txns.forEach (txn) ->
             tweet = txn.doc.raw
             li ->
