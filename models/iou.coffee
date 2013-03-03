@@ -4,9 +4,12 @@ querystring = require 'querystring'
 db = require '../config/db'
 twitter = require '../config/twitter'
 
+twitterSearchSinceId = null
+
 IOU = exports
 
 IOU.searchTwitter = (cb) ->
+  return performSearch twitterSearchSinceId, cb if twitterSearchSinceId
   db.view 'iouome', 'by_raw_id', descending: true, limit: 1, (err, res) ->
     return cb err if err
     performSearch res.rows.length && res.rows[0].key, cb
@@ -47,6 +50,8 @@ performSearch = (sinceId, maxId, cb) ->
         else
           cb()
     ], (err) ->
+      refreshParams = querystring.parse data.search_metadata.refresh_url.slice(1)
+      twitterSearchSinceId = refreshParams.since_id unless twitterSearchSinceId > refreshParams.since_id
       return cb err if err
 
 processTweet = (tweet, cb) ->
