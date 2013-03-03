@@ -11,4 +11,10 @@ exports.index = (req, res, next) ->
 exports.ledger = (req, res, next) ->
   IOU.ledger req.params.ower, req.params.owee, (err, txns) ->
     return next err if err
-    res.render 'ledger', owee: req.params.owee, ower: req.params.ower, txns: txns
+    res.render 'ledger',
+      amount: txns.reduce (m, txn) ->
+        m += txn.value
+      , 0
+      owee: req.params.owee
+      ower: req.params.ower
+      txns: txns
