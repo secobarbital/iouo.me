@@ -1,4 +1,4 @@
-{renderable, div, h1, h4, ul, li, a, text} = require 'teacup'
+{renderable, div, h1, h2, h4, ul, li, a, p, strong, time, text, raw, coffeescript} = require 'teacup'
 
 layout = require './layout'
 
@@ -11,6 +11,12 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
         txns.forEach (txn) ->
           tweet = txn.doc.raw
           li ->
-            a href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", rel: 'external', "@#{tweet.user.screen_name}: #{tweet.text}"
+            a href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", rel: 'external', ->
+              p '.ui-li-aside', ->
+                time datetime: new Date(tweet.created_at).toISOString()
+              text tweet.text
     a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $#{amount}")}", rel: 'external', data: role: 'button', ->
       text "Owe @#{owee} back"
+    coffeescript ->
+      $ ->
+        $('time').timeago()

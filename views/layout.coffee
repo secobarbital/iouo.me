@@ -7,7 +7,8 @@ module.exports = renderable ({content}) ->
       title 'I owe you owe me'
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
       link rel: 'stylesheet', href: '/stylesheets/jquery.mobile-1.3.0.min.css'
-    body ->
-      content()
       script src: '/javascripts/jquery-1.9.1.min.js', ''
       script src: '/javascripts/jquery.mobile-1.3.0.min.js', ''
+      script src: '/javascripts/jquery.timeago.js', ''
+    body ->
+      content()
