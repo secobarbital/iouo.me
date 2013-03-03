@@ -10,7 +10,7 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
       ul data: role: 'listview', ->
         txns.forEach (txn) ->
           tweet = txn.doc.raw
-          li ->
+          li data: 'tweet-embed': tweet.id_str, ->
             a href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", rel: 'external', "@#{tweet.user.screen_name}: #{tweet.text}"
     a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $#{amount}")}", rel: 'external', data: role: 'button', ->
       text "Owe @#{owee} back"

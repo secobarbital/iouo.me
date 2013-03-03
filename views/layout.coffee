@@ -11,3 +11,5 @@ module.exports = renderable ({content}) ->
       content()
       script src: '/javascripts/jquery-1.9.1.min.js', ''
       script src: '/javascripts/jquery.mobile-1.3.0.min.js', ''
+      script src: '//platform.twitter.com/widgets.js', charset: 'utf-8', ''
+      script src: '/javascripts/iouo.js', ''
