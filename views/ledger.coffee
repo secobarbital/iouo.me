@@ -16,7 +16,7 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
                 time datetime: new Date(tweet.created_at).toISOString()
               text tweet.text
     a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $#{amount}")}", rel: 'external', data: role: 'button', ->
-      text "Owe @#{owee} back"
+      text "Owe @#{owee} more"
     coffeescript ->
       $ ->
         $('time').timeago()
