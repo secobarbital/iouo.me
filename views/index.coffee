@@ -5,7 +5,7 @@ layout = require './layout'
 module.exports = renderable ({balances}) -> layout content: ->
   div data: role: 'page', ->
     div data: role: 'header', ->
-      h1 'I owe You'
+      h1 'i owe you owe me'
     div data: role: 'content', ->
       ul '#balances', data: role: 'listview', ->
         balances.forEach (balance, i) ->
@@ -16,5 +16,11 @@ module.exports = renderable ({balances}) -> layout content: ->
             a href: "/transactions/#{ower}/#{owee}", data: transition: 'slide', ->
               text "@#{owee}"
               strong '.ui-li-aside', "$#{amount}"
-    div data: role: 'footer', ->
-      h4 'You owe Me'
+    div data: role: 'footer', position: 'fixed', ->
+      div data: role: 'navbar', ->
+        ul ->
+          li ->
+            a '.ui-btn-active', href: '/owe', data: role: 'button', transition: 'slide', ->
+              h1 "Owe Someone"
+
+
