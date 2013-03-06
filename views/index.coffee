@@ -20,7 +20,7 @@ module.exports = renderable ({balances}) -> layout content: ->
       div data: role: 'navbar', ->
         ul ->
           li ->
-            a '.ui-btn-active', href: '/owe', data: role: 'button', transition: 'slide', ->
+            a '.ui-btn', href: '/owe', data: role: 'button', transition: 'slide', ->
               h1 "Owe Someone"
 
 
