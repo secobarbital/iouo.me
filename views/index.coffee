@@ -1,10 +1,11 @@
-{renderable, div, h1, h4, ul, li, a, strong, text} = require 'teacup'
+{renderable, div, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
 
 layout = require './layout'
 
 module.exports = renderable ({balances}) -> layout content: ->
   div data: role: 'page', ->
     div data: role: 'header', ->
+      img '.logo', src: '/images/iou-logo.png'
       h1 'i owe you owe me'
     div data: role: 'content', ->
       ul '#balances', data: role: 'listview', ->
