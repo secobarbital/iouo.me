@@ -12,7 +12,6 @@ app.configure ->
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'coffee'
   app.engine 'coffee', teacup.renderFile
-  app.use express.favicon()
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
