@@ -15,10 +15,11 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
               p '.ui-li-aside', ->
                 time datetime: new Date(tweet.created_at).toISOString()
               text tweet.text
-    a href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $#{amount}")}", rel: 'external', data: {role: 'button', icon: 'arrow-l', iconpos: 'left', inline: 'true'}, ->
-      text "Owe @#{ower}"
-    a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $#{amount}")}", rel: 'external', data: {role: 'button', icon: 'arrow-r', iconpos: 'right', inline: 'true'}, ->
-      text "Owe @#{owee}"
+    div '.owe-buttons', ->
+      a href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", rel: 'external', data: {role: 'button', icon: 'arrow-l', iconpos: 'left', inline: 'true'}, ->
+        text "Owe @#{ower}"
+      a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", rel: 'external', data: {role: 'button', icon: 'arrow-r', iconpos: 'right', inline: 'true'}, ->
+        text "Owe @#{owee}"
     coffeescript ->
       $ ->
         $('time').timeago()
