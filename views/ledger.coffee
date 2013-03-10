@@ -15,8 +15,12 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
               p '.ui-li-aside', ->
                 time datetime: new Date(tweet.created_at).toISOString()
               text tweet.text
-    div '.owe-buttons', ->
-      a href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", rel: 'external', data: {role: 'button', icon: 'arrow-l', iconpos: 'left', inline: 'true'}, ->
-        text "Owe @#{ower}"
-      a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", rel: 'external', data: {role: 'button', icon: 'arrow-r', iconpos: 'right', inline: 'true'}, ->
-        text "Owe @#{owee}"
+    div data: role: 'footer', ->
+      div data: role: 'navbar', ->
+        ul ->
+          li ->
+            a href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", rel: 'external', data: role: 'button', icon: 'arrow-l', iconpos: 'left', ->
+              text "Owe @#{ower}"
+          li ->
+            a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", rel: 'external', data: role: 'button', icon: 'arrow-r', iconpos: 'right', ->
+              text "Owe @#{owee}"

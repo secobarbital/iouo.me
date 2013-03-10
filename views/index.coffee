@@ -17,16 +17,16 @@ module.exports = renderable ({balances}) -> layout content: ->
             a href: "/transactions/#{ower}/#{owee}", ->
               text "@#{owee}"
               strong '.ui-li-aside', "$#{amount}"
-    div data: role: 'footer', position: 'fixed', ->
+    div data: role: 'footer', ->
       div data: role: 'navbar', ->
         ul ->
           li ->
-            a '.ui-btn', href: '#owe-someone', data: role: 'button', ->
-              h1 "Owe Someone"
+            a href: '#owe-someone', ->
+              h1 'Owe Someone'
 
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->
-      h1 "Owe Someone"
+      h1 'Owe Someone'
     div data: role: 'content', ->
       form ->
         label for: 'owee', 'Twitter @screenname'
