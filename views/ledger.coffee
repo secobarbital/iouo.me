@@ -20,6 +20,3 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
         text "Owe @#{ower}"
       a href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", rel: 'external', data: {role: 'button', icon: 'arrow-r', iconpos: 'right', inline: 'true'}, ->
         text "Owe @#{owee}"
-    coffeescript ->
-      $ ->
-        $('time').timeago()

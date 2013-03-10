@@ -23,5 +23,3 @@ module.exports = renderable ({balances}) -> layout content: ->
           li ->
             a '.ui-btn', href: '/owe', data: role: 'button', transition: 'slide', ->
               h1 "Owe Someone"
-
-

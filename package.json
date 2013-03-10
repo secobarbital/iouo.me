@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "0.2.5",
     "coffee-script": "1.5.0",
+    "connect-coffee-script": "0.1.1",
     "express": "3.1.0",
     "nano": "3.3.7",
     "stylus": "0.32.0",

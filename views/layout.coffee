@@ -11,5 +11,6 @@ module.exports = renderable ({content}) ->
       script src: '/javascripts/jquery-1.9.1.min.js', ''
       script src: '/javascripts/jquery.mobile-1.3.0.min.js', ''
       script src: '/javascripts/jquery.timeago.js', ''
+      script src: '/javascripts/iou.js', ''
     body ->
       content()
