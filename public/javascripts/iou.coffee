@@ -1,2 +1,5 @@
-$(document).on 'pageinit', ->
-  $('time').timeago()
+$(document).on
+  mobileinit: ->
+    $.mobile.defaultPageTransition = 'slide'
+  pageinit: ->
+    $('time').timeago()

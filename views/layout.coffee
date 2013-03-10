@@ -9,8 +9,8 @@ module.exports = renderable ({content}) ->
       link rel: 'stylesheet', href: '/stylesheets/jquery.mobile-1.3.0.min.css'
       link rel: 'stylesheet', href: '/stylesheets/style.css'
       script src: '/javascripts/jquery-1.9.1.min.js', ''
+      script src: '/javascripts/iou.js', ''
       script src: '/javascripts/jquery.mobile-1.3.0.min.js', ''
       script src: '/javascripts/jquery.timeago.js', ''
-      script src: '/javascripts/iou.js', ''
     body ->
       content()
