@@ -1,9 +1,9 @@
-{renderable, div, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
+{renderable, div, form, label, input, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
 
 layout = require './layout'
 
 module.exports = renderable ({balances}) -> layout content: ->
-  div data: role: 'page', ->
+  div '#balances', data: role: 'page', ->
     div data: role: 'header', ->
       img '.logo', src: '/images/iou-logo.png'
       h1 'i owe you owe me'
@@ -21,5 +21,16 @@ module.exports = renderable ({balances}) -> layout content: ->
       div data: role: 'navbar', ->
         ul ->
           li ->
-            a '.ui-btn', href: '/owe', data: role: 'button', ->
+            a '.ui-btn', href: '#owe-someone', data: role: 'button', ->
               h1 "Owe Someone"
+
+  div '#owe-someone', data: role: 'page', ->
+    div data: role: 'header', ->
+      h1 "Owe Someone"
+    div data: role: 'content', ->
+      form ->
+        label for: 'owee', 'Twitter @screenname'
+        input type: 'text', name: 'owee', value: '@'
+        label for: 'amount', 'Amount'
+        input type: 'text', name: 'amount', value: '$'
+        input type: 'submit', value: 'Tweet It'

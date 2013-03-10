@@ -3,7 +3,7 @@
 layout = require './layout'
 
 module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
-  div data: role: 'page', ->
+  div '.ledger', data: role: 'page', ->
     div data: role: 'header', ->
       h1 "@#{ower} owes @#{owee} $#{amount}"
     div data: role: 'content', ->

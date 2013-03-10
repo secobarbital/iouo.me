@@ -25,11 +25,6 @@ app.configure 'development', ->
 
 app.get '/', routes.index
 app.get '/transactions/:ower/:owee', routes.ledger
-app.get '/owe', (req, res, next) ->
-  if req.query.amount && req.query.owee
-    res.redirect "https://twitter.com/intent/tweet?text=#{escape("#{req.query.owee} #iou #{req.query.amount}")}"
-  else
-    res.render 'owe'
 
 http.createServer(app).listen app.get('port'), ->
   console.log "Express server listening on port #{app.get('port')}"
