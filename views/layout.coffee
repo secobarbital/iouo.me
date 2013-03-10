@@ -6,6 +6,8 @@ module.exports = renderable ({content}) ->
     head ->
       title 'i owe you owe me'
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
+      link rel: 'apple-touch-icon', href: '/images/iou-logo.png'
+      link rel: 'apple-touch-icon-precomposed', href: '/images/iou-logo.png'
       link rel: 'stylesheet', href: '/stylesheets/jquery.mobile-1.3.0.min.css'
       link rel: 'stylesheet', href: '/stylesheets/style.css'
       script src: '/javascripts/jquery-1.9.1.min.js', ''
