@@ -6,7 +6,7 @@ module.exports = renderable ({balances}) -> layout content: ->
   div '#balances', data: role: 'page', ->
     div data: role: 'header', ->
       img '.logo', src: '/images/iou-logo.png', alt: 'I owe you owe me'
-      h1 'I owe You'
+      h1 'I owe U'
       a '.ui-btn-right', href: '#owe-someone', data: icon: 'plus', theme: 'b', ->
         text 'Owe someone'
     div data: role: 'content', ->
@@ -20,7 +20,7 @@ module.exports = renderable ({balances}) -> layout content: ->
               text "@#{owee}"
               strong '.ui-li-aside', "$#{amount}"
     div data: role: 'footer', ->
-      h4 'You owe Me'
+      h4 'U owe Me'
 
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->
