@@ -5,8 +5,10 @@ layout = require './layout'
 module.exports = renderable ({balances}) -> layout content: ->
   div '#balances', data: role: 'page', ->
     div data: role: 'header', ->
-      img '.logo', src: '/images/iou-logo.png'
-      h1 'i owe you owe me'
+      img '.logo', src: '/images/iou-logo.png', alt: 'I owe you owe me'
+      h1 'I owe You'
+      a '.ui-btn-right', href: '#owe-someone', data: icon: 'plus', theme: 'b', ->
+        text 'Owe someone'
     div data: role: 'content', ->
       ul '#balances', data: role: 'listview', ->
         balances.forEach (balance, i) ->
@@ -18,11 +20,7 @@ module.exports = renderable ({balances}) -> layout content: ->
               text "@#{owee}"
               strong '.ui-li-aside', "$#{amount}"
     div data: role: 'footer', ->
-      div data: role: 'navbar', ->
-        ul ->
-          li ->
-            a href: '#owe-someone', ->
-              h1 'Owe Someone'
+      h4 'You owe Me'
 
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->
