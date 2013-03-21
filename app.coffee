@@ -15,10 +15,11 @@ app.configure ->
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
+  app.use express.compress()
   app.use app.router
   app.use require('stylus').middleware src: "#{__dirname}/public"
   app.use require('connect-coffee-script') src: "#{__dirname}/public"
-  app.use express.static path.join __dirname, 'public'
+  app.use express.static path.join __dirname, 'public', maxAge: 3600000
 
 app.configure 'development', ->
   app.use express.errorHandler()
