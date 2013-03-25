@@ -26,7 +26,7 @@ module.exports = renderable ({balances}) -> layout content: ->
       h1 'Owe Someone'
     div data: role: 'content', ->
       form ->
-        label for: 'owee', 'Twitter @screenname'
+        label for: 'owee', 'Twitter screen name'
         input type: 'text', name: 'owee', value: '@'
         label for: 'amount', 'Amount'
         input type: 'text', name: 'amount', value: '$'
