@@ -2,8 +2,9 @@
   var tweet;
 
   tweet = function(href) {
-    var params;
-    if (~navigator.userAgent.indexOf(' Mobile') && ~navigator.userAgent.indexOf(' AppleWebKit')) {
+    var params, ua;
+    ua = navigator.userAgent;
+    if (~ua.indexOf(' Mobile') && ~ua.indexOf(' AppleWebKit') && (~ua.indexOf(' Chrome') || !~ua.indexOf(' Android'))) {
       params = href.split('?', 2)[1].split('&').reduce(function(m, kv) {
         var k, v, _ref;
         _ref = kv.split('='), k = _ref[0], v = _ref[1];

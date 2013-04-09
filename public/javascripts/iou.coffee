@@ -1,5 +1,6 @@
 tweet = (href) ->
-  if ~navigator.userAgent.indexOf(' Mobile') && ~navigator.userAgent.indexOf(' AppleWebKit')
+  ua = navigator.userAgent
+  if ~ua.indexOf(' Mobile') && ~ua.indexOf(' AppleWebKit') && (~ua.indexOf(' Chrome') || !~ua.indexOf(' Android'))
     params = href.split('?', 2)[1].split('&').reduce (m, kv) ->
       [k, v] = kv.split('=')
       m[k] = v
