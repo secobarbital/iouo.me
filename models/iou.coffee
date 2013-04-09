@@ -20,9 +20,10 @@ IOU.balances = (cb) ->
 
 IOU.ledger = (ower, owee, cb) ->
   db.view 'iouome', 'balances',
+    descending: true
     reduce: false
-    startkey: [ower, owee]
-    endkey: [ower, owee, {}]
+    startkey: [ower, owee, {}]
+    endkey: [ower, owee]
     include_docs: true
    , (err, res) ->
     cb err, res && res.rows
