@@ -1,9 +1,17 @@
-$.cachedScript = (url, options) ->
-  options = $.extend options || {},
-    dataType: 'script'
-    cache: true
-    url: url
-  $.ajax options
+tweet = (href) ->
+  if ~navigator.userAgent.indexOf(' Mobile') && ~navigator.userAgent.indexOf(' AppleWebKit')
+    params = href.split('?', 2)[1].split('&').reduce (m, kv) ->
+      [k, v] = kv.split('=')
+      m[k] = v
+      m
+    , {}
+    setTimeout ->
+      if document.webkitHidden
+        window.location.reload()
+      else
+        window.location = href
+    , 300
+    window.location = "twitter://post?message=#{params.text}"
 
 $(document).on 'mobileinit', ->
   $.mobile.defaultPageTransition = 'slide'
@@ -17,7 +25,6 @@ $(document).on 'mobileinit', ->
     owee = $('[name=owee]', e.target).val()
     amount = $('[name=amount]', e.target).val()
     if owee && amount
-      window.location = "https://twitter.com/intent/tweet?text=#{escape("#{owee} #iou #{amount}")}"
-
-$ ->
-  $.cachedScript '//platform.twitter.com/widgets.js'
+      tweet "https://twitter.com/intent/tweet?text=#{escape("#{owee} #iou #{amount}")}"
+.on 'click', 'a[href*="twitter.com/intent/tweet"]', (e) ->
+  e.preventDefault() if tweet e.currentTarget.href

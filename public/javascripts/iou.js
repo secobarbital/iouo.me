@@ -1,12 +1,24 @@
 (function() {
+  var tweet;
 
-  $.cachedScript = function(url, options) {
-    options = $.extend(options || {}, {
-      dataType: 'script',
-      cache: true,
-      url: url
-    });
-    return $.ajax(options);
+  tweet = function(href) {
+    var params;
+    if (~navigator.userAgent.indexOf(' Mobile') && ~navigator.userAgent.indexOf(' AppleWebKit')) {
+      params = href.split('?', 2)[1].split('&').reduce(function(m, kv) {
+        var k, v, _ref;
+        _ref = kv.split('='), k = _ref[0], v = _ref[1];
+        m[k] = v;
+        return m;
+      }, {});
+      setTimeout(function() {
+        if (document.webkitHidden) {
+          return window.location.reload();
+        } else {
+          return window.location = href;
+        }
+      }, 300);
+      return window.location = "twitter://post?message=" + params.text;
+    }
   };
 
   $(document).on('mobileinit', function() {
@@ -23,13 +35,13 @@
       owee = $('[name=owee]', e.target).val();
       amount = $('[name=amount]', e.target).val();
       if (owee && amount) {
-        return window.location = "https://twitter.com/intent/tweet?text=" + (escape("" + owee + " #iou " + amount));
+        return tweet("https://twitter.com/intent/tweet?text=" + (escape("" + owee + " #iou " + amount)));
       }
     });
-  });
-
-  $(function() {
-    return $.cachedScript('//platform.twitter.com/widgets.js');
+  }).on('click', 'a[href*="twitter.com/intent/tweet"]', function(e) {
+    if (tweet(e.currentTarget.href)) {
+      return e.preventDefault();
+    }
   });
 
 }).call(this);
