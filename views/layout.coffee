@@ -10,6 +10,8 @@ module.exports = renderable ({content}) ->
       style '''
         img.logo {
           float: left;
+          height: 38px;
+          width: 38px;
         }
       '''
       script src: 'http://code.jquery.com/jquery-1.9.1.min.js', ''
