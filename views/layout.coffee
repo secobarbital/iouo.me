@@ -6,21 +6,31 @@ module.exports = renderable ({content}) ->
     head ->
       title 'I owe U'
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
-      link rel: 'stylesheet', href: 'http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.css'
-      style '''
-        img.logo {
+      style type: 'text/css', '''
+        .logotype {
           float: left;
-          height: 38px;
-          width: 38px;
+          font-family: Arial;
+          display: inline-block;
+          margin-left: 8px;
+          text-align: center;
+          text-shadow: none;
+        }
+        .logotype-o {
+          font-size: 18px;
+        }
+        .logotype-u {
+          font-size: 23px;
+          margin-top: -8px;
         }
       '''
+      link rel: 'stylesheet', href: 'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css'
       script src: 'http://code.jquery.com/jquery-1.9.1.min.js', ''
       script '''
         $(document).on('mobileinit', function() {
           $.mobile.defaultPageTransition = 'slide';
         });
       '''
-      script src: 'http://code.jquery.com/mobile/1.3.0/jquery.mobile-1.3.0.min.js', ''
+      script src: 'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js', ''
     body ->
       content()
       script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''

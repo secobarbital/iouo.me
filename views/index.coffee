@@ -5,7 +5,9 @@ layout = require './layout'
 module.exports = renderable ({balances}) -> layout content: ->
   div '#balances', data: role: 'page', ->
     div data: role: 'header', ->
-      img '.logo', src: '/images/iou-logo.png', alt: 'I owe you owe me'
+      div '.logotype', ->
+        div '.logotype-o', 'O'
+        div '.logotype-u', 'U'
       h1 'I owe U'
       a '.ui-btn-right', href: '#owe-someone', data: icon: 'plus', theme: 'b', ->
         text 'Owe someone'
