@@ -15,8 +15,18 @@ IOU.searchTwitter = (cb) ->
     performSearch res.rows.length && res.rows[0].key, cb
 
 IOU.balances = (cb) ->
-  db.view 'iouome', 'balances', group_level: 2, (err, res) ->
-    cb err, res && res.rows
+  db.view 'iouome', 'balances', group_level: 1, (err, res) ->
+    cb err, res && res.rows.sort (a, b) ->
+      b.value - a.value
+
+IOU.balancesFor = (ower, cb) ->
+  db.view 'iouome', 'balances',
+    group_level: 2
+    startkey: [ower]
+    endkey: [ower, {}]
+  , (err, res) ->
+    cb err, res && res.rows.sort (a, b) ->
+      b.value - a.value
 
 IOU.ledger = (ower, owee, cb) ->
   db.view 'iouome', 'balances',
