@@ -3,7 +3,11 @@ http = require 'http'
 path = require 'path'
 teacup = require 'teacup/lib/express'
 
+db = require './config/db'
+ddocs = require './ddocs'
 routes = require './routes'
+
+ddocs.update()
 
 app = express()
 
