@@ -20,7 +20,8 @@ module.exports = {
             emit([owee, ower], -amount);
           }
         }
-      }
+      },
+      reduce: '_sum'
     }
   }
 }
