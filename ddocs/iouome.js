@@ -1,5 +1,5 @@
 module.exports = {
-  _id: '_design/newddoc',
+  _id: '_design/iouome',
   views: {
     by_raw_id: {
       map: function(doc) {
