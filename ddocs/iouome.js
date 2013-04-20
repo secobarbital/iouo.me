@@ -10,10 +10,10 @@ module.exports = {
       map: function(doc) {
         var ower, owee, amount;
 
-        if (doc.raw && ~doc.raw.text.indexOf('#iou')) {
+        if (doc.raw && doc.ower && doc.owee && doc.amount) {
           ower = doc.raw.user.screen_name;
-          owee = doc.raw.text.match(/@(\w+)/)[1];
-          amount = doc.raw.text.match(/#iou\s+\$?([.\d]+)/i)[1];
+          owee = doc.raw.in_reply_to_screen_name;
+          amount = doc.amount;
           if (ower && owee && amount) {
             amount = parseFloat(amount);
             emit([ower, owee], amount);
