@@ -71,7 +71,7 @@ processTweet = (tweet, cb) ->
     raw: tweet
     ower: tweet.user.id_str
     owee: tweet.in_reply_to_user_id_str
-    amount: parseFloat m[1] if m = tweet.text.match /#iou\s+\$?([.\d]+)/i
+    amount: parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
   if doc.ower && doc.owee && doc.amount
     db.insert doc, cb
   else
