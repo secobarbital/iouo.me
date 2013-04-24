@@ -18,6 +18,7 @@ exports.balances = (req, res, next) ->
       balances: balances.filter (balance) -> balance.value
       ower: req.params.ower
       total: total
+      xhr: req.xhr
 
 exports.transactions = (req, res, next) ->
   IOU.ledger req.params.ower, req.params.owee, (err, txns) ->
@@ -29,6 +30,8 @@ exports.transactions = (req, res, next) ->
       owee: req.params.owee
       ower: req.params.ower
       txns: txns
+      xhr: req.xhr
 
 exports.owe = (req, res, next) ->
-  res.render 'owe'
+  res.render 'owe',
+    xhr: req.xhr

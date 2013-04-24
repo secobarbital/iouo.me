@@ -1,13 +1,13 @@
-{renderable, div, h1, h2, h4, ul, li, a, p, strong, time, text, raw, coffeescript} = require 'teacup'
+{renderable, div, h1, ul, li, a, p, strong, time, text} = require 'teacup'
 
 layout = require './layout'
 
-module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
+module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr, content: ->
   div '.ledger', data: role: 'page', ->
     div data: role: 'header', ->
       a href: "/balances/#{ower}", data: icon: 'arrow-l', ->
         text "@#{ower}"
-      h1 "@#{ower} owes @#{owee} $#{amount.toFixed(2)}"
+      h1 "@#{ower} owes @#{owee} $#{amount.toFixed 2}"
     div data: role: 'content', ->
       ul data: role: 'listview', ->
         txns.forEach (txn) ->
