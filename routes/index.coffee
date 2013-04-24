@@ -29,3 +29,6 @@ exports.transactions = (req, res, next) ->
       owee: req.params.owee
       ower: req.params.ower
       txns: txns
+
+exports.owe = (req, res, next) ->
+  res.render 'owe'

@@ -66,7 +66,7 @@ module.exports = renderable ({content}) ->
             owee = $('[name=owee]', e.target).val();
             amount = $('[name=amount]', e.target).val();
             if (owee && amount) {
-              tweet('https://twitter.com/intent/tweet?text=' + escape(owee + ' #iou ' + amount));
+              tweet('https://twitter.com/intent/tweet?text=' + escape('@' + owee + ' #iou $' + amount));
             }
           });
         }).on('click', 'a[href*="twitter.com/intent/tweet"]', function(e) {

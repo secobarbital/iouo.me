@@ -27,6 +27,7 @@ app.configure 'development', ->
   app.use express.errorHandler()
 
 app.get '/', routes.index
+app.get '/owe', routes.owe
 app.get '/balances/:ower', routes.balances
 app.get '/transactions/:ower/:owee', routes.transactions
 
