@@ -2,31 +2,26 @@
 
 layout = require './layout'
 
-module.exports = renderable ({balances, head, foot}) -> layout content: ->
-  div '#balances', data: role: 'page', ->
+module.exports = renderable ({balances}) -> layout content: ->
+  div data: role: 'page', ->
     div data: role: 'header', ->
       div '.logotype', ->
         div '.logotype-o', 'O'
         div '.logotype-u', 'U'
-      h1 head || 'I owe U'
+      h1 'I owe U'
       a '.ui-btn-right', href: '#owe-someone', data: icon: 'plus', theme: 'b', ->
         text 'Owe someone'
     div data: role: 'content', ->
-      ul '#balances', data: role: 'listview', ->
+      ul data: role: 'listview', ->
         balances.forEach (balance) ->
+          [ower] = balance.key
+          amount = balance.value.toFixed 2
           li ->
-            [ower, owee] = balance.key
-            amount = balance.value.toFixed 2
-            if owee?
-              a href: "/transactions/#{ower}/#{owee}", data: prefetch: true, ->
-                text "@#{owee}"
-                strong '.ui-li-aside', "$#{amount}"
-            else
-              a href: "/balances/#{ower}", data: prefetch: true, ->
-                text "@#{ower}"
-                strong '.ui-li-aside', "$#{amount}"
+            a href: "/balances/#{ower}", data: prefetch: true, ->
+              text "@#{ower}"
+              strong '.ui-li-aside', "$#{amount}"
     div data: role: 'footer', ->
-      h4 foot || 'U owe Me'
+      h4 'U owe Me'
 
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->

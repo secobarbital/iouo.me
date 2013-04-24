@@ -5,6 +5,8 @@ layout = require './layout'
 module.exports = renderable ({amount, owee, ower, txns}) -> layout content: ->
   div '.ledger', data: role: 'page', ->
     div data: role: 'header', ->
+      a href: "/balances/#{ower}", data: icon: 'arrow-l', ->
+        text "@#{ower}"
       h1 "@#{ower} owes @#{owee} $#{amount.toFixed(2)}"
     div data: role: 'content', ->
       ul data: role: 'listview', ->
