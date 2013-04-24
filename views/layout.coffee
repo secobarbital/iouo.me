@@ -4,6 +4,12 @@ module.exports = renderable ({content, xhr}) ->
   doctype 5
   html ->
     if xhr
+      head ->
+        script '''
+          if (!window.jQuery) {
+            window.location.reload();
+          }
+        '''
       body ->
         content()
     else
