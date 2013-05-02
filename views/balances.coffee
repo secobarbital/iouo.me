@@ -5,7 +5,7 @@ layout = require './layout'
 module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, content: ->
   div '.balances', role: 'page', ->
     div data: role: 'header', ->
-      a href: '/', data: icon: 'arrow-l', ->
+      a href: '/', data: icon: 'arrow-l', rel: 'back', ->
         text 'I owe U'
       h1 "@#{ower} owes $#{total.toFixed 2}"
     div data: role: 'content', ->

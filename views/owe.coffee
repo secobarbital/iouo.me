@@ -5,7 +5,7 @@ layout = require './layout'
 module.exports = renderable -> layout content: ->
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->
-      a href: '/', data: icon: 'delete', ->
+      a href: '/', data: icon: 'delete', rel: 'back', ->
         text 'Cancel'
       h1 'Owe Someone'
     div data: role: 'content', ->
