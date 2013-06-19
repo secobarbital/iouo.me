@@ -34,7 +34,7 @@ module.exports = renderable ({content, xhr}) ->
           }
         '''
         link rel: 'stylesheet', href: 'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css'
-        script src: 'http://code.jquery.com/jquery-2.0.0.min.js', ''
+        script src: 'http://code.jquery.com/jquery-2.0.2.min.js', ''
         script '''
           $(document).on('mobileinit', function() {
             $.mobile.defaultPageTransition = 'slide';
