@@ -49,12 +49,10 @@ module.exports = renderable ({content, xhr}) ->
             $('time', e.target).timeago();
           }).on('pageinit', '#owe-someone', function(e) {
             $('form', e.target).on('submit', function(e) {
-              e.preventDefault();
-              e.stopPropagation();
-              owee = $('[name=owee]', e.target).val();
-              amount = $('[name=amount]', e.target).val();
+              var owee = $('#owee', e.target).val();
+              var amount = $('#amount', e.target).val();
               if (owee && amount) {
-                location = 'https://twitter.com/intent/tweet?text=' + escape('@' + owee + ' #iou $' + amount);
+                $('[name=text]').val('@' + owee + ' #iou $' + amount);
               }
             });
           });

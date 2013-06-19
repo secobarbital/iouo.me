@@ -9,9 +9,10 @@ module.exports = renderable -> layout content: ->
         text 'Cancel'
       h1 'Owe Someone'
     div data: role: 'content', ->
-      form ->
+      form action: 'https://twitter.com/intent/tweet', ->
+        input name: 'text', type: 'hidden'
         label for: 'owee', 'Twitter screen name:'
-        input type: 'text', name: 'owee'
+        input '#owee', type: 'text'
         label for: 'amount', 'Amount'
-        input type: 'number', name: 'amount'
+        input '#amount', type: 'number'
         input type: 'submit', value: 'Tweet It'
