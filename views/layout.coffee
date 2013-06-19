@@ -45,27 +45,6 @@ module.exports = renderable ({content, xhr}) ->
         content()
         script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''
         script '''
-          function tweet(href) {
-            var params, ua = navigator.userAgent;
-            if (~ua.indexOf(' Mobile') && ~ua.indexOf(' AppleWebKit') && (~ua.indexOf(' Chrome') || !~ua.indexOf(' Android'))) {
-              params = href.split('?', 2)[1].split('&').reduce(function(m, kv) {
-                var pair = kv.split('=');
-                m[pair[0]] = pair[1];
-                return m;
-              }, {});
-              setTimeout(function() {
-                if (document.webkitHidden) {
-                  window.location.reload();
-                } else {
-                  window.location = href;
-                }
-              }, 300);
-              window.location = 'twitter://post?message=' + params.text;
-              return true;
-            } else {
-              return false;
-            }
-          }
           $(document).on('pageinit', '.ledger', function(e) {
             $('time', e.target).timeago();
           }).on('pageinit', '#owe-someone', function(e) {
@@ -75,12 +54,8 @@ module.exports = renderable ({content, xhr}) ->
               owee = $('[name=owee]', e.target).val();
               amount = $('[name=amount]', e.target).val();
               if (owee && amount) {
-                tweet('https://twitter.com/intent/tweet?text=' + escape('@' + owee + ' #iou $' + amount));
+                location = 'https://twitter.com/intent/tweet?text=' + escape('@' + owee + ' #iou $' + amount);
               }
             });
-          }).on('click', 'a[href*="twitter.com/intent/tweet"]', function(e) {
-            if (tweet(e.currentTarget.href)) {
-              e.preventDefault();
-            }
           });
         '''
