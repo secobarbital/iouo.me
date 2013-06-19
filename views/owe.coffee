@@ -2,7 +2,7 @@
 
 layout = require './layout'
 
-module.exports = renderable -> layout content: ->
+module.exports = renderable ({xhr}) -> layout xhr: xhr, content: ->
   div '#owe-someone', data: role: 'page', ->
     div data: role: 'header', ->
       a href: '/', data: icon: 'delete', rel: 'back', ->
