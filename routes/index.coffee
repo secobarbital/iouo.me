@@ -1,8 +1,12 @@
 IOU = require '../models/iou'
 
+exports.refresh = (req, res, next) ->
+  unless req.xhr
+    IOU.searchTwitter (err) ->
+      console.log "Error searching Twitter for IOUs: #{err}" if err
+  next()
+
 exports.index = (req, res, next) ->
-  IOU.searchTwitter (err) ->
-    console.log "Error searching Twitter for IOUs: #{err}" if err
   IOU.balances (err, balances) ->
     return next err if err
     res.render 'index',
