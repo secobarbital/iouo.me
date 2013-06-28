@@ -1,4 +1,5 @@
 express = require 'express'
+favicons = require 'connect-favicons'
 http = require 'http'
 path = require 'path'
 teacup = require 'teacup/lib/express'
@@ -16,12 +17,12 @@ app.configure ->
   app.set 'views', __dirname + '/views'
   app.set 'view engine', 'coffee'
   app.engine 'coffee', teacup.renderFile
+  app.use favicons()
   app.use express.logger 'dev'
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.compress()
   app.use app.router
-  app.use express.static path.join(__dirname, 'public'), maxAge: 86400000
 
 app.configure 'development', ->
   app.use express.errorHandler()
