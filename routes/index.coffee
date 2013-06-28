@@ -1,10 +1,18 @@
+url = require 'url'
+
 IOU = require '../models/iou'
 
 exports.refresh = (req, res, next) ->
-  unless req.xhr
+  return next() if req.xhr
+
+  if tweetId = parseTweetIdFromReferer req.get 'referer'
+    IOU.fetchTweet tweetId, (err) ->
+      console.log "Error fetching tweet #{tweetId}: #{err}" if err
+      next()
+  else
     IOU.searchTwitter (err) ->
       console.log "Error searching Twitter for IOUs: #{err}" if err
-  next()
+    next()
 
 exports.index = (req, res, next) ->
   IOU.balances (err, balances) ->
@@ -39,3 +47,7 @@ exports.transactions = (req, res, next) ->
 exports.owe = (req, res, next) ->
   res.render 'owe',
     xhr: req.xhr
+
+parseTweetIdFromReferer = (referer) ->
+  if referer && !referer.indexOf 'https://twitter.com/intent/tweet/complete?'
+    url.parse(referer, true).query.latest_status_id

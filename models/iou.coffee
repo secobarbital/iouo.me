@@ -14,6 +14,11 @@ IOU.searchTwitter = (cb) ->
     return cb err if err
     performSearch res.rows.length && res.rows[0].key, cb
 
+IOU.fetchTweet = (id, cb) ->
+  twitter.get "statuses/show/#{id}", (err, tweet) ->
+    return cb err if err
+    processTweet tweet, cb
+
 IOU.balances = (cb) ->
   db.view 'iouome', 'balances', group_level: 1, (err, res) ->
     cb err, res && res.rows.sort (a, b) ->
