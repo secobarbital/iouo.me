@@ -2,7 +2,7 @@
 
 module.exports = renderable ({content, xhr}) ->
   doctype 5
-  html manifest: 'index.appcache', ->
+  html manifest: '/index.appcache', ->
     if xhr
       head ->
         script '''
@@ -66,8 +66,8 @@ module.exports = renderable ({content, xhr}) ->
           }).on('cached error noupdate obsolete', function() {
             $.mobile.loading('hide');
           }).on('noupdate', function() {
-            $('time.freshness').attr('datetime', new Date().toISOString()).timeago();
+            $('time.freshness').html('&#8203;').removeData('timeago').attr('datetime', new Date().toISOString());
           }).on('error obsolete', function() {
-            $('.freshness').show();
+            $('time.freshness').timeago();
           });
         '''

@@ -8,9 +8,8 @@ module.exports = renderable ({balances}) -> layout content: ->
       div '.logotype', ->
         div '.logotype-o', 'O'
         div '.logotype-u', 'U'
-      time '.freshness', style: 'display: none', datetime: new Date().toISOString(), ->
-      div '.ui-title', ->
-        raw '&nbsp;'
+      time '.ui-title.freshness', datetime: new Date().toISOString(), ->
+        raw '&#8203;'
       a '.ui-btn-right.refresh', href: '/', data: icon: 'refresh', theme: 'b', ->
         text 'Refresh'
     div data: role: 'content', ->
