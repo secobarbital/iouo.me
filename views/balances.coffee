@@ -6,8 +6,8 @@ refreshButton = require './refresh_button'
 module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, content: ->
   div '.balances', role: 'page', ->
     div data: role: 'header', ->
-      a href: '/', data: icon: 'arrow-l', rel: 'back', ->
-        text 'I owe U'
+      a href: '/', data: icon: 'arrow-l', direction: 'reverse', ->
+        text 'Balances'
       h1 "@#{ower} owes $#{total.toFixed 2}"
       refreshButton()
     div data: role: 'content', ->

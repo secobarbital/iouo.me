@@ -6,7 +6,7 @@ refreshButton = require './refresh_button'
 module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr, content: ->
   div '.ledger', data: role: 'page', ->
     div data: role: 'header', ->
-      a href: "/balances/#{ower}", data: icon: 'arrow-l', rel: 'back', ->
+      a href: "/balances/#{ower}", data: icon: 'arrow-l', direction: 'reverse', ->
         text "@#{ower}"
       h1 "@#{ower} owes @#{owee} $#{amount.toFixed 2}"
       refreshButton()
