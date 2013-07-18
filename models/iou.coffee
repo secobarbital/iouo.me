@@ -74,7 +74,7 @@ processTweet = (tweet, cb) ->
   doc =
     _id: "twitter/#{tweet.id_str}"
     raw: tweet
-    ower: tweet.user.id_str
+    ower: tweet.user && tweet.user.id_str
     owee: tweet.in_reply_to_user_id_str
     amount: parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
   if doc.ower && doc.owee && doc.amount
