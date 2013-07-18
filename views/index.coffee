@@ -1,6 +1,7 @@
-{renderable, div, ul, li, a, img, raw, small, strong, text, time} = require 'teacup'
+{renderable, div, ul, li, a, img, h1, small, strong, text} = require 'teacup'
 
 layout = require './layout'
+refreshButton = require './refresh_button'
 
 module.exports = renderable ({balances}) -> layout content: ->
   div '.home', data: role: 'page', ->
@@ -8,10 +9,8 @@ module.exports = renderable ({balances}) -> layout content: ->
       div '.logotype', ->
         div '.logotype-o', 'O'
         div '.logotype-u', 'U'
-      time '.ui-title.freshness', datetime: new Date().toISOString(), ->
-        raw '&#8203;'
-      a '.ui-btn-right.refresh', href: '/', data: icon: 'refresh', theme: 'b', ->
-        text 'Refresh'
+      h1 'Balances'
+      refreshButton()
     div data: role: 'content', ->
       ul data: role: 'listview', ->
         balances.forEach (balance) ->

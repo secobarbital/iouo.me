@@ -6,7 +6,7 @@ module.exports = renderable ({content, xhr}) ->
     if xhr
       head ->
         script '''
-          if (!jQuery) {
+          if (!window.jQuery) {
             location.reload();
           }
         '''
@@ -55,8 +55,9 @@ module.exports = renderable ({content, xhr}) ->
                 $('[name=text]').val('@' + owee + ' #iou $' + amount);
               }
             });
-          }).on('click', '.refresh', function() {
-            applicationCache ? applicationCache.update() : location.reload();
+          }).on('click', '.refresh', function(e) {
+            e.preventDefault();
+            window.applicationCache ? applicationCache.update() : location.reload();
           });
           $(applicationCache).on('checking', function() {
             $.mobile.loading('show');
@@ -66,8 +67,6 @@ module.exports = renderable ({content, xhr}) ->
           }).on('cached error noupdate obsolete', function() {
             $.mobile.loading('hide');
           }).on('noupdate', function() {
-            $('time.freshness').html('&#8203;').removeData('timeago').attr('datetime', new Date().toISOString());
-          }).on('error obsolete', function() {
-            $('time.freshness').timeago();
+            $('time.freshness').removeData('timeago').attr('datetime', new Date().toISOString()).timeago();
           });
         '''

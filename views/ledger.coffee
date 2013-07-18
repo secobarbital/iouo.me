@@ -1,6 +1,7 @@
 {renderable, div, h1, ul, li, a, p, strong, time, text} = require 'teacup'
 
 layout = require './layout'
+refreshButton = require './refresh_button'
 
 module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr, content: ->
   div '.ledger', data: role: 'page', ->
@@ -8,6 +9,7 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
       a href: "/balances/#{ower}", data: icon: 'arrow-l', rel: 'back', ->
         text "@#{ower}"
       h1 "@#{ower} owes @#{owee} $#{amount.toFixed 2}"
+      refreshButton()
     div data: role: 'content', ->
       ul data: role: 'listview', ->
         txns.forEach (txn) ->
