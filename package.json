@@ -8,6 +8,7 @@
   "dependencies": {
     "async": "0.2.9",
     "coffee-script": "1.6.3",
+    "connect-favicons": "0.0.4",
     "express": "3.2.6",
     "nano": "3.4.0",
     "teacup": "0.2.8",
