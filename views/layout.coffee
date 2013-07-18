@@ -33,14 +33,14 @@ module.exports = renderable ({content, xhr}) ->
             margin-top: -8px;
           }
         '''
-        link rel: 'stylesheet', href: 'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.css'
-        script src: 'http://code.jquery.com/jquery-2.0.2.min.js', ''
+        link rel: 'stylesheet', href: '//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.3.1/jquery.mobile.min.css'
+        script src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js', ''
         script '''
           $(document).on('mobileinit', function() {
             $.mobile.defaultPageTransition = 'slide';
           });
         '''
-        script src: 'http://code.jquery.com/mobile/1.3.1/jquery.mobile-1.3.1.min.js', ''
+        script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.3.1/jquery.mobile.min.js', ''
       body ->
         content()
         script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''
