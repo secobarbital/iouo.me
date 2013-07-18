@@ -1,6 +1,12 @@
 url = require 'url'
 
 IOU = require '../models/iou'
+manifestTemplate = require('../views/manifest').template
+
+exports.manifest = (req, res, next) ->
+  IOU.latest (err, version) ->
+    return next err if err
+    res.send manifestTemplate.replace '$version', version
 
 exports.refresh = (req, res, next) ->
   return next() if req.xhr

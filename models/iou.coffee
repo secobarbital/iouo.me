@@ -8,11 +8,16 @@ twitterSearchSinceId = null
 
 IOU = exports
 
-IOU.searchTwitter = (cb) ->
-  return performSearch twitterSearchSinceId, cb if twitterSearchSinceId
+IOU.latest = (cb) ->
   db.view 'iouome', 'by_raw_id', descending: true, limit: 1, (err, res) ->
     return cb err if err
-    performSearch res.rows.length && res.rows[0].key, cb
+    cb null, res.rows.length && res.rows[0].key
+
+IOU.searchTwitter = (cb) ->
+  return performSearch twitterSearchSinceId, cb if twitterSearchSinceId
+  IOU.latest (err, sinceId) ->
+    return cb err if err
+    performSearch sinceId, cb
 
 IOU.fetchTweet = (id, cb) ->
   twitter.get "statuses/show/#{id}", (err, tweet) ->

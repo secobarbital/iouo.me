@@ -2,7 +2,7 @@
 
 module.exports = renderable ({content, xhr}) ->
   doctype 5
-  html ->
+  html manifest: 'index.appcache', ->
     if xhr
       head ->
         script '''
