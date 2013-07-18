@@ -6,8 +6,8 @@ module.exports = renderable ({content, xhr}) ->
     if xhr
       head ->
         script '''
-          if (!window.jQuery) {
-            window.location.reload();
+          if (!jQuery) {
+            location.reload();
           }
         '''
       body ->
@@ -45,7 +45,7 @@ module.exports = renderable ({content, xhr}) ->
         content()
         script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''
         script '''
-          $(document).on('pageinit', '.ledger', function(e) {
+          $(document).on('pageinit', function(e) {
             $('time', e.target).timeago();
           }).on('pageinit', '#owe-someone', function(e) {
             $('form', e.target).on('submit', function(e) {
@@ -55,5 +55,19 @@ module.exports = renderable ({content, xhr}) ->
                 $('[name=text]').val('@' + owee + ' #iou $' + amount);
               }
             });
+          }).on('click', '.refresh', function() {
+            applicationCache ? applicationCache.update() : location.reload();
+          });
+          $(applicationCache).on('checking', function() {
+            $.mobile.loading('show');
+          }).on('updateready', function() {
+            applicationCache.swapCache();
+            location.reload();
+          }).on('cached error noupdate obsolete', function() {
+            $.mobile.loading('hide');
+          }).on('noupdate', function() {
+            $('time.freshness').attr('datetime', new Date().toISOString()).timeago();
+          }).on('error obsolete', function() {
+            $('.freshness').show();
           });
         '''
