@@ -67,6 +67,6 @@ module.exports = renderable ({content, xhr}) ->
           }).on('cached error noupdate obsolete', function() {
             $.mobile.loading('hide');
           }).on('noupdate', function() {
-            $('time.freshness').removeData('timeago').attr('datetime', new Date().toISOString()).timeago();
+            $('time.freshness').timeago('update', new Date().toISOString());
           });
         '''
