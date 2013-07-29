@@ -1,4 +1,4 @@
-{renderable, div, form, label, input, h1, a, text} = require 'teacup'
+{renderable, div, form, label, input, h1, a, text, script} = require 'teacup'
 
 layout = require './layout'
 
@@ -16,3 +16,13 @@ module.exports = renderable ({xhr}) -> layout xhr: xhr, content: ->
         label for: 'amount', 'Amount'
         input '#amount', type: 'number'
         input type: 'submit', value: 'Tweet It'
+
+  script '''
+    $('form').on('submit', function(e) {
+      var owee = $('#owee', e.target).val();
+      var amount = $('#amount', e.target).val();
+      if (owee && amount) {
+        $('[name=text]').val('@' + owee + ' #iou $' + amount);
+      }
+    });
+  '''
