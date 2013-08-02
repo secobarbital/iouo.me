@@ -1,28 +1,30 @@
-{renderable, div, ul, li, a, img, h1, small, strong, text} = require 'teacup'
+accounting = require 'accounting'
+
+{renderable, header, div, form, span, ul, li, a, p, h1, small, text, time} = require 'teacup'
 
 layout = require './layout'
 refreshButton = require './refresh_button'
 
 module.exports = renderable ({balances}) -> layout content: ->
-  div '.home', data: role: 'page', ->
-    div data: role: 'header', ->
-      div '.logotype', ->
-        div '.logotype-o', 'O'
-        div '.logotype-u', 'U'
-      h1 'Balances'
-      refreshButton()
-    div data: role: 'content', ->
-      ul data: role: 'listview', ->
-        balances.forEach (balance) ->
-          [ower] = balance.key
-          amount = balance.value.toFixed 2
-          li ->
-            a href: "/balances/#{ower}", data: prefetch: true, ->
-              text "@#{ower}"
-              strong '.ui-li-aside', "$#{amount}"
-    div data: role: 'footer', ->
-      div data: role: 'navbar', ->
-        ul ->
-          li ->
-            a href: '/owe', data: role: 'button', icon: 'plus', prefetch: true, ->
-              text "Owe someone"
+  header '.bar-title', ->
+    h1 '.title', 'iouo.me'
+  div '#balances.content', ->
+    div '.content-padded', ->
+      p '.updated', ->
+        text 'Updated '
+        time datetime: new Date().toISOString()
+        text '. '
+        span '.updating', ->
+    ul '.list.inset', ->
+      balances.forEach (balance) ->
+        [ower] = balance.key
+        verb = (balance.value > 0) && ' owes ' || ' is owed '
+        amount = accounting.formatMoney Math.abs balance.value
+        li ->
+          a href: "/balances/#{ower}", ->
+            span '.subject', "@#{ower}"
+            span '.object', ->
+              text verb
+              span '.amount', amount
+            span '.chevron'
+    a '.button-main.button-block', href: '/owe', 'Owe someone'

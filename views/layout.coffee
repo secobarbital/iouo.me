@@ -2,74 +2,67 @@
 
 module.exports = renderable ({content, xhr}) ->
   doctype 5
-  html manifest: '/index.appcache', ->
-    if xhr
-      head ->
-        script '''
-          if (!window.jQuery) {
-            location.reload();
+  html manifest: '/manifest.appcache', ->
+    head ->
+      meta charset: 'utf-8'
+      title 'iouo.me'
+      meta name: 'viewport', content: 'initial-scale=1, maximum-scale=1, user-scalable=no'
+      meta name: 'apple-mobile-web-app-capable', content: 'yes'
+      meta name: 'apple-mobile-web-app-status-bar-style', content: 'black'
+      meta name: 'apple-mobile-web-app-title', content: 'iouo.me'
+      link rel: 'stylesheet', href: '//cdnjs.cloudflare.com/ajax/libs/ratchet/1.0.1/ratchet.min.css'
+      style type: 'text/css', '''
+        .updated {
+          display: none;
+          text-align: center;
+        }
+        #balances .subject {
+          font-weight: bold;
+        }
+        #balances .amount {
+          font-family: Georgia, Palatino, serif;
+          font-weight: bold;
+        }
+        #balances .object {
+          float: right;
+          margin-right: -30px;
+        }
+        .content > .button-block {
+          margin-left: 10px;
+          margin-right: 10px;
+        }
+        .content > form {
+          margin: 10px;
+        }
+      '''
+    body ->
+      content()
+      script src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js', ''
+      script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''
+      #script src: '//cdnjs.cloudflare.com/ajax/libs/ratchet/1.0.1/ratchet.min.js', ''
+      script src: '/ratchet.js'
+      script '''
+        $(document).on('submit', '#owe-someone form', function(e) {
+          var owee = $('#owee', e.target).val().replace('@', '');
+          var amount = $('#amount', e.target).val();
+          if (owee && amount) {
+            $('[name=text]', e.target).val('@' + owee + ' #iou $' + amount);
           }
-        '''
-      body ->
-        content()
-    else
-      head ->
-        title 'iouo.me'
-        meta name: 'apple-mobile-web-app-capable', content: 'yes'
-        meta name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'
-        meta name: 'apple-mobile-web-app-title', content: 'iouo.me'
-        meta name: 'viewport', content: 'width=device-width, initial-scale=1'
-        style type: 'text/css', '''
-          .logotype {
-            float: left;
-            font-family: Arial;
-            display: inline-block;
-            margin-left: 8px;
-            text-align: center;
-            text-shadow: none;
-          }
-          .logotype-o {
-            font-size: 18px;
-          }
-          .logotype-u {
-            font-size: 23px;
-            margin-top: -8px;
-          }
-        '''
-        link rel: 'stylesheet', href: '//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.3.1/jquery.mobile.min.css'
-        script src: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js', ''
-        script '''
-          $(document).on('mobileinit', function() {
-            $.mobile.defaultPageTransition = 'slide';
-          });
-        '''
-        script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-mobile/1.3.1/jquery.mobile.min.js', ''
-      body ->
-        content()
-        script src: '//cdnjs.cloudflare.com/ajax/libs/jquery-timeago/1.1.0/jquery.timeago.min.js', ''
-        script '''
-          $(document).on('pageinit', function(e) {
-            $('time', e.target).timeago();
-          }).on('pageinit', '#owe-someone', function(e) {
-            $('form', e.target).on('submit', function(e) {
-              var owee = $('#owee', e.target).val();
-              var amount = $('#amount', e.target).val();
-              if (owee && amount) {
-                $('[name=text]').val('@' + owee + ' #iou $' + amount);
-              }
-            });
-          }).on('click', '.refresh', function(e) {
-            e.preventDefault();
-            window.applicationCache ? applicationCache.update() : location.reload();
-          });
-          $(applicationCache).on('checking', function() {
-            $.mobile.loading('show');
-          }).on('updateready', function() {
-            applicationCache.swapCache();
-            location.reload();
-          }).on('cached error noupdate obsolete', function() {
-            $.mobile.loading('hide');
-          }).on('noupdate', function() {
-            $('time.freshness').timeago('update', new Date().toISOString());
-          });
-        '''
+        }).on('click', 'a.submit', function(e) {
+          $(e.target).closest('form').submit();
+        });
+        $(applicationCache).on('checking', function() {
+          $('.updating').text('Checking for update...');
+          $('.updated').slideDown();
+        }).on('updateready', function() {
+          $('.updating').text('Updating...');
+          setTimeout(function() { location.reload() }, 1000);
+        }).on('cached error obsolete', function() {
+          $('.updating').text('');
+        }).on('noupdate', function() {
+          $('.updated').slideUp();
+        });
+        $(function() {
+          $('time').timeago();
+        });
+      '''
