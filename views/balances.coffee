@@ -1,27 +1,21 @@
-{renderable, div, form, label, input, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
+accounting = require 'accounting'
+{renderable, header, footer, section, div, span, form, label, input, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
 
 layout = require './layout'
 refreshButton = require './refresh_button'
 
 module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, content: ->
-  div '.balances', role: 'page', ->
-    div data: role: 'header', ->
-      a href: '/', data: icon: 'arrow-l', direction: 'reverse', ->
-        text 'Balances'
-      h1 "@#{ower} owes $#{total.toFixed 2}"
-      refreshButton()
-    div data: role: 'content', ->
-      ul data: role: 'listview', ->
-        balances.forEach (balance) ->
-          li ->
-            [ower, owee] = balance.key
-            amount = balance.value.toFixed 2
-            a href: "/transactions/#{ower}/#{owee}", data: prefetch: true, ->
-              text "@#{owee}"
-              strong '.ui-li-aside', "$#{amount}"
-    div data: role: 'footer', ->
-      div data: role: 'navbar', ->
-        ul ->
-          li ->
-            a href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", rel: 'external', data: role: 'button', icon: 'plus', iconpos: 'left', ->
-              text "Owe @#{ower}"
+  header '.navbar', ->
+    a '.navbar-brand', href: '/', "@#{ower}"
+  section ->
+    div '.list-group', ->
+      balances.forEach (balance) ->
+        [ower, owee] = balance.key
+        amount = balance.value.toFixed 2
+        verb = if amount < 0 then 'owes' else 'is owed'
+        a '.list-group-item', href: "/transactions/#{ower}/#{owee}", ->
+          span '.subject', "@#{owee}"
+          span '.verb', " #{verb} "
+          span '.amount', accounting.formatMoney Math.abs(amount), '$ '
+    footer ->
+      a '.btn.btn-primary.btn-lg.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", "Owe @#{ower}"
