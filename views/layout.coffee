@@ -37,13 +37,9 @@ module.exports = renderable ({content, xhr}) ->
           font-family: Georgia, Palatino, serif;
           line-height: 1;
         }
-        .freshness {
-          display: block;
-          text-align: center;
-        }
-        .list-group {
-          margin-left: 10px;
-          margin-right: 10px;
+        section, footer {
+          padding-left: 10px;
+          padding-right: 10px;
         }
         a.list-group-item:after {
           content: "\\203A";
