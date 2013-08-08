@@ -28,20 +28,31 @@ module.exports = renderable ({content, xhr}) ->
           font-size: 23px;
           margin-top: -8px;
         }
+        .subject {
+          font-weight: bold;
+        }
         .amount {
-          font-size: 1.2em;
+          float: right;
+          font-size: 1.3em;
           font-family: Georgia, Palatino, serif;
           line-height: 1;
+        }
+        .freshness {
+          display: block;
+          text-align: center;
         }
         .list-group {
           margin-left: 10px;
           margin-right: 10px;
         }
-        .list-group-item:after {
-          content: "\\1433";
-          font-weight: bold;
+        a.list-group-item:after {
+          content: "\\203A";
+          font-size: 2em;
+          font-weight: 100;
+          line-height: 1;
           position: absolute;
-          right: 8px;
+          right: 12px;
+          top: 3px;
         }
       '''
     body ->
