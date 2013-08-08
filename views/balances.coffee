@@ -1,12 +1,18 @@
 accounting = require 'accounting'
-{renderable, header, footer, section, div, span, form, label, input, h1, h4, ul, li, a, img, strong, text} = require 'teacup'
+{renderable, header, footer, section, div, span, a, p, small, text} = require 'teacup'
 
 layout = require './layout'
-refreshButton = require './refresh_button'
 
 module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, content: ->
   header '.navbar', ->
-    a '.navbar-brand', href: '/', "@#{ower}"
+    a '.navbar-brand', href: '/', 'iouo.me'
+    p '.navbar-text', ->
+      total = balances.reduce (m, i) ->
+        m + i.value
+      , 0
+      verb = if total > 0 then 'owes' else 'is owed'
+      text "@#{ower} "
+      small "#{verb} #{accounting.formatMoney Math.abs(total), '$ '}"
   section ->
     div '.list-group', ->
       balances.forEach (balance) ->
