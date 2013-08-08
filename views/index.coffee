@@ -17,4 +17,4 @@ module.exports = renderable ({balances}) -> layout content: ->
           span '.verb', " #{verb} "
           span '.amount', accounting.formatMoney Math.abs(amount), '$ '
   footer ->
-    a '.btn.btn-primary.btn-lg.btn-block', href: '/owe', 'Owe someone'
+    a '.btn.btn-primary.btn-block', href: '/owe', 'Owe someone'

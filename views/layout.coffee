@@ -11,7 +11,7 @@ module.exports = renderable ({content, xhr}) ->
       meta name: 'apple-mobile-web-app-status-bar-style', content: 'black-translucent'
       meta name: 'apple-mobile-web-app-title', content: 'iouo.me'
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
-      link rel: 'stylesheet', href: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/css/bootstrap.min.css'
+      link rel: 'stylesheet', href: '/css/bootstrap.min.css'
       style type: 'text/css', '''
         .subject {
           font-weight: bold;
@@ -21,6 +21,12 @@ module.exports = renderable ({content, xhr}) ->
           font-size: 1.3em;
           font-family: Georgia, Palatino, serif;
           line-height: 1;
+        }
+        .panel-heading {
+          margin-bottom: 0;
+        }
+        .panel .list-group {
+          margin-top: 0;
         }
         section, footer {
           padding-left: 10px;
