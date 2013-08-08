@@ -1,18 +1,19 @@
-{renderable, div, form, label, input, h1, a, text} = require 'teacup'
+{renderable, header, section, div, form, fieldset, legend, label, input, button, a, text} = require 'teacup'
 
 layout = require './layout'
 
 module.exports = renderable ({xhr}) -> layout xhr: xhr, content: ->
-  div '#owe-someone', data: role: 'page', ->
-    div data: role: 'header', ->
-      a href: '/', data: icon: 'delete', rel: 'back', ->
-        text 'Cancel'
-      h1 'Owe Someone'
-    div data: role: 'content', ->
-      form action: 'https://twitter.com/intent/tweet', ->
-        input name: 'text', type: 'hidden'
-        label for: 'owee', 'Twitter screen name:'
-        input '#owee', type: 'text'
-        label for: 'amount', 'Amount'
-        input '#amount', type: 'number'
-        input type: 'submit', value: 'Tweet It'
+  header '.navbar', ->
+    a '.navbar-brand', href: '/', 'iouo.me'
+  section ->
+    form action: 'https://twitter.com/intent/tweet', ->
+      input name: 'text', type: 'hidden'
+      fieldset ->
+        legend 'Owe someone'
+        div '.form-group', ->
+          label for: 'owee', 'Twitter screen name'
+          input '#owee.form-control', type: 'text'
+        div '.form-group', ->
+          label for: 'amount', 'Amount'
+          input '#amount.form-control', type: 'number'
+        button '.btn.btn-default', type: 'submit', 'Tweet It'
