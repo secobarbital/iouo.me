@@ -13,21 +13,6 @@ module.exports = renderable ({content, xhr}) ->
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
       link rel: 'stylesheet', href: '//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.0.0-rc1/css/bootstrap.min.css'
       style type: 'text/css', '''
-        .logotype {
-          float: left;
-          font-family: Arial;
-          display: inline-block;
-          margin-left: 8px;
-          text-align: center;
-          text-shadow: none;
-        }
-        .logotype-o {
-          font-size: 18px;
-        }
-        .logotype-u {
-          font-size: 23px;
-          margin-top: -8px;
-        }
         .subject {
           font-weight: bold;
         }
@@ -62,20 +47,6 @@ module.exports = renderable ({content, xhr}) ->
           if (owee && amount) {
             $('[name=text]').val('@' + owee + ' #iou $' + amount);
           }
-        }).on('click', '.refresh', function(e) {
-          e.preventDefault();
-          window.applicationCache ? applicationCache.update() : location.reload();
-        });
-
-        $(applicationCache).on('checking', function() {
-          $.mobile.loading('show');
-        }).on('updateready', function() {
-          applicationCache.swapCache();
-          location.reload();
-        }).on('cached error noupdate obsolete', function() {
-          $.mobile.loading('hide');
-        }).on('noupdate', function() {
-          $('time.freshness').timeago('update', new Date().toISOString());
         });
 
         $(function() {
