@@ -22,6 +22,7 @@ app.configure ->
   app.use express.methodOverride()
   app.use express.compress()
   app.use app.router
+  app.use express.static path.join __dirname, 'public'
 
 app.configure 'development', ->
   app.use express.errorHandler()
