@@ -42,7 +42,8 @@ module.exports = renderable ({content, xhr}) ->
           line-height: 1;
           position: absolute;
           right: 12px;
-          top: 3px;
+          top: 50%;
+          margin-top: -16px;
         }
       '''
     body ->
