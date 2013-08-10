@@ -32,6 +32,9 @@ module.exports = renderable ({content, xhr}) ->
           padding-left: 10px;
           padding-right: 10px;
         }
+        footer {
+          margin-bottom: 20px;
+        }
         a.list-group-item:after {
           content: "\\203A";
           font-size: 2em;
