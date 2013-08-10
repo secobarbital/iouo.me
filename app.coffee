@@ -31,7 +31,6 @@ app.get '/', routes.refresh, routes.index
 app.get '/owe', routes.owe
 app.get '/balances/:ower', routes.refresh, routes.balances
 app.get '/transactions/:ower/:owee', routes.refresh, routes.transactions
-app.get '/index.appcache', routes.manifest
 
 http.createServer(app).listen app.get('port'), ->
   console.log "Express server listening on port #{app.get('port')}"
