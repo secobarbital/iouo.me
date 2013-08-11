@@ -10,7 +10,9 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
     div '.panel', ->
       div '.panel-heading.clearfix', ->
         if amount > 0
-          text "@#{ower} owes @#{owee}"
+          a href: "/balances/#{ower}", "@#{ower}"
+          text ' owes '
+          a href: "/balances/#{owee}", "@#{owee}"
         else
           text "@#{owee} owes @#{ower}"
         span '.amount', accounting.formatMoney Math.abs(amount), '$ '
@@ -23,7 +25,5 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
             small '.text-muted', ->
               time datetime: new Date(tweet.created_at).toISOString()
   footer ->
-    a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", ->
-      text "Owe @#{ower}"
     a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", ->
       text "Owe @#{owee}"

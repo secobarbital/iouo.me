@@ -26,5 +26,5 @@ module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, c
               span '.subject', "@#{owee}"
               span '.verb', ' owes'
               span '.amount', accounting.formatMoney Math.abs(amount), '$ '
-    footer ->
-      a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", "Owe @#{ower}"
+  footer ->
+    a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{ower} #iou $")}", "Owe @#{ower}"
