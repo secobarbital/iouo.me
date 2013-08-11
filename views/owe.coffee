@@ -1,4 +1,4 @@
-{renderable, header, section, div, form, fieldset, legend, label, input, button, a, text} = require 'teacup'
+{renderable, header, section, div, span, form, fieldset, legend, label, input, button, a, text} = require 'teacup'
 
 layout = require './layout'
 
@@ -12,8 +12,12 @@ module.exports = renderable ({xhr}) -> layout xhr: xhr, content: ->
         legend 'Owe someone'
         div '.form-group', ->
           label for: 'owee', 'Twitter screen name'
-          input '#owee.form-control', type: 'text'
+          div '.input-group', ->
+            span '.input-group-addon', '@'
+            input '#owee.form-control', type: 'text'
         div '.form-group', ->
           label for: 'amount', 'Amount'
-          input '#amount.form-control', type: 'number'
+          div '.input-group', ->
+            span '.input-group-addon', '$'
+            input '#amount.form-control', type: 'number'
         button '.btn.btn-default', type: 'submit', 'Tweet It'
