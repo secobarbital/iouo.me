@@ -1,11 +1,12 @@
 accounting = require 'accounting'
-{renderable, header, footer, section, div, span, p, a, time, text} = require 'teacup'
+{renderable, nav, footer, section, div, span, p, a, time, text} = require 'teacup'
 
 layout = require './layout'
 
 module.exports = renderable ({balances}) -> layout content: ->
-  header '.navbar', ->
-    a '.navbar-brand', href: '/', 'iouo.me'
+  nav '.navbar', role: 'navigation', ->
+    div '.navbar-header', ->
+      a '.navbar-brand', href: '/', 'iouo.me'
   section ->
     div '.list-group', ->
       balances.forEach (balance) ->
