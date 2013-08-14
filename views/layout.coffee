@@ -25,9 +25,6 @@ module.exports = renderable ({content, xhr}) ->
           font-family: Georgia, Palatino, serif;
           line-height: 1;
         }
-        .panel-heading + .list-group {
-          margin-top: -20px;
-        }
         .list-group-item.media {
           margin-top: 0;
         }
@@ -44,11 +41,12 @@ module.exports = renderable ({content, xhr}) ->
         }
         a.list-group-item:after {
           content: "\\203A";
+          font-family: monospace;
           font-size: 2em;
           font-weight: 100;
           line-height: 1;
           position: absolute;
-          right: 12px;
+          right: 0px;
           top: 50%;
           margin-top: -16px;
         }
