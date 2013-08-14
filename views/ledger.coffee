@@ -1,6 +1,7 @@
 accounting = require 'accounting'
-{renderable, header, footer, section, h4, div, span, a, p, small, time, text} = require 'teacup'
+{renderable, header, footer, section, div, span, a, raw, script, text} = require 'teacup'
 
+iou = require '../models/iou'
 layout = require './layout'
 
 module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr, content: ->
@@ -18,12 +19,12 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
         span '.amount', accounting.formatMoney Math.abs(amount), '$ '
       div '.list-group', ->
         txns.forEach (txn) ->
-          tweet = txn.doc.raw
-          a '.list-group-item', href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", ->
-            h4 '.list-group-item-heading', tweet.user.screen_name
-            p '.list-group-item-text', tweet.text
-            small '.text-muted', ->
-              time datetime: new Date(tweet.created_at).toISOString()
+          console.log 'txn', txn
+          raw txn.oembed.html
   footer ->
     a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", ->
       text "Owe @#{owee}"
+  script
+    async: true
+    charset: 'utf-8'
+    src: '//platform.twitter.com/widgets.js'

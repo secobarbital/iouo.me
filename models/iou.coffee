@@ -1,3 +1,4 @@
+_ = require 'lodash'
 async = require 'async'
 querystring = require 'querystring'
 
@@ -45,8 +46,24 @@ IOU.ledger = (ower, owee, cb) ->
     startkey: [ower, owee, {}]
     endkey: [ower, owee]
     include_docs: true
-   , (err, res) ->
-    cb err, res && res.rows
+  , (err, res) ->
+    return cb err if err || !res
+    docs = (row.doc for row in res.rows)
+    async.map docs, ensureOembed, cb
+
+ensureOembed = (doc, cb) ->
+  return cb null, doc if doc.oembed
+  twitter.get 'statuses/oembed',
+    id: doc.raw.id_str
+    omit_script: true
+  , (err, oembed) ->
+    return cb err if err
+    newdoc = _.extend
+      oembed: oembed
+    , doc
+    db.insert newdoc, (err) ->
+      console.log "Error adding oembed to #{doc._id}: #{err}" if err
+    cb null, newdoc
 
 performSearch = (sinceId, maxId, cb) ->
   if typeof maxId == 'function'
