@@ -25,11 +25,15 @@ module.exports = renderable ({content, xhr}) ->
           font-family: Georgia, Palatino, serif;
           line-height: 1;
         }
-        .panel-heading {
-          margin-bottom: 0;
+        .panel-heading + .list-group {
+          margin-top: -20px;
         }
-        .panel .list-group {
+        .list-group-item.media {
           margin-top: 0;
+        }
+        .transactions img {
+          height: 40px;
+          width: 40px;
         }
         section, footer {
           padding-left: 10px;

@@ -1,5 +1,5 @@
 accounting = require 'accounting'
-{renderable, header, footer, section, h4, div, span, a, p, small, time, text} = require 'teacup'
+{renderable, header, footer, section, h4, div, span, img, a, p, small, time, text, raw} = require 'teacup'
 
 layout = require './layout'
 
@@ -19,11 +19,15 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
       div '.list-group', ->
         txns.forEach (txn) ->
           tweet = txn.doc.raw
-          a '.list-group-item', href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", ->
-            h4 '.list-group-item-heading', tweet.user.screen_name
-            p '.list-group-item-text', tweet.text
-            small '.text-muted', ->
-              time datetime: new Date(tweet.created_at).toISOString()
+          dir = if tweet.user.screen_name == owee ^ amount > 0 then 'left' else 'right'
+          a '.list-group-item.media', href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", ->
+            img ".media-object.pull-#{dir}", src: tweet.user.profile_image_url
+            div ".media-body.text-#{dir}", ->
+              div "#{tweet.text}"
+              small '.text-muted', ->
+                raw '&mdash;'
+                text " #{tweet.user.screen_name} "
+                time datetime: new Date(tweet.created_at).toISOString()
   footer ->
     a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", ->
       text "Owe @#{owee}"
