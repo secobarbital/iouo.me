@@ -4,8 +4,9 @@ accounting = require 'accounting'
 layout = require './layout'
 
 module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, content: ->
-  header '.navbar', ->
-    a '.navbar-brand', href: '/', 'iouo.me'
+  nav '.navbar', role: 'navigation', ->
+    div '.navbar-header', ->
+      a '.navbar-brand', href: '/', 'iouo.me'
   section '.balances', ->
     div '.panel', ->
       div '.panel-heading.clearfix', ->
