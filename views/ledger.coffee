@@ -1,5 +1,5 @@
 accounting = require 'accounting'
-{renderable, header, footer, section, h4, div, span, img, a, p, small, time, text, raw} = require 'teacup'
+{renderable, nav, header, footer, section, h4, div, span, img, a, p, small, time, text, raw} = require 'teacup'
 
 layout = require './layout'
 

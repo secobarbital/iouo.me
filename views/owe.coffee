@@ -1,10 +1,11 @@
-{renderable, header, section, div, span, form, fieldset, legend, label, input, button, a, text} = require 'teacup'
+{renderable, nav, header, section, div, span, form, fieldset, legend, label, input, button, a, text} = require 'teacup'
 
 layout = require './layout'
 
 module.exports = renderable ({xhr}) -> layout xhr: xhr, content: ->
-  header '.navbar', ->
-    a '.navbar-brand', href: '/', 'iouo.me'
+  nav '.navbar', role: 'navigation', ->
+    div '.navbar-header', ->
+      a '.navbar-brand', href: '/', 'iouo.me'
   section ->
     form action: 'https://twitter.com/intent/tweet', ->
       input name: 'text', type: 'hidden'
