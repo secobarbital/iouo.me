@@ -1,6 +1,5 @@
 express = require 'express'
 http = require 'http'
-path = require 'path'
 teacup = require 'teacup/lib/express'
 
 db = require './config/db'
@@ -13,7 +12,7 @@ app = express()
 
 app.configure ->
   app.set 'port', process.env.PORT || 3000
-  app.set 'views', __dirname + '/views'
+  app.set 'views', "#{__dirname}/views"
   app.set 'view engine', 'coffee'
   app.engine 'coffee', teacup.renderFile
   app.use express.logger 'dev'
@@ -21,7 +20,7 @@ app.configure ->
   app.use express.methodOverride()
   app.use express.compress()
   app.use app.router
-  app.use express.static path.join __dirname, 'public'
+  app.use express.static "#{__dirname}/public", maxAge: 86400000
 
 app.configure 'development', ->
   app.use express.errorHandler()
