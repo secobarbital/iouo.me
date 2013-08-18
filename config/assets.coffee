@@ -19,11 +19,11 @@ findVersioned = (file) ->
   "#{cdnUrl}/#{path.dirname file}/#{candidates[0] or file}"
 
 exports.scripts = renderable ->
-  script src: versioned('js/vendor.min.js'), ''
+  script src: versioned('vendor.min.js'), ''
   script inlineScript
 
 exports.styles = renderable ->
-  link rel: 'stylesheet', href: versioned('css/vendor.min.css')
+  link rel: 'stylesheet', href: versioned('vendor.min.css')
   style inlineStyle
 
 exports.favicons = renderable ->
