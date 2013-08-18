@@ -21,7 +21,7 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
         txns.forEach (txn) ->
           tweet = txn.doc.raw
           dir = if tweet.user.screen_name == owee ^ amount > 0 then 'left' else 'right'
-          a '.list-group-item.media', href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", ->
+          a '.list-group-item.list-group-link.media', href: "http://twitter.com/#{tweet.user.id_str}/status/#{tweet.id_str}", ->
             img ".media-object.pull-#{dir}", src: tweet.user.profile_image_url
             div ".media-body.text-#{dir}", ->
               div "#{tweet.text}"

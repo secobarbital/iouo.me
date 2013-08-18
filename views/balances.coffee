@@ -18,7 +18,7 @@ module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, c
         balances.forEach (balance) ->
           [ower, owee] = balance.key
           amount = balance.value
-          a '.list-group-item', href: "/transactions/#{ower}/#{owee}", ->
+          a '.list-group-item.list-group-link', href: "/transactions/#{ower}/#{owee}", ->
             if amount > 0
               span '.verb', 'owes '
               span '.subject', "@#{owee}"

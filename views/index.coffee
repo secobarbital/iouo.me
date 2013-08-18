@@ -13,7 +13,7 @@ module.exports = renderable ({balances}) -> layout content: ->
         [ower] = balance.key
         amount = balance.value.toFixed 2
         verb = if amount > 0 then 'owes' else 'is owed'
-        a '.list-group-item', href: "/balances/#{ower}", ->
+        a '.list-group-item.list-group-link', href: "/balances/#{ower}", ->
           span '.subject', "@#{ower}"
           span '.verb', " #{verb} "
           span '.amount', accounting.formatMoney Math.abs(amount), '$ '

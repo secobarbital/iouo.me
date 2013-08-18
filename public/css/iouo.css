@@ -1,0 +1,36 @@
+.subject {
+  font-weight: bold;
+}
+
+.amount {
+  float: right;
+  font-size: 1.3em;
+  font-family: Georgia, Palatino, serif;
+  line-height: 1;
+}
+
+.transactions img {
+  height: 40px;
+  width: 40px;
+}
+
+section, footer {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+
+footer {
+  margin-bottom: 20px;
+}
+
+.list-group-link:after {
+  content: "\203A";
+  font-family: monospace;
+  font-size: 2em;
+  font-weight: 100;
+  line-height: 1;
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -16px;
+}
