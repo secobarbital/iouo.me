@@ -4,9 +4,10 @@ path = require 'path'
 
 cdnUrl = process.env['CDN_URL'] || ''
 
+assetsDir = "#{__dirname}/../assets"
 publicDir = "#{__dirname}/../public"
-inlineScript = fs.readFileSync "#{publicDir}/js/iouo.min.js"
-inlineStyle = fs.readFileSync "#{publicDir}/css/iouo.min.css"
+inlineScript = fs.readFileSync "#{assetsDir}/js/iouo.min.js"
+inlineStyle = fs.readFileSync "#{assetsDir}/css/iouo.min.css"
 versions = {}
 
 versioned = (file) ->
@@ -14,9 +15,8 @@ versioned = (file) ->
 
 findVersioned = (file) ->
   candidates = fs.readdirSync("#{publicDir}/#{path.dirname file}").filter (filename) ->
-    new RegExp(".#{path.basename file}".split('.').join('\\.')).test filename
-  versionedFile = candidates[0] or file
-  "#{cdnUrl}/#{path.dirname file}/#{versionedFile}"
+    ~filename.indexOf ".#{path.basename file}"
+  "#{cdnUrl}/#{path.dirname file}/#{candidates[0] or file}"
 
 exports.scripts = renderable ->
   script src: versioned('js/vendor.min.js'), ''

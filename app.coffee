@@ -20,7 +20,8 @@ app.configure ->
   app.use express.methodOverride()
   app.use express.compress()
   app.use app.router
-  app.use express.static "#{__dirname}/public", maxAge: 86400000
+  app.use express.static "#{__dirname}/favicons", maxAge: 86400000
+  app.use express.static "#{__dirname}/public", maxAge: 31536000000
 
 app.configure 'development', ->
   app.use express.errorHandler()

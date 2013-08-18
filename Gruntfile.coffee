@@ -4,26 +4,26 @@ module.exports = (grunt) ->
     clean: ['public/css/*.vendor.min.css', 'public/js/*.vendor.min.js']
     csslint:
       strict:
-        src: ['public/css/iouo.css']
+        src: ['assets/css/iouo.css']
     cssmin:
       iouo:
         files:
-          'public/css/iouo.min.css': ['public/css/iouo.css']
+          'assets/css/iouo.min.css': ['assets/css/iouo.css']
       vendor:
         files:
-          'public/css/vendor.min.css': ['public/css/bootstrap.css']
+          'public/css/vendor.min.css': ['assets/css/bootstrap.css']
     jshint:
-      files: ['public/js/iouo.js']
+      files: ['assets/js/iouo.js']
     rev:
       files:
         src: ['public/css/vendor.min.css', 'public/js/vendor.min.js']
     uglify:
       iouo:
         files:
-          'public/js/iouo.min.js': ['public/js/iouo.js']
+          'assets/js/iouo.min.js': ['assets/js/iouo.js']
       vendor:
         files:
-          'public/js/vendor.min.js': ['public/js/stay_standalone.js', 'public/js/jquery-2.0.3.custom.js', 'public/js/jquery.timeago.js']
+          'public/js/vendor.min.js': ['assets/js/stay_standalone.js', 'assets/js/jquery-2.0.3.custom.js', 'assets/js/jquery.timeago.js']
 
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-csslint'
