@@ -23,7 +23,7 @@ module.exports = (grunt) ->
           'public/js/iouo.min.js': ['public/js/iouo.js']
       vendor:
         files:
-          'public/js/vendor.min.js': ['public/js/standalone.js', 'public/js/jquery-2.0.3.custom.js', 'public/js/jquery.timeago.js']
+          'public/js/vendor.min.js': ['public/js/stay_standalone.js', 'public/js/jquery-2.0.3.custom.js', 'public/js/jquery.timeago.js']
 
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-csslint'
