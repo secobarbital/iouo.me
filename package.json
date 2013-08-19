@@ -1,9 +1,13 @@
 {
   "name": "iouo.me",
-  "version": "0.0.1",
+  "subdomain": "iouo",
+  "domains": [
+    "www.iouo.me"
+  ],
+  "version": "1.0.0",
   "private": true,
   "scripts": {
-    "start": "node_modules/.bin/coffee app"
+    "start": "coffee app.coffee"
   },
   "dependencies": {
     "accounting": "~0.3.2",
