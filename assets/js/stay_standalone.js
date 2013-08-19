@@ -4,7 +4,7 @@
   if((alon in nav) && nav[alon]){
 
   	// If you want to prevent remote links in standalone web apps opening Mobile Safari, change 'remotes' to true
-  	var noddy, remotes = true;
+  	var noddy, remotes = false;
 	
   	document.addEventListener('click', function(event) {
 		
