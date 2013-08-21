@@ -1,7 +1,7 @@
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
-    clean: ['public/*.vendor.min.*']
+    clean: ['public/*.vendor.min.*', 'assets/css/bootstrap.css']
     csslint:
       strict:
         src: ['assets/css/iouo.css']
@@ -14,6 +14,12 @@ module.exports = (grunt) ->
           'public/vendor.min.css': ['assets/css/bootstrap.css']
     jshint:
       files: ['assets/js/iouo.js']
+    less:
+      bootstrap:
+        options:
+          paths: ['assets/css/bootstrap']
+        files:
+          'assets/css/bootstrap.css': 'assets/css/bootstrap.less'
     rev:
       files:
         src: ['public/vendor.min.css', 'public/vendor.min.js']
@@ -29,10 +35,12 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-csslint'
   grunt.loadNpmTasks 'grunt-contrib-cssmin'
   grunt.loadNpmTasks 'grunt-contrib-jshint'
+  grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
   grunt.loadNpmTasks 'grunt-rev'
 
   grunt.registerTask 'default', [
+    'less',
     'csslint'
     'cssmin'
     'jshint'
