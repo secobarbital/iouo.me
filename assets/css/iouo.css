@@ -34,3 +34,7 @@ footer {
   top: 50%;
   margin-top: -16px;
 }
+
+.list-group-media {
+  margin-top: 0;
+}
