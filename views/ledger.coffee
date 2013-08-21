@@ -8,7 +8,7 @@ module.exports = renderable ({amount, owee, ower, txns, xhr}) -> layout xhr: xhr
     div '.navbar-header', ->
       a '.navbar-brand', href: '/', 'iouo.me'
   section '.transactions', ->
-    div '.panel', ->
+    div '.panel.panel-default', ->
       div '.panel-heading.clearfix', ->
         if amount > 0
           a href: "/balances/#{ower}", "@#{ower}"

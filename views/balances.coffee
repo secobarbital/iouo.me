@@ -8,7 +8,7 @@ module.exports = renderable ({balances, ower, total, xhr}) -> layout xhr: xhr, c
     div '.navbar-header', ->
       a '.navbar-brand', href: '/', 'iouo.me'
   section '.balances', ->
-    div '.panel', ->
+    div '.panel.panel-default', ->
       div '.panel-heading.clearfix', ->
         verb = if total > 0 then 'owes' else 'is owed'
         span '.subject', "@#{ower} "
