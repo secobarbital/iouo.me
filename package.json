@@ -15,7 +15,7 @@
     "coffee-script": "~1.6.3",
     "express": "~3.2.6",
     "nano": "~3.4.0",
-    "teacup": "~0.2.8",
+    "teacup": "~0.2.10",
     "twit": "~1.1.9"
   },
   "engines": {
