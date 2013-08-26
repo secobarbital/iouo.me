@@ -18,7 +18,9 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout
             text ' owes '
             a href: "/balances/#{owee}", "@#{owee}"
           else
-            text "@#{owee} owes @#{ower}"
+            a href: "/balances/#{owee}", "@#{owee}"
+            text ' owes '
+            a href: "/balances/#{ower}", "@#{ower}"
           span '.amount', accounting.formatMoney Math.abs(amount), '$ '
         div '.list-group', ->
           txns.forEach (txn) ->
