@@ -1,31 +1,41 @@
+_ = require 'lodash'
 fs = require 'fs'
-path = require 'path'
-{renderable, link, script, style} = require 'teacup'
+memoRead = _.memoize fs.readFileSync
+{link, script, style} = require 'teacup'
 
 cdnUrl = process.env['CDN_URL'] || ''
+gaPropertyId = process.env['GA_PROPERTY_ID'] || 'UA-43468793-2'
 
 assetsDir = "#{__dirname}/../assets"
 publicDir = "#{__dirname}/../public"
-inlineScript = fs.readFileSync "#{assetsDir}/js/iouo.min.js"
-inlineStyle = fs.readFileSync "#{assetsDir}/css/iouo.min.css"
-versions = {}
 
-versioned = (file) ->
-  versions[file] or versions[file] = findVersioned file
+versioned = _.memoize (file, ext) ->
+  file = "#{file}.#{ext}" if ext
+  candidates = fs.readdirSync(publicDir).filter (filename) ->
+    ~filename.indexOf ".#{file}"
+  "#{cdnUrl}/#{candidates[0]}"
 
-findVersioned = (file) ->
-  candidates = fs.readdirSync("#{publicDir}/#{path.dirname file}").filter (filename) ->
-    ~filename.indexOf ".#{path.basename file}"
-  "#{cdnUrl}/#{path.dirname file}/#{candidates[0] or file}"
+exports.headjs = ({externaljs, inlinejs}) ->
+  script src: '//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.load.min.js', ''
+  if externaljs
+    scripts = ("'#{versioned(f, 'min.js')}'" for f in externaljs).join ','
+    script "head.js(#{scripts});"
+  if inlinejs
+    script memoRead "#{assetsDir}/js/#{f}.min.js" for f in inlinejs
 
-exports.scripts = renderable ->
-  script src: versioned('vendor.min.js'), ''
-  script inlineScript
+exports.gajs = ->
+  script """
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date(); head.js(g);
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+    ga('create', '#{gaPropertyId}', 'iouo.me');
+    ga('send', 'pageview');
+  """
 
-exports.styles = renderable ->
+exports.styles = ->
   link rel: 'stylesheet', href: versioned('vendor.min.css')
-  style inlineStyle
+  style memoRead "#{assetsDir}/css/iouo.min.css"
 
-exports.favicons = renderable ->
+exports.favicons = ->
   link rel: 'apple-touch-icon-precomposed', href: "#{cdnUrl}/apple-touch-icon-precomposed.png"
   link rel: 'shortcut icon', href: "#{cdnUrl}/apple-touch-icon.png"

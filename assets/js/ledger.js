@@ -1,0 +1,3 @@
+head(function() {
+  $('time').timeago();
+});

@@ -1,7 +1,9 @@
 module.exports = (grunt) ->
   grunt.initConfig
     pkg: grunt.file.readJSON 'package.json'
-    clean: ['public/*.vendor.min.*', 'assets/css/bootstrap.css']
+    clean:
+      less: ['assets/css/bootstrap.css']
+      rev: ['public/*.jquery.min.js', 'public/*.jquery.timeago.min.js', 'public/*.vendor.min.css']
     csslint:
       strict:
         src: ['assets/css/iouo.css']
@@ -13,7 +15,7 @@ module.exports = (grunt) ->
         files:
           'public/vendor.min.css': ['assets/css/bootstrap.css']
     jshint:
-      files: ['assets/js/iouo.js']
+      files: ['assets/js/ledger.js', 'assets/js/owe.js']
     less:
       bootstrap:
         options:
@@ -22,14 +24,16 @@ module.exports = (grunt) ->
           'assets/css/bootstrap.css': 'assets/css/bootstrap.less'
     rev:
       files:
-        src: ['public/vendor.min.css', 'public/vendor.min.js']
+        src: ['public/jquery.min.js', 'public/jquery.timeago.min.js', 'public/vendor.min.css']
     uglify:
       iouo:
         files:
-          'assets/js/iouo.min.js': ['assets/js/iouo.js']
+          'assets/js/ledger.min.js': ['assets/js/ledger.js']
+          'assets/js/owe.min.js': ['assets/js/owe.js']
       vendor:
         files:
-          'public/vendor.min.js': ['assets/js/stay_standalone.js', 'assets/js/jquery-2.0.3.custom.js', 'assets/js/jquery.timeago.js']
+          'public/jquery.min.js': ['assets/js/jquery-2.0.3.custom.js']
+          'public/jquery.timeago.min.js': ['assets/js/jquery.timeago.js']
 
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-csslint'
@@ -40,7 +44,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-rev'
 
   grunt.registerTask 'default', [
-    'less',
+    'less'
     'csslint'
     'cssmin'
     'jshint'
