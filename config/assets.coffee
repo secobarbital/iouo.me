@@ -16,7 +16,8 @@ versioned = _.memoize (file, ext) ->
   "#{cdnUrl}/#{candidates[0]}"
 
 exports.headjs = ({externaljs, inlinejs}) ->
-  script src: '//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.load.min.js', ''
+  if externaljs || inlinejs
+    script src: '//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.load.min.js', ''
   if externaljs
     scripts = ("'#{versioned(f, 'min.js')}'" for f in externaljs).join ','
     script "head.js(#{scripts});"
@@ -26,7 +27,8 @@ exports.headjs = ({externaljs, inlinejs}) ->
 exports.gajs = ->
   script """
     (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date(); head.js(g);
+    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
     })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
     ga('create', '#{gaPropertyId}', 'iouo.me');
     ga('send', 'pageview');
