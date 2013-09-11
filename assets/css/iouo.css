@@ -24,15 +24,9 @@ footer {
 }
 
 .list-group-link:after {
-  content: "\203A";
-  font-family: monospace;
-  font-size: 2em;
-  font-weight: 100;
-  line-height: 1;
+  content: "\276F";
   position: absolute;
-  right: 0;
-  top: 50%;
-  margin-top: -16px;
+  right: 3px;
 }
 
 .list-group-media {
