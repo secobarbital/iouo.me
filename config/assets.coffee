@@ -23,8 +23,7 @@ exports.headjs = ({cdnjs, externaljs, inlinejs}) ->
   if cdnjs
     scripts.push cdnUrls[f] for f in cdnjs
   if externaljs
-    scripts.push "'#{versioned(f, 'min.js')}'" for f in externaljs
-  console.log 'script', scripts.length
+    scripts.push "#{versioned(f, 'min.js')}" for f in externaljs
   if scripts.length
     script src: cdnUrls.head, ''
     script "head.js(#{JSON.stringify scripts})"

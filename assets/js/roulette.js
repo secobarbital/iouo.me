@@ -2,22 +2,12 @@ head(function() {
   function listenForNeighbors() {
     var source = new EventSource(location.pathname + '/nearby');
     source.addEventListener('message', function(e) {
-      $.each(e.data, function(i, name) {
-        $('.balances .subject:contains(' + name + ')')
-          .parents('.list-group-item')
-          .appendTo('.neighbors .list-group');
-      });
+      var data = JSON.parse(e.data);
+      $('.roulette-panel').html(data.neighbors);
     }, false);
   }
 
-  function ensureView() {
-    $('.balances, .roulette').hide();
-    $('.neighbors').show();
-  }
-
   function handleGeo(position) {
-    console.log('position', position);
-    ensureView();
     $.post(location.pathname, {
       position: position
     });
@@ -26,12 +16,10 @@ head(function() {
   function handleGeoError(err) {}
 
   if (navigator.geolocation && window.EventSource) {
-    $('.roulette').on('click', function(e) {
-      listenForNeighbors();
-      navigator.geolocation.getCurrentPosition(handleGeo, handleGeoError, {
-        enableHighAccuracy: true,
-        maximumAge: 60000
-      });
+    listenForNeighbors();
+    navigator.geolocation.getCurrentPosition(handleGeo, handleGeoError, {
+      enableHighAccuracy: true,
+      maximumAge: 60000
     });
   }
 });

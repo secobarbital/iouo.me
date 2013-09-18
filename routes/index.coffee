@@ -36,15 +36,10 @@ exports.balances = (req, res, next) ->
     total = balances.reduce (a, b) ->
       a + b.value
     , 0
-    res.format
-      html: ->
-        res.render 'balances',
-          balances: balances
-          ower: req.params.ower
-          total: total
-      json: ->
-        res.json balances
-
+    res.render 'balances',
+      balances: balances
+      ower: req.params.ower
+      total: total
 
 exports.transactions = (req, res, next) ->
   IOU.ledger req.params.ower, req.params.owee, (err, txns) ->

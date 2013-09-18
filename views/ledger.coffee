@@ -2,6 +2,7 @@ accounting = require 'accounting'
 {renderable, nav, header, footer, section, h4, div, span, img, a, p, small, time, text, raw, script} = require 'teacup'
 
 layout = require './layout'
+urlFor = require '../lib/url_for'
 
 module.exports = renderable ({amount, owee, ower, txns}) -> layout
   externaljs: ['jquery', 'jquery.timeago']
@@ -35,5 +36,5 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout
                   text " #{tweet.user.screen_name} "
                   time datetime: new Date(tweet.created_at).toISOString()
     footer ->
-      a '.btn.btn-primary.btn-block', href: "https://twitter.com/intent/tweet?text=#{escape("@#{owee} #iou $")}", ->
+      a '.btn.btn-primary.btn-block', href: urlFor.owe(owee), ->
         text "Owe @#{owee}"

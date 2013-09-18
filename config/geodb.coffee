@@ -23,7 +23,10 @@ MongoClient.connect url, (err, db) ->
       loc: pos2geo position
     positions.update { user: user }, doc, { upsert: true }, cb
 
-  exports.nearby = (user, position, cb) ->
+  exports.remove = (user, cb) ->
+    positions.findAndModify { user: user }, [], {}, { remove: true }, cb
+
+  exports.nearby = (position, cb) ->
     query =
       loc:
         $near:
