@@ -1,7 +1,10 @@
+_ = require 'lodash'
 url = require 'url'
 
 IOU = require '../models/iou'
 manifestTemplate = require('../views/manifest').template
+
+_.extend exports, require './roulette'
 
 exports.manifest = (req, res, next) ->
   IOU.latest (err, version) ->
@@ -29,14 +32,19 @@ exports.index = (req, res, next) ->
 exports.balances = (req, res, next) ->
   IOU.balancesFor req.params.ower, (err, balances) ->
     return next err if err
+    balances = balances.filter (balance) -> balance.value
     total = balances.reduce (a, b) ->
       a + b.value
     , 0
-    res.render 'balances',
-      balances: balances.filter (balance) -> balance.value
-      ower: req.params.ower
-      total: total
-      xhr: req.xhr
+    res.format
+      html: ->
+        res.render 'balances',
+          balances: balances
+          ower: req.params.ower
+          total: total
+      json: ->
+        res.json balances
+
 
 exports.transactions = (req, res, next) ->
   IOU.ledger req.params.ower, req.params.owee, (err, txns) ->
@@ -48,11 +56,9 @@ exports.transactions = (req, res, next) ->
       owee: req.params.owee
       ower: req.params.ower
       txns: txns
-      xhr: req.xhr
 
 exports.owe = (req, res, next) ->
-  res.render 'owe',
-    xhr: req.xhr
+  res.render 'owe'
 
 parseTweetIdFromReferer = (referer) ->
   if referer && !referer.indexOf 'https://twitter.com/intent/tweet/complete?'

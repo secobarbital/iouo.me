@@ -2,7 +2,7 @@
 
 assets = require '../config/assets'
 
-module.exports = renderable ({content, externaljs, inlinejs}) ->
+module.exports = renderable ({content, cdnjs, externaljs, inlinejs}) ->
   doctype 5
   html ->
     head ->
@@ -12,7 +12,7 @@ module.exports = renderable ({content, externaljs, inlinejs}) ->
       meta name: 'viewport', content: 'width=device-width, initial-scale=1'
       assets.favicons()
       assets.styles()
-      assets.headjs externaljs: externaljs, inlinejs: inlinejs
+      assets.headjs cdnjs: cdnjs, externaljs: externaljs, inlinejs: inlinejs
       assets.gajs()
     body ->
       content()

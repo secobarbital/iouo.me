@@ -15,12 +15,19 @@ versioned = _.memoize (file, ext) ->
     ~filename.indexOf ".#{file}"
   "#{cdnUrl}/#{candidates[0]}"
 
-exports.headjs = ({externaljs, inlinejs}) ->
-  if externaljs || inlinejs
-    script src: '//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.load.min.js', ''
+exports.headjs = ({cdnjs, externaljs, inlinejs}) ->
+  cdnUrls =
+    head: '//cdnjs.cloudflare.com/ajax/libs/headjs/0.99/head.load.min.js'
+    jquery: '//cdnjs.cloudflare.com/ajax/libs/jquery/2.0.3/jquery.min.js'
+  scripts = []
+  if cdnjs
+    scripts.push cdnUrls[f] for f in cdnjs
   if externaljs
-    scripts = ("'#{versioned(f, 'min.js')}'" for f in externaljs).join ','
-    script "head.js(#{scripts});"
+    scripts.push "'#{versioned(f, 'min.js')}'" for f in externaljs
+  console.log 'script', scripts.length
+  if scripts.length
+    script src: cdnUrls.head, ''
+    script "head.js(#{JSON.stringify scripts})"
   if inlinejs
     script memoRead "#{assetsDir}/js/#{f}.min.js" for f in inlinejs
 

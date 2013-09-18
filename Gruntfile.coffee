@@ -15,7 +15,11 @@ module.exports = (grunt) ->
         files:
           'public/vendor.min.css': ['assets/css/bootstrap.css']
     jshint:
-      files: ['assets/js/ledger.js', 'assets/js/owe.js']
+      files: [
+        'assets/js/ledger.js'
+        'assets/js/owe.js'
+        'assets/js/roulette.js'
+      ]
     less:
       bootstrap:
         options:
@@ -24,16 +28,32 @@ module.exports = (grunt) ->
           'assets/css/bootstrap.css': 'assets/css/bootstrap.less'
     rev:
       files:
-        src: ['public/jquery.min.js', 'public/jquery.timeago.min.js', 'public/vendor.min.css']
+        src: [
+          'public/jquery.min.js'
+          'public/jquery.timeago.min.js'
+          'public/vendor.min.css'
+        ]
     uglify:
       iouo:
         files:
           'assets/js/ledger.min.js': ['assets/js/ledger.js']
           'assets/js/owe.min.js': ['assets/js/owe.js']
+          'assets/js/roulette.min.js': ['assets/js/roulette.js']
       vendor:
         files:
           'public/jquery.min.js': ['assets/js/jquery-2.0.3.custom.js']
           'public/jquery.timeago.min.js': ['assets/js/jquery.timeago.js']
+    watch:
+      css:
+        files: 'assets/**/*.css'
+        tasks: ['csslint', 'cssmin', 'rev']
+      js:
+        files: 'assets/**/*.js'
+        tasks: ['jshint', 'uglify', 'clean', 'rev']
+      less:
+        files: 'assets/**/*.less'
+        tasks: ['less']
+
 
   grunt.loadNpmTasks 'grunt-contrib-clean'
   grunt.loadNpmTasks 'grunt-contrib-csslint'
@@ -41,6 +61,7 @@ module.exports = (grunt) ->
   grunt.loadNpmTasks 'grunt-contrib-jshint'
   grunt.loadNpmTasks 'grunt-contrib-less'
   grunt.loadNpmTasks 'grunt-contrib-uglify'
+  grunt.loadNpmTasks 'grunt-contrib-watch'
   grunt.loadNpmTasks 'grunt-rev'
 
   grunt.registerTask 'default', [
