@@ -25,4 +25,4 @@ module.exports = renderable ({balances, ower, total}) -> layout
               balanceView ower: ower, owee: owee, amount: balance.value
     footer ->
       a '.btn.btn-primary.btn-block', href: urlFor.owe(ower), "Owe @#{ower}"
-      a '.btn.btn-default.btn-block.roulette', href: "/roulette/#{ower}", 'Who pays?'
+      a '.btn.btn-default.btn-block.roulette-link', href: "/roulette/#{ower}", 'Who pays?'
