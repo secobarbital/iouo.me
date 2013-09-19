@@ -31,5 +31,5 @@ MongoClient.connect url, (err, db) ->
       loc:
         $near:
           $geometry: pos2geo position
-          $maxdistance: 100
+          $maxDistance: 100
     positions.find(query).toArray cb
