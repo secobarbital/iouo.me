@@ -38,3 +38,11 @@ footer {
 .list-group-media {
   margin-top: 0;
 }
+
+.roulette-features-missing,
+.roulette-geo-permission-denied,
+.roulette-geo-position-unavailable,
+.roulette-geo-timeout,
+.roulette-geo-error {
+  display: none;
+}
