@@ -43,6 +43,7 @@ footer {
 .roulette-geo-permission-denied,
 .roulette-geo-position-unavailable,
 .roulette-geo-timeout,
-.roulette-geo-error {
+.roulette-geo-error,
+.roulette {
   display: none;
 }

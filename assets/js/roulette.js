@@ -48,7 +48,6 @@ head(function() {
 
   $('.roulette-geo-enable').on('click', function(e) {
     e.preventDefault();
-    $('.roulette-errors > div').hide();
-    enableGeo();
+    location.reload();
   });
 });
