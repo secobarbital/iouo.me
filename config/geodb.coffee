@@ -1,7 +1,7 @@
 async = require 'async'
 MongoClient = require('mongodb').MongoClient
 
-url = process.env['MONGODB_URL'] || 'mongodb://localhost/iouome'
+url = process.env['MONGODB_URL'] || process.env['MONGOLAB_URI'] || 'mongodb://localhost/iouome'
 
 pos2geo = (position) ->
   type: 'Point'
