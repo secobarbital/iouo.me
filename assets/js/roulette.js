@@ -35,7 +35,7 @@ head(function() {
   function enableGeo() {
     navigator.geolocation.getCurrentPosition(handleGeo, handleGeoError, {
       enableHighAccuracy: true,
-      maximumAge: 60000
+      timeout: 5000
     });
   }
 
