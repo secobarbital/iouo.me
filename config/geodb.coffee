@@ -1,11 +1,12 @@
 async = require 'async'
 MongoClient = require('mongodb').MongoClient
 
+geo = require '../lib/geo'
+
 url = process.env['MONGODB_URL'] || process.env['MONGOLAB_URI'] || 'mongodb://localhost/iouome'
 
 pos2geo = (position) ->
-  type: 'Point'
-  coordinates: [parseFloat(position.coords.longitude), parseFloat(position.coords.latitude)]
+  geo.polygon(+position.coords.longitude, +position.coords.latitude, +position.coords.accuracy)
 
 MongoClient.connect url, (err, db) ->
   return console.error err if err
@@ -29,7 +30,6 @@ MongoClient.connect url, (err, db) ->
   exports.nearby = (position, cb) ->
     query =
       loc:
-        $near:
+        $geoIntersects:
           $geometry: pos2geo position
-          $maxDistance: 100
     positions.find(query).toArray cb
