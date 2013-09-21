@@ -6,7 +6,7 @@ geo = require '../lib/geo'
 url = process.env['MONGODB_URL'] || process.env['MONGOLAB_URI'] || 'mongodb://localhost/iouome'
 
 pos2geo = (position) ->
-  geo.polygon(+position.coords.longitude, +position.coords.latitude, +position.coords.accuracy)
+  geo.polygon(+position.coords.longitude, +position.coords.latitude, (+position.coords.accuracy+100)/1000)
 
 MongoClient.connect url, (err, db) ->
   return console.error err if err
