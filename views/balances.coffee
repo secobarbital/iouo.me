@@ -7,7 +7,7 @@ layout = require './layout'
 urlFor = require '../lib/url_for'
 
 module.exports = renderable ({balances, ower, total}) -> layout
-  cdnjs: ['jquery']
+  externaljs: ['jquery']
   content: ->
     nav '.navbar', role: 'navigation', ->
       div '.navbar-header', ->

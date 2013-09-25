@@ -3,7 +3,7 @@ module.exports = (grunt) ->
     pkg: grunt.file.readJSON 'package.json'
     clean:
       less: ['assets/css/bootstrap.css']
-      rev: ['public/*.jquery.min.js', 'public/*.jquery.timeago.min.js', 'public/*.vendor.min.css']
+      rev: ['public/*.jquery.min.js', 'public/*.jquery.fittext.min.js', 'public/*.jquery.timeago.min.js', 'public/*.vendor.min.css']
     csslint:
       strict:
         src: ['assets/css/iouo.css']
@@ -30,6 +30,7 @@ module.exports = (grunt) ->
       files:
         src: [
           'public/jquery.min.js'
+          'public/jquery.fittext.min.js'
           'public/jquery.timeago.min.js'
           'public/vendor.min.css'
         ]
@@ -42,6 +43,7 @@ module.exports = (grunt) ->
       vendor:
         files:
           'public/jquery.min.js': ['assets/js/jquery-2.0.3.custom.js']
+          'public/jquery.fittext.min.js': ['assets/js/jquery.fittext.js']
           'public/jquery.timeago.min.js': ['assets/js/jquery.timeago.js']
     watch:
       css:

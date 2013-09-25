@@ -26,7 +26,7 @@ exports.headjs = ({cdnjs, externaljs, inlinejs}) ->
     scripts.push "#{versioned(f, 'min.js')}" for f in externaljs
   if scripts.length
     script src: cdnUrls.head, ''
-    script "head.js(#{JSON.stringify scripts})"
+    script "head.js(#{scripts.map JSON.stringify})"
   if inlinejs
     script memoRead "#{assetsDir}/js/#{f}.min.js" for f in inlinejs
 

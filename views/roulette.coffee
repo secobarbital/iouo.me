@@ -3,7 +3,7 @@
 layout = require './layout'
 
 module.exports = renderable ({user}) -> layout
-  cdnjs: ['jquery']
+  externaljs: ['jquery', 'jquery.fittext']
   inlinejs: ['roulette']
   content: ->
     nav '.navbar', role: 'navigation', ->
