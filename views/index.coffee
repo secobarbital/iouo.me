@@ -1,6 +1,7 @@
-accounting = require 'accounting'
 {renderable, nav, footer, section, div, span, p, a, time, text} = require 'teacup'
+accounting = require 'accounting'
 
+amountView = require './amount'
 layout = require './layout'
 
 module.exports = renderable ({balances}) -> layout content: ->
@@ -16,6 +17,7 @@ module.exports = renderable ({balances}) -> layout content: ->
         a '.list-group-item.list-group-link', href: "/balances/#{ower}", ->
           span '.subject', "@#{ower}"
           span '.verb', " #{verb} "
-          span '.amount', accounting.formatMoney Math.abs(amount), '$ '
+          div '.list-group-link-rhs', ->
+            amountView amount: Math.abs(amount)
   footer ->
     a '.btn.btn-primary.btn-block', href: '/owe', 'Owe someone'

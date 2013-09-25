@@ -1,6 +1,7 @@
 {renderable, nav, header, footer, section, h3, div, span, a, p, small, text} = require 'teacup'
 accounting = require 'accounting'
 
+amountView = require './amount'
 balanceView = require './balance'
 layout = require './layout'
 urlFor = require '../lib/url_for'
@@ -17,7 +18,8 @@ module.exports = renderable ({balances, ower, total}) -> layout
           verb = if total > 0 then 'owes' else 'is owed'
           span '.subject', "@#{ower} "
           span '.verb', verb
-          span '.amount', accounting.formatMoney Math.abs(total), '$ '
+          div '.panel-heading-rhs', ->
+            amountView amount: Math.abs(total)
         div '.list-group', ->
           balances.forEach (balance) ->
             [ower, owee] = balance.key

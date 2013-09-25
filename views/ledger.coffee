@@ -1,6 +1,7 @@
-accounting = require 'accounting'
 {renderable, nav, header, footer, section, h4, div, span, img, a, p, small, time, text, raw, script} = require 'teacup'
+accounting = require 'accounting'
 
+amountView = require './amount'
 layout = require './layout'
 urlFor = require '../lib/url_for'
 
@@ -22,7 +23,7 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout
             a href: "/balances/#{owee}", "@#{owee}"
             text ' owes '
             a href: "/balances/#{ower}", "@#{ower}"
-          span '.amount', accounting.formatMoney Math.abs(amount), '$ '
+          amountView amount: Math.abs(amount)
         div '.list-group', ->
           txns.forEach (txn) ->
             tweet = txn.doc.raw
