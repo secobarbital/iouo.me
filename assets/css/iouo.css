@@ -6,7 +6,7 @@
   font-size: 1.3em;
 }
 
-.amount, .currency {
+.amount, .currency, .roulette-headline {
   font-family: Georgia, Palatino, serif;
   line-height: 1;
 }
@@ -39,6 +39,10 @@ footer {
 
 .list-group-media {
   margin-top: 0;
+}
+
+.roulette-headline {
+  text-align: center;
 }
 
 .roulette-features-missing,

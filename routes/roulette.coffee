@@ -1,4 +1,5 @@
 _ = require 'lodash'
+accounting = require 'accounting'
 events = require 'events'
 
 db = require '../config/db'
@@ -29,6 +30,7 @@ announce = (res, user, neighbors) ->
 
     res.write 'data: '
     res.write JSON.stringify
+      headline: accounting.formatMoney -total, ''
       neighbors: neighborsView
         balances: balances
         ower: user

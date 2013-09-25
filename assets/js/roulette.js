@@ -3,6 +3,7 @@ head(function() {
     var source = new EventSource(location.pathname + '/nearby');
     source.addEventListener('message', function(e) {
       var data = JSON.parse(e.data);
+      $('.roulette-headline').text(data.headline);
       $('.roulette-panel').html(data.neighbors);
     }, false);
   }

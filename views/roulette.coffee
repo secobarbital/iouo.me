@@ -1,4 +1,4 @@
-{renderable, nav, section, div, span, a, text} = require 'teacup'
+{renderable, nav, section, h1, div, span, a, text} = require 'teacup'
 
 layout = require './layout'
 
@@ -10,6 +10,7 @@ module.exports = renderable ({user}) -> layout
       div '.navbar-header', ->
         a '.navbar-brand', href: '/', 'iouo.me'
     section '.roulette', ->
+      h1 '.roulette-headline', ->
       div '.panel.panel-default.roulette-panel', ->
     section '.roulette-errors', ->
       div '.alert.alert-danger.roulette-features-missing', ->
