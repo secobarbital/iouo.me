@@ -20,7 +20,8 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout
             a href: "/balances/#{owee}", "@#{owee}"
             text ' owes '
             a href: "/balances/#{ower}", "@#{ower}"
-          amountView amount: Math.abs(amount)
+          div '.panel-heading-rhs', ->
+            amountView amount: Math.abs(amount)
         div '.list-group', ->
           txns.forEach (txn) ->
             tweet = txn.doc.raw
