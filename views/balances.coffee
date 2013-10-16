@@ -9,9 +9,6 @@ urlFor = require '../lib/url_for'
 module.exports = renderable ({balances, ower, total}) -> layout
   externaljs: ['jquery']
   content: ->
-    nav '.navbar', role: 'navigation', ->
-      div '.navbar-header', ->
-        a '.navbar-brand', href: '/', 'iouo.me'
     section '.balances', ->
       div '.panel.panel-default', ->
         div '.panel-heading.clearfix', ->

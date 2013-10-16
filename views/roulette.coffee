@@ -6,9 +6,6 @@ module.exports = renderable ({user}) -> layout
   externaljs: ['jquery', 'jquery.fittext']
   inlinejs: ['roulette']
   content: ->
-    nav '.navbar', role: 'navigation', ->
-      div '.navbar-header', ->
-        a '.navbar-brand', href: '/', 'iouo.me'
     section '.roulette', ->
       h1 '.roulette-headline', ->
       div '.panel.panel-default.roulette-panel', ->

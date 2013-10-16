@@ -5,9 +5,6 @@ amountView = require './amount'
 layout = require './layout'
 
 module.exports = renderable ({balances}) -> layout content: ->
-  nav '.navbar', role: 'navigation', ->
-    div '.navbar-header', ->
-      a '.navbar-brand', href: '/', 'iouo.me'
   section ->
     div '.list-group', ->
       balances.forEach (balance) ->

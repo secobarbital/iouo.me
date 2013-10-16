@@ -9,9 +9,6 @@ module.exports = renderable ({amount, owee, ower, txns}) -> layout
   externaljs: ['jquery', 'jquery.timeago']
   inlinejs: ['ledger']
   content: ->
-    nav '.navbar', role: 'navigation', ->
-      div '.navbar-header', ->
-        a '.navbar-brand', href: '/', 'iouo.me'
     section '.transactions', ->
       div '.panel.panel-default', ->
         div '.panel-heading.clearfix', ->

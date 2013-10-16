@@ -7,9 +7,6 @@ module.exports = renderable -> layout
   externaljs: ['jquery']
   inlinejs: ['owe']
   content: ->
-    nav '.navbar', role: 'navigation', ->
-      div '.navbar-header', ->
-        a '.navbar-brand', href: '/', 'iouo.me'
     section '#owe-someone', ->
       form action: 'https://twitter.com/intent/tweet', ->
         input name: 'text', type: 'hidden'

@@ -1,3 +1,18 @@
+@font-face {
+	font-family: 'fontawesome';
+	src:url('/fontawesome82497.eot');
+	src:url('/fontawesome82497.eot?#iefix') format('embedded-opentype'),
+		url('/fontawesome82497.woff') format('woff'),
+		url('/fontawesome82497.ttf') format('truetype'),
+		url('/fontawesome82497.svg#fontawesome') format('svg');
+	font-weight: normal;
+	font-style: normal;
+}
+
+.logotype {
+  font-family: fontawesome;
+}
+
 .subject {
   font-weight: bold;
 }
@@ -30,11 +45,8 @@ footer {
 }
 
 .list-group-link-rhs:after {
-  content: "\203A";
-  font-family: monospace;
-  font-size: 2em;
-  font-weight: 100;
-  line-height: 0;
+  content: " \3e";
+  font-family: 'fontawesome';
 }
 
 .list-group-media {

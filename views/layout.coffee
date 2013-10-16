@@ -1,6 +1,7 @@
 {renderable, doctype, html, head, title, meta, link, body, style, script} = require 'teacup'
 
 assets = require '../config/assets'
+navbar = require './navbar'
 
 module.exports = renderable ({content, cdnjs, externaljs, inlinejs}) ->
   doctype 5
@@ -15,4 +16,5 @@ module.exports = renderable ({content, cdnjs, externaljs, inlinejs}) ->
       assets.headjs cdnjs: cdnjs, externaljs: externaljs, inlinejs: inlinejs
       assets.gajs()
     body ->
+      navbar()
       content()
