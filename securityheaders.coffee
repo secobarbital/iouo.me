@@ -8,9 +8,9 @@ secureHeaders = (req, res, next) ->
     'X-Content-Type-Options': 'nosniff'
     'X-XSS-Protection': '1; mode=block'
     'X-Content-Security-Policy': [
-      "default-src 'self' http://cdn.iouo.me/;"
-      "img-src 'self' http://www.google-analytics.com/;"
-      "script-src 'self' http://cdn.iouo.me/ http://www.google-analytics.com/;"
+      "default-src 'self' cdn.iouo.me;"
+      "img-src 'self' www.google-analytics.com *.twimg.com;"
+      "script-src 'self' cdn.iouo.me www.google-analytics.com;"
     ].join ' '
     'X-Permitted-Cross-Domain-Policies': 'master-only'
   next()
