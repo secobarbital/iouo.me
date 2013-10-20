@@ -1,5 +1,6 @@
 express = require 'express'
 http = require 'http'
+securityheaders = require './securityheaders'
 teacup = require 'teacup/lib/express'
 
 db = require './config/db'
@@ -16,6 +17,7 @@ app.configure ->
   app.set 'view engine', 'coffee'
   app.engine 'coffee', teacup.renderFile
   app.use express.logger 'dev'
+  securityheaders.secure app
   app.use express.bodyParser()
   app.use express.methodOverride()
   app.use express.compress()
