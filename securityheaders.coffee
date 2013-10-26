@@ -4,13 +4,14 @@ exports.secure = secure = (app) ->
 
 secureHeaders = (req, res, next) ->
   res.set
-    'X-Frame-Options': 'SAMEORIGIN'
-    'X-Content-Type-Options': 'nosniff'
-    'X-XSS-Protection': '1; mode=block'
-    'X-Content-Security-Policy': [
+    'Content-Security-Policy': [
       "default-src 'self' cdn.iouo.me;"
+      "frame-src 'none';"
       "img-src 'self' www.google-analytics.com *.twimg.com;"
       "script-src 'self' cdn.iouo.me www.google-analytics.com;"
     ].join ' '
+    'X-Content-Type-Options': 'nosniff'
+    'X-Frame-Options': 'SAMEORIGIN'
     'X-Permitted-Cross-Domain-Policies': 'master-only'
+    'X-XSS-Protection': '1; mode=block'
   next()
