@@ -8,7 +8,7 @@ secureHeaders = (req, res, next) ->
       "default-src 'self' cdn.iouo.me;"
       "frame-src 'none';"
       "img-src 'self' cdn.iouo.me www.google-analytics.com *.twimg.com;"
-      "script-src 'unsafe-inline' 'self' cdn.iouo.me www.google-analytics.com;"
+      "script-src 'unsafe-inline' 'self' cdn.iouo.me cdnjs.cloudflare.com www.google-analytics.com;"
       "style-src 'unsafe-inline' 'self' cdn.iouo.me;"
     ].join ' '
     'X-Content-Type-Options': 'nosniff'
