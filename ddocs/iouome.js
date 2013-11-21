@@ -10,12 +10,17 @@ module.exports = {
       map: function(doc) {
         var ower, owee, amount;
 
-        if (doc.raw && doc.ower && doc.owee && doc.amount) {
-          ower = doc.raw.user.screen_name;
-          owee = doc.raw.in_reply_to_screen_name;
+        if (doc.ower && doc.owee && doc.amount) {
+          ower = doc.ower
+          owee = doc.owee
           amount = doc.amount;
-          if (ower && owee && amount) {
-            amount = parseFloat(amount);
+          amount = parseFloat(amount);
+          if (via) {
+            emit([ower, via], amount);
+            emit([via, owee], amount);
+            emit([via, ower], -amount);
+            emit([owee, via], -amount);
+          } else {
             emit([ower, owee], amount);
             emit([owee, ower], -amount);
           }

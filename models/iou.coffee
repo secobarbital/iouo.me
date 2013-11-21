@@ -50,6 +50,10 @@ IOU.ledger = (ower, owee, cb) ->
    , (err, res) ->
     cb err, res && res.rows
 
+isMentioned = (screenName, tweet) ->
+  tweet.entities?.user_mentions? &&
+    screenName.toLowerCase() in (mention.screen_name.toLowerCase() for mention in tweet.entities.user_mentions)
+
 performSearch = (sinceId, maxId, cb) ->
   if typeof maxId == 'function'
     cb = maxId
@@ -84,6 +88,8 @@ processTweet = (tweet, cb) ->
     ower: tweet.user && tweet.user.id_str
     owee: tweet.in_reply_to_user_id_str
     amount: parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
+    via: m[1] if (m = tweet.text.match /\bvia\s+@(\S+)/i) && isMentioned(m[1], tweet)
+
   if doc.ower && doc.owee && doc.amount
     db.insert doc, cb
   else
