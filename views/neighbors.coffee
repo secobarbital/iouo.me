@@ -6,10 +6,11 @@ balanceView = require './balance'
 urlFor = require '../lib/url_for'
 
 module.exports = renderable ({ower, balances, total}) ->
-  a '.panel-heading.clearfix.roulette-heading', href: "/balances/#{ower}", ->
+  div '.panel-heading.clearfix.roulette-heading', ->
     span '.verb.roulette-owed', 'The group owes ' if total < 0
-    text '@'
-    span '.subject', "#{ower}"
+    a href: "/balances/#{ower}", ->
+      text '@'
+      span '.subject', "#{ower}"
     span '.verb.roulette-owes', ' owes the group' if total > 0
     if total
       div '.panel-heading-rhs', ->
