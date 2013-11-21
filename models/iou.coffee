@@ -5,6 +5,7 @@ db = require '../config/db'
 twitter = require '../config/twitter'
 
 twitterSearchSinceId = null
+twitterSearchLastFullSearch = null
 
 IOU = exports
 
@@ -14,7 +15,8 @@ IOU.latest = (cb) ->
     cb null, res.rows.length && res.rows[0].key
 
 IOU.searchTwitter = (cb) ->
-  return performSearch twitterSearchSinceId, cb if twitterSearchSinceId
+  return performSearch twitterSearchSinceId, cb if twitterSearchSinceId && twitterSearchLastFullSearch > Date.now() - 86400000
+  twitterSearchLastFullSearch = Date.now()
   IOU.latest (err, sinceId) ->
     return cb err if err
     performSearch sinceId, cb
