@@ -50,10 +50,6 @@ IOU.ledger = (ower, owee, cb) ->
    , (err, res) ->
     cb err, res && res.rows
 
-isMentioned = (screenName, tweet) ->
-  tweet.entities?.user_mentions? &&
-    screenName.toLowerCase() in (mention.screen_name.toLowerCase() for mention in tweet.entities.user_mentions)
-
 performSearch = (sinceId, maxId, cb) ->
   if typeof maxId == 'function'
     cb = maxId
@@ -81,16 +77,42 @@ performSearch = (sinceId, maxId, cb) ->
       twitterSearchSinceId = refreshParams.since_id unless twitterSearchSinceId > refreshParams.since_id
       return cb err if err
 
+extractOwer = (tweet) ->
+  tweet.user &&
+    provider: 'twitter'
+    id: tweet.user.id_str
+    displayName: tweet.user.screen_name
+
+extractOwee = (tweet) ->
+  tweet.in_reply_to_user_id_str &&
+    provider: 'twitter'
+    id: tweet.in_reply_to_user_id_str
+    displayName: tweet.in_reply_to_screen_name
+
+extractAmount = (tweet) ->
+  parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
+
+extractVia = (tweet) ->
+  via = tweet.text.indexOf 'via'
+  if ~via
+    candidates = tweet.entities?.user_mentions?.filter (mention) ->
+      mention.indices[0] > via
+    if candidates
+      candidate = candidates[0]
+      provider: 'twitter'
+      id: candidate.id_str
+      displayName: candidate.screen_name
+
 processTweet = (tweet, cb) ->
   doc =
     _id: "twitter/#{tweet.id_str}"
     raw: tweet
-    ower: tweet.user && tweet.user.id_str
-    owee: tweet.in_reply_to_user_id_str
-    amount: parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
-    via: m[1] if (m = tweet.text.match /\bvia\s+@(\S+)/i) && isMentioned(m[1], tweet)
+    ower: extractOwer tweet
+    owee: extractOwee tweet
+    amount: extractAmount tweet
 
   if doc.ower && doc.owee && doc.amount
+    doc.via = via if via = extractVia tweet
     db.insert doc, cb
   else
     cb()

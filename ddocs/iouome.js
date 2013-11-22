@@ -8,14 +8,14 @@ module.exports = {
     },
     balances: {
       map: function(doc) {
-        var ower, owee, amount;
+        var ower, owee, amount, via;
 
         if (doc.ower && doc.owee && doc.amount) {
-          ower = doc.ower
-          owee = doc.owee
+          ower = doc.ower.displayName || doc.raw.user.screen_name;
+          owee = doc.owee.displayName || doc.raw.in_reply_to_screen_name;
           amount = doc.amount;
-          amount = parseFloat(amount);
-          if (via) {
+          if (doc.via) {
+            via = doc.via.displayName
             emit([ower, via], amount);
             emit([via, owee], amount);
             emit([via, ower], -amount);
