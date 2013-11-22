@@ -81,13 +81,18 @@ extractOwer = (tweet) ->
   tweet.user &&
     provider: 'twitter'
     id: tweet.user.id_str
-    displayName: tweet.user.screen_name
+    username: tweet.user.screen_name
+    displayName: tweet.user.name
 
 extractOwee = (tweet) ->
-  tweet.in_reply_to_user_id_str &&
-    provider: 'twitter'
-    id: tweet.in_reply_to_user_id_str
-    displayName: tweet.in_reply_to_screen_name
+  if tweet.in_reply_to_user_id_str
+    candidates = tweet.entities?.user_mentions?.filter (mention) ->
+      mention.id_str == tweet.in_reply_to_user_id_str
+    if candidates && candidate = candidates[0]
+      provider: 'twitter'
+      id: candidate.id_str
+      username: candidate.screen_name
+      displayName: candidate.name
 
 extractAmount = (tweet) ->
   parseFloat m[1] if m = tweet.text.match /#iou\s+\$([.\d]+)/i
@@ -97,11 +102,11 @@ extractVia = (tweet) ->
   if ~via
     candidates = tweet.entities?.user_mentions?.filter (mention) ->
       mention.indices[0] > via
-    if candidates
-      candidate = candidates[0]
+    if candidates && candidate = candidates[0]
       provider: 'twitter'
       id: candidate.id_str
-      displayName: candidate.screen_name
+      username: candidate.screen_name
+      displayName: candidate.name
 
 processTweet = (tweet, cb) ->
   doc =

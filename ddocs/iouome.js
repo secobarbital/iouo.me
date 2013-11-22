@@ -11,11 +11,11 @@ module.exports = {
         var ower, owee, amount, via;
 
         if (doc.ower && doc.owee && doc.amount) {
-          ower = doc.ower.displayName || doc.raw.user.screen_name;
-          owee = doc.owee.displayName || doc.raw.in_reply_to_screen_name;
+          ower = doc.ower.username || doc.raw.user.screen_name;
+          owee = doc.owee.username || doc.raw.in_reply_to_screen_name;
           amount = doc.amount;
           if (doc.via) {
-            via = doc.via.displayName
+            via = doc.via.username
             emit([ower, via], amount);
             emit([via, owee], amount);
             emit([via, ower], -amount);
