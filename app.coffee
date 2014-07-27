@@ -35,6 +35,7 @@ app.get '/transactions/:ower/:owee', routes.refresh, routes.transactions
 app.get '/roulette/:user', routes.roulette
 app.post '/roulette/:user', routes.updatePosition
 app.get '/roulette/:user/nearby', routes.sse, routes.nearby
+app.get '/ping', routes.ping
 
 http.createServer(app).listen app.get('port'), ->
   console.log "Express server listening on port #{app.get('port')}"

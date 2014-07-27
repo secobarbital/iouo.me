@@ -73,9 +73,10 @@ performSearch = (sinceId, maxId, cb) ->
         else
           cb()
     ], (err) ->
+      return cb err if err
       refreshParams = querystring.parse data.search_metadata.refresh_url.slice(1)
       twitterSearchSinceId = refreshParams.since_id unless twitterSearchSinceId > refreshParams.since_id
-      return cb err if err
+      cb()
 
 extractOwer = (tweet) ->
   tweet.user &&

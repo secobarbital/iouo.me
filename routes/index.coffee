@@ -23,6 +23,13 @@ exports.refresh = (req, res, next) ->
       console.log "Error searching Twitter for IOUs: #{err}" if err
     next()
 
+exports.ping = (req, res) ->
+  IOU.searchTwitter (err) ->
+    if err
+      res.send 502, err
+    else
+      res.send 200
+
 exports.index = (req, res, next) ->
   IOU.balances (err, balances) ->
     return next err if err
