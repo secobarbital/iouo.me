@@ -13,6 +13,10 @@ var stylizer = require('stylizer');
 var templatizer = require('templatizer');
 var app = express();
 
+var api = require('./api.js');
+var ddocs = require('./ddocs');
+ddocs.update();
+
 // a little helper for fixing paths for various environments
 var fixPath = function (pathString) {
     return path.resolve(path.normalize(pathString));
@@ -44,17 +48,7 @@ app.use(helmet.nosniff());
 
 app.set('view engine', 'jade');
 
-
-// -----------------
-// Set up our little demo API
-// -----------------
-var api = require('./fakeApi');
-app.get('/api/people', api.list);
-app.get('/api/people/:id', api.get);
-app.delete('/api/people/:id', api.delete);
-app.put('/api/people/:id', api.update);
-app.post('/api/people', api.add);
-
+app.get('/api/balances', api.list);
 
 // -----------------
 // Enable the functional test site in development

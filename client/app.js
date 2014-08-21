@@ -8,6 +8,7 @@ var tracking = require('./helpers/metrics');
 var MainView = require('./views/main');
 var Me = require('./models/me');
 var People = require('./models/persons');
+var Balances = require('./models/balances');
 var domReady = require('domready');
 
 
@@ -19,6 +20,7 @@ module.exports = {
         // create our global 'me' object and an empty collection for our people models.
         window.me = new Me();
         this.people = new People();
+        this.balances = new Balances();
 
         // init our URL handlers and the history tracker
         this.router = new Router();

@@ -23,6 +23,11 @@
         return '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/><meta name="apple-mobile-web-app-capable" content="yes"/>';
     };
 
+    // includes/balance.jade compiled template
+    templatizer["includes"]["balance"] = function tmpl_includes_balance() {
+        return '<a role="balance" class="list-group-item list-group-link"><span role="subject" class="subject"></span> <span role="verb" class="verb"></span> <div role="amount" class="list-group-link-rhs"></div></a>';
+    };
+
     // includes/formInput.jade compiled template
     templatizer["includes"]["formInput"] = function tmpl_includes_formInput() {
         return '<div class="form-group"><label role="label"></label><div role="message-container"><div role="message-text" class="alert alert-danger"></div></div><input class="form-control"/></div>';
@@ -39,36 +44,8 @@
     };
 
     // pages/home.jade compiled template
-    templatizer["pages"]["home"] = function tmpl_pages_home(locals) {
-        var buf = [];
-        var jade_mixins = {};
-        var jade_interp;
-        var locals_for_with = locals || {};
-        (function(balances, verb) {
-            buf.push('<section class="page home"><div class="list-group">');
-            (function() {
-                var $obj = balances;
-                if ("number" == typeof $obj.length) {
-                    for (var $index = 0, $l = $obj.length; $index < $l; $index++) {
-                        var balance = $obj[$index];
-                        var ower = balance.key[0];
-                        var link = "/balances/" + ower;
-                        buf.push("<a" + jade.attr("href", ower, true, false) + ' class="list-group-item list-group-link"><span class="subject">' + jade.escape(null == (jade_interp = "@" + ower) ? "" : jade_interp) + '</span><span class="verb">' + jade.escape(null == (jade_interp = " " + verb + " ") ? "" : jade_interp) + '</span><div class="list-group-link-rhs">' + jade.escape(null == (jade_interp = balance.value.toFixed(2)) ? "" : jade_interp) + "</div></a>");
-                    }
-                } else {
-                    var $l = 0;
-                    for (var $index in $obj) {
-                        $l++;
-                        var balance = $obj[$index];
-                        var ower = balance.key[0];
-                        var link = "/balances/" + ower;
-                        buf.push("<a" + jade.attr("href", ower, true, false) + ' class="list-group-item list-group-link"><span class="subject">' + jade.escape(null == (jade_interp = "@" + ower) ? "" : jade_interp) + '</span><span class="verb">' + jade.escape(null == (jade_interp = " " + verb + " ") ? "" : jade_interp) + '</span><div class="list-group-link-rhs">' + jade.escape(null == (jade_interp = balance.value.toFixed(2)) ? "" : jade_interp) + "</div></a>");
-                    }
-                }
-            }).call(this);
-            buf.push('</div></section><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer>');
-        }).call(this, "balances" in locals_for_with ? locals_for_with.balances : typeof balances !== "undefined" ? balances : undefined, "verb" in locals_for_with ? locals_for_with.verb : typeof verb !== "undefined" ? verb : undefined);
-        return buf.join("");
+    templatizer["pages"]["home"] = function tmpl_pages_home() {
+        return '<section class="page home"><div role="balances" class="list-group"></div><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></section>';
     };
 
     // pages/info.jade compiled template

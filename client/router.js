@@ -22,7 +22,8 @@ module.exports = Router.extend({
     // ------- ROUTE HANDLERS ---------
     home: function () {
         this.trigger('page', new HomePage({
-            model: me
+            model: me,
+            collection: app.balances
         }));
     },
 
