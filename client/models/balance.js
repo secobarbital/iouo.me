@@ -32,5 +32,11 @@ module.exports = AmpersandModel.extend({
                 return '/balances/' + this.ower;
             }
         }
+    },
+    parse: function(attrs) {
+        return {
+            ower: attrs.key[0],
+            amount: attrs.value
+        };
     }
 });

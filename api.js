@@ -6,9 +6,7 @@ exports.list = function(req, res, next) {
             return next(err);
         }
         res.send(balances.rows.filter(function(balance) {
-            return !!balance.value;
-        }).map(function(balance) {
-            return { ower: balance.key[0], amount: balance.value };
+            return balance.value !== 0;
         }));
     });
 }
