@@ -20,7 +20,7 @@
 
     // head.jade compiled template
     templatizer["head"] = function tmpl_head() {
-        return '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/><meta name="apple-mobile-web-app-capable" content="yes"/>';
+        return '<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0"/><meta name="apple-mobile-web-app-capable" content="yes"/><link rel="apple-touch-icon-precomposed" href="/apple-touch-icon-precomposed.png"/><link rel="shortcut icon" href="/apple-touch-icon.png"/>';
     };
 
     // includes/balance.jade compiled template
