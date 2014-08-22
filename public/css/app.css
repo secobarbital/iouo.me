@@ -27,8 +27,7 @@ body {
   height: 40px;
   width: 40px;
 }
-section,
-footer {
+section {
   padding-left: 10px;
   padding-right: 10px;
 }

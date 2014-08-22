@@ -45,7 +45,7 @@
 
     // pages/home.jade compiled template
     templatizer["pages"]["home"] = function tmpl_pages_home() {
-        return '<section class="page home"><div role="balances" class="list-group"></div><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></section>';
+        return '<section class="page home"><div role="balances" class="list-group"></div><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer></section>';
     };
 
     // pages/info.jade compiled template
