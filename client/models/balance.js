@@ -1,11 +1,11 @@
 var AmpersandModel = require('ampersand-model');
+var accounting = require('accounting');
 
 
 module.exports = AmpersandModel.extend({
     props: {
         ower: 'string',
         amount: 'number',
-
     },
     derived: {
         subject: {
@@ -18,6 +18,12 @@ module.exports = AmpersandModel.extend({
             deps: ['amount'],
             fn: function() {
                 return this.amount > 0 ? 'owes' : 'is owed';
+            }
+        },
+        formattedAmount: {
+            deps: ['amount'],
+            fn: function() {
+                return accounting.formatMoney(Math.abs(this.amount), '');
             }
         },
         url: {

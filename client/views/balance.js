@@ -7,7 +7,7 @@ module.exports = View.extend({
     bindings: {
         'model.subject': '[role=subject]',
         'model.verb': '[role=verb]',
-        'model.amount': '[role=amount]',
+        'model.formattedAmount': '[role=amount]',
         'model.url': {
             type: 'attribute',
             role: 'balance',

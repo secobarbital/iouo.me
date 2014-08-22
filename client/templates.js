@@ -15,7 +15,7 @@
 
     // body.jade compiled template
     templatizer["body"] = function tmpl_body() {
-        return '<body><nav role="navigation" class="navbar"><div class="navbar-header"><a href="/" class="navbar-brand"><span class="logotype">iouo.me</span></a></div></nav><div class="container"><main role="page-container"></main></div></body>';
+        return '<body><nav role="navigation" class="navbar"><div class="navbar-header"><a href="/" class="navbar-brand"><span class="logotype">IOU</span></a></div></nav><div class="container"><main role="page-container"></main></div></body>';
     };
 
     // head.jade compiled template
@@ -25,7 +25,7 @@
 
     // includes/balance.jade compiled template
     templatizer["includes"]["balance"] = function tmpl_includes_balance() {
-        return '<a role="balance" class="list-group-item list-group-link"><span role="subject" class="subject"></span> <span role="verb" class="verb"></span> <div role="amount" class="list-group-link-rhs"></div></a>';
+        return '<a role="balance" class="list-group-item list-group-link"><span role="subject" class="subject"></span> <span role="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
     };
 
     // includes/formInput.jade compiled template

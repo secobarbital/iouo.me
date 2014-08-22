@@ -3,4 +3,6 @@ a.list-group-item.list-group-link(role='balance')
   = ' '
   span.verb(role='verb')
   = ' '
-  div.list-group-link-rhs(role='amount')
+  div.list-group-link-rhs
+    span.currency= '$ '
+    span.amount(role='amount')

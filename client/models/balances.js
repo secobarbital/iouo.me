@@ -4,5 +4,8 @@ var Balance = require('./balance');
 
 module.exports = Collection.extend({
     model: Balance,
-    url: '/api/balances'
+    url: '/api/balances',
+    comparator: function(balance) {
+        return -balance.amount;
+    }
 });

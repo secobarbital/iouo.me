@@ -9,8 +9,6 @@ exports.list = function(req, res, next) {
             return !!balance.value;
         }).map(function(balance) {
             return { ower: balance.key[0], amount: balance.value };
-        }).sort(function(a, b) {
-            return b.value - a.value;
         }));
     });
 }
