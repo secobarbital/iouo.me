@@ -25,7 +25,7 @@
 
     // includes/balance.jade compiled template
     templatizer["includes"]["balance"] = function tmpl_includes_balance() {
-        return '<a role="balance" class="list-group-item list-group-link"><span role="subject" class="subject"></span> <span role="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
+        return '<a role="balance" class="list-group-item list-group-link"><span class="subject">@<span role="subject"></span></span> <span role="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
     };
 
     // includes/formInput.jade compiled template
@@ -36,6 +36,16 @@
     // includes/person.jade compiled template
     templatizer["includes"]["person"] = function tmpl_includes_person() {
         return '<li class="person list-group-item"><img role="avatar" width="40" height="40"/><a role="name"></a><span class="btn-group pull-right"> <a role="action-edit" class="btn btn-default">edit </a><a href="#" role="action-delete" class="btn btn-danger">delete</a></span></li>';
+    };
+
+    // includes/xbalance.jade compiled template
+    templatizer["includes"]["xbalance"] = function tmpl_includes_xbalance() {
+        return '<a role="balance" class="list-group-item list-group-link"><span role="prefixVerb" class="verb"></span> <span class="subject">@<span role="subject"></span></span> <span role="suffixVerb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
+    };
+
+    // pages/balance.jade compiled template
+    templatizer["pages"]["balance"] = function tmpl_pages_balance() {
+        return '<section class="page balance"><div class="panel panel-default"><div class="panel-heading clearfix"><span role="ower" class="subject"></span> <span role="verb" class="verb"></span><div class="panel-heading-rhs"><span class="currency">$ </span><span role="total" class="amount"></span></div></div><div role="balances" class="list-group"></div></div><footer><a role="owe" class="btn btn-primary btn-block">Owe @<span role="ower"></span></a></footer></section>';
     };
 
     // pages/collectionDemo.jade compiled template

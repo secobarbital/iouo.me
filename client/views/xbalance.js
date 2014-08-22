@@ -3,10 +3,11 @@ var templates = require('../templates');
 
 
 module.exports = View.extend({
-    template: templates.includes.balance,
+    template: templates.includes.xbalance,
     bindings: {
-        'model.ower': '[role=subject]',
-        'model.verb': '[role=verb]',
+        'model.owee': '[role=subject]',
+        'model.prefixVerb': '[role=prefixVerb]',
+        'model.suffixVerb': '[role=suffixVerb]',
         'model.formattedAmount': '[role=amount]',
         'model.url': {
             type: 'attribute',

@@ -1,6 +1,7 @@
 /*global me, app*/
 var Router = require('ampersand-router');
 var HomePage = require('./pages/home');
+var BalancePage = require('./pages/balance');
 var CollectionDemo = require('./pages/collection-demo');
 var InfoPage = require('./pages/info');
 var PersonAddPage = require('./pages/person-add');
@@ -11,6 +12,7 @@ var PersonViewPage = require('./pages/person-view');
 module.exports = Router.extend({
     routes: {
         '': 'home',
+        'balances/:ower': 'balance',
         'collections': 'collectionDemo',
         'info': 'info',
         'person/add': 'personAdd',
@@ -20,10 +22,16 @@ module.exports = Router.extend({
     },
 
     // ------- ROUTE HANDLERS ---------
-    home: function () {
+    home: function() {
         this.trigger('page', new HomePage({
             model: me,
             collection: app.balances
+        }));
+    },
+
+    balance: function(id) {
+        this.trigger('page', new BalancePage({
+            id: id
         }));
     },
 

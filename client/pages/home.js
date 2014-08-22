@@ -16,8 +16,5 @@ module.exports = PageView.extend({
     fetchCollection: function() {
         this.collection.fetch();
         return false;
-    },
-    resetCollection: function() {
-        this.collection.reset();
     }
 });

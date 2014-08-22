@@ -1,46 +1,44 @@
 var AmpersandModel = require('ampersand-model');
 var accounting = require('accounting');
 
-var CrossBalances = require('./xbalances');
 
 module.exports = AmpersandModel.extend({
-    idAttribute: 'ower',
+    idAttribute: 'owee',
     props: {
         ower: 'string',
+        owee: 'string',
         amount: 'number'
     },
     derived: {
-        verb: {
-            deps: ['amount'],
-            fn: function() {
-                return this.amount > 0 ? 'owes' : 'is owed';
-            }
-        },
         formattedAmount: {
             deps: ['amount'],
             fn: function() {
                 return accounting.formatMoney(Math.abs(this.amount), '');
             }
         },
-        url: {
-            deps: ['ower'],
+        prefixVerb: {
+            deps: ['amount'],
             fn: function() {
-                return '/balances/' + this.ower;
+                return this.amount > 0 ? 'owes' : '';
             }
         },
-        oweUrl: {
-            deps: ['ower'],
+        suffixVerb: {
+            deps: ['amount'],
             fn: function() {
-                return 'https://twitter.com/intent/tweet?text=@' + encodeURIComponent(this.ower + ' #iou $');
+                return this.amount < 0 ? 'owes' : '';
+            }
+        },
+        url: {
+            deps: ['ower', 'owee'],
+            fn: function() {
+                return '/balances/' + this.ower + '/' + this.owee;
             }
         }
-    },
-    collections: {
-        owees: CrossBalances
     },
     parse: function(attrs) {
         return {
             ower: attrs.key[0],
+            owee: attrs.key[1],
             amount: attrs.value
         };
     }

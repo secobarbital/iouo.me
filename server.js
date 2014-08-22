@@ -22,7 +22,6 @@ var fixPath = function (pathString) {
     return path.resolve(path.normalize(pathString));
 };
 
-
 // -----------------
 // Configure express
 // -----------------
@@ -48,7 +47,8 @@ app.use(helmet.nosniff());
 
 app.set('view engine', 'jade');
 
-app.get('/api/balances', api.list);
+app.get('/api/balances', api.balances);
+app.get('/api/balances/:ower', api.balance);
 
 // -----------------
 // Enable the functional test site in development

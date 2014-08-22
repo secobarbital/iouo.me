@@ -1,8 +1,10 @@
 a.list-group-item.list-group-link(role='balance')
+  span.verb(role='prefixVerb')
+  = ' '
   span.subject @
     span(role='subject')
   = ' '
-  span.verb(role='verb')
+  span.verb(role='suffixVerb')
   = ' '
   div.list-group-link-rhs
     span.currency= '$ '

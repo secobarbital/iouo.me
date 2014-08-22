@@ -1,12 +1,28 @@
 var db = require('./config/db');
 
-exports.list = function(req, res, next) {
+exports.balances = function(req, res, next) {
     db.view('iouome', 'balances', { group_level: 1 }, function(err, balances) {
         if (err) {
             return next(err);
         }
         res.send(balances.rows.filter(function(balance) {
             return balance.value !== 0;
+        }));
+    });
+}
+
+exports.balance = function(req, res, next) {
+    var ower = req.params.ower;
+    db.view('iouome', 'balances', {
+        group_level: 2,
+        startkey: [ower],
+        endkey: [ower, {}]
+    }, function(err, balances) {
+        if (err) {
+            return next(err);
+        }
+        res.send(balances.rows.filter(function(balance) {
+            return balance.value != 0;
         }));
     });
 }

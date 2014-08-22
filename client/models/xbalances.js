@@ -1,11 +1,10 @@
 var Collection = require('ampersand-rest-collection');
-var Balance = require('./balance');
+var CrossBalance = require('./xbalance');
 
 
 module.exports = Collection.extend({
-    mainIndex: 'ower',
-    model: Balance,
-    url: '/api/balances',
+    mainIndex: 'owee',
+    model: CrossBalance,
     comparator: function(balance) {
         return -balance.amount;
     }
