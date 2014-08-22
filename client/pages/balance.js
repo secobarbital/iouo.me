@@ -22,14 +22,25 @@ module.exports = PageView.extend({
             if (err) alert('did not find a balance for: ' + spec.id);
             this.model = model;
             this.collection = model.owees;
-            this.collection.url = model.collection.url + '/' + model.ower;
+            if (this.renderCollectionDeferred) {
+                var args = this.renderCollectionDeferred;
+                delete this.renderCollectionDeferred;
+                this.renderCollection(this.collection, args.view, args.el);
+            }
         }.bind(this));
     },
     render: function() {
         this.renderWithTemplate();
-        this.renderCollection(this.collection, XBalanceView, this.getByRole('balances'));
-        if (!this.collection.length) {
-            this.fetchCollection();
+        this.deferredRenderCollection(this.collection, XBalanceView, this.getByRole('balances'));
+    },
+    deferredRenderCollection: function(collection, view, el) {
+        if (collection) {
+            this.renderCollection(collection, view, el);
+        } else {
+            this.renderCollectionDeferred = {
+                view: view,
+                el: el
+            };
         }
     },
     fetchCollection: function() {

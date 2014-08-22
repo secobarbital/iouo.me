@@ -22,7 +22,7 @@ module.exports = AmpersandModel.extend({
                 return accounting.formatMoney(Math.abs(this.amount), '');
             }
         },
-        url: {
+        balanceUrl: {
             deps: ['ower'],
             fn: function() {
                 return '/balances/' + this.ower;
@@ -38,10 +38,23 @@ module.exports = AmpersandModel.extend({
     collections: {
         owees: CrossBalances
     },
+    initialize: function() {
+        return this;
+    },
     parse: function(attrs) {
-        return {
-            ower: attrs.key[0],
-            amount: attrs.value
-        };
+        if (attrs instanceof Array) {
+            return {
+                ower: attrs[0].key[0],
+                owees: attrs,
+                amount: attrs.reduce(function(sum, xbalance) {
+                    return sum + xbalance.value;
+                }, 0)
+            }
+        } else {
+            return {
+                ower: attrs.key[0],
+                amount: attrs.value
+            };
+        }
     }
 });

@@ -14,5 +14,5 @@ module.exports = View.extend({
             role: 'balance',
             name: 'href'
         }
-    },
+    }
 });

@@ -8,10 +8,10 @@ module.exports = View.extend({
         'model.ower': '[role=subject]',
         'model.verb': '[role=verb]',
         'model.formattedAmount': '[role=amount]',
-        'model.url': {
+        'model.balanceUrl': {
             type: 'attribute',
             role: 'balance',
             name: 'href'
         }
-    },
+    }
 });
