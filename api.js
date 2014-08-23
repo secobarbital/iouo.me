@@ -30,7 +30,6 @@ exports.balance = function(req, res, next) {
 exports.transactions = function(req, res, next) {
     var ower = req.params.ower;
     var owee = req.params.owee;
-    console.log('transactions for', ower, owee);
     db.view('iouome', 'balances', {
         descending: true,
         reduce: false,
