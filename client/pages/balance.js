@@ -22,11 +22,7 @@ module.exports = PageView.extend({
             if (err) alert('did not find a balance for: ' + spec.id);
             this.model = model;
             this.collection = model.owees;
-            if (this.renderCollectionDeferred) {
-                var args = this.renderCollectionDeferred;
-                delete this.renderCollectionDeferred;
-                this.renderCollection(this.collection, args.view, args.el);
-            }
+            this.deferredRenderCollection(this.collection);
         }.bind(this));
     },
     render: function() {
@@ -34,17 +30,21 @@ module.exports = PageView.extend({
         this.deferredRenderCollection(this.collection, XBalanceView, this.getByRole('balances'));
     },
     deferredRenderCollection: function(collection, view, el) {
-        if (collection) {
+        if (arguments.length === 1 && this.renderCollectionDeferred) {
+            view = this.renderCollectionDeferred[1];
+            el = this.renderCollectionDeferred[2];
+        }
+        if (collection && view && el) {
+            delete this.renderCollectionDeferred;
             this.renderCollection(collection, view, el);
+            this.fetchCollectionIfEmpty();
         } else {
-            this.renderCollectionDeferred = {
-                view: view,
-                el: el
-            };
+            this.renderCollectionDeferred = arguments;
         }
     },
-    fetchCollection: function() {
-        this.collection.fetch();
-        return false;
+    fetchCollectionIfEmpty: function() {
+        if (this.collection.isEmpty()) {
+            this.collection.fetch();
+        }
     }
 });

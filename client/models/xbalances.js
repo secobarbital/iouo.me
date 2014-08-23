@@ -7,5 +7,8 @@ module.exports = Collection.extend({
     model: CrossBalance,
     comparator: function(balance) {
         return -balance.amount;
+    },
+    url: function() {
+        return this.parent && this.parent.url();
     }
 });
