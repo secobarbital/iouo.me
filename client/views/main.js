@@ -27,7 +27,7 @@ module.exports = View.extend({
         document.head.appendChild(domify(templates.head()));
 
         // main renderer
-        this.renderWithTemplate({me: me});
+        this.renderWithTemplate();
 
         // init and configure our page switcher
         this.pageSwitcher = new ViewSwitcher(this.getByRole('page-container'), {

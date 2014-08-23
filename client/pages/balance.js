@@ -18,8 +18,10 @@ module.exports = PageView.extend({
         }
     },
     initialize: function(spec) {
-        app.balances.getOrFetch(spec.id, function(err, model) {
-            if (err) alert('did not find a balance for: ' + spec.id);
+        app.balances.getOrFetch(spec.ower, function(err, model) {
+            if (err) {
+                return alert('did not find a balance for: ' + spec.ower);
+            }
             this.model = model;
             this.collection = model.owees;
             this.deferredRenderCollection(this.collection);
