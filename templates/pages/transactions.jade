@@ -1,0 +1,15 @@
+section.page.transactions
+  .panel.panel-default
+    .panel-heading.clearfix
+      a(role='subjectLink') @
+        span(role='subject')
+      = ' owes '
+      a(role='objectLink') @
+        span(role='object')
+      .panel-heading-rhs
+        span.currency= '$ '
+        span.amount(role='total')
+    .list-group(role='transactions')
+  footer
+    a.btn.btn-primary.btn-block(role='owe') Owe @
+      span(role='owee')

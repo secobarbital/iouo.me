@@ -49,6 +49,7 @@ app.set('view engine', 'jade');
 
 app.get('/api/balances', api.balances);
 app.get('/api/balances/:ower', api.balance);
+app.get('/api/balances/:ower/:owee', api.transactions);
 
 // -----------------
 // Enable the functional test site in development

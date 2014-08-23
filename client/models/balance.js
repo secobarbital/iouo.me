@@ -38,9 +38,6 @@ module.exports = AmpersandModel.extend({
     collections: {
         owees: CrossBalances
     },
-    initialize: function() {
-        return this;
-    },
     parse: function(attrs) {
         if (attrs instanceof Array) {
             return {

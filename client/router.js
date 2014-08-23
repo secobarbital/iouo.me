@@ -2,6 +2,7 @@
 var Router = require('ampersand-router');
 var HomePage = require('./pages/home');
 var BalancePage = require('./pages/balance');
+var TransactionsPage = require('./pages/transactions');
 var CollectionDemo = require('./pages/collection-demo');
 var InfoPage = require('./pages/info');
 var PersonAddPage = require('./pages/person-add');
@@ -13,6 +14,7 @@ module.exports = Router.extend({
     routes: {
         '': 'home',
         'balances/:ower': 'balance',
+        'transactions/:ower/:owee': 'transactions',
         'collections': 'collectionDemo',
         'info': 'info',
         'person/add': 'personAdd',
@@ -32,6 +34,13 @@ module.exports = Router.extend({
     balance: function(id) {
         this.trigger('page', new BalancePage({
             id: id
+        }));
+    },
+
+    transactions: function(ower, owee) {
+        this.trigger('page', new TransactionsPage({
+            ower: ower,
+            owee: owee
         }));
     },
 

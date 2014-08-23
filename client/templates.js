@@ -38,6 +38,11 @@
         return '<li class="person list-group-item"><img role="avatar" width="40" height="40"/><a role="name"></a><span class="btn-group pull-right"> <a role="action-edit" class="btn btn-default">edit </a><a href="#" role="action-delete" class="btn btn-danger">delete</a></span></li>';
     };
 
+    // includes/transaction.jade compiled template
+    templatizer["includes"]["transaction"] = function tmpl_includes_transaction() {
+        return '<a role="transaction" class="list-group-item media list-group-link list-group-media"><img role="image" class="media-object"/><div role="body" class="media-body"><div role="text"></div><small class="text-muted">&mdash; <span role="ower"></span> <time role="timestamp"></time></small></div></a>';
+    };
+
     // includes/xbalance.jade compiled template
     templatizer["includes"]["xbalance"] = function tmpl_includes_xbalance() {
         return '<a role="balance" class="list-group-item list-group-link"><span role="prefixVerb" class="verb"></span> <span class="subject">@<span role="subject"></span></span> <span role="suffixVerb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
@@ -76,6 +81,11 @@
     // pages/personView.jade compiled template
     templatizer["pages"]["personView"] = function tmpl_pages_personView() {
         return '<section class="page view-person"><h2 role="name"></h2><img role="avatar" width="80" height="80"/><div class="buttons"><a role="edit" class="btn">Edit</a><button role="delete" class="btn">Delete</button></div></section>';
+    };
+
+    // pages/transactions.jade compiled template
+    templatizer["pages"]["transactions"] = function tmpl_pages_transactions() {
+        return '<section class="page transactions"><div class="panel panel-default"><div class="panel-heading clearfix"><a role="subjectLink">@<span role="subject"></span></a> owes <a role="objectLink">@<span role="object"></span></a><div class="panel-heading-rhs"><span class="currency">$ </span><span role="total" class="amount"></span></div></div><div role="transactions" class="list-group"></div></div><footer><a role="owe" class="btn btn-primary btn-block">Owe @<span role="owee"></span></a></footer></section>';
     };
 
     return templatizer;

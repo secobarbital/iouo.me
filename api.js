@@ -26,3 +26,21 @@ exports.balance = function(req, res, next) {
         }));
     });
 }
+
+exports.transactions = function(req, res, next) {
+    var ower = req.params.ower;
+    var owee = req.params.owee;
+    console.log('transactions for', ower, owee);
+    db.view('iouome', 'balances', {
+        descending: true,
+        reduce: false,
+        startkey: [ower, owee, {}],
+        endkey: [ower, owee],
+        include_docs: true
+    }, function(err, transactions) {
+        if (err) {
+            return next(err);
+        }
+        res.send(transactions.rows);
+    });
+}

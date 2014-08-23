@@ -9,7 +9,7 @@ module.exports = View.extend({
         'model.prefixVerb': '[role=prefixVerb]',
         'model.suffixVerb': '[role=suffixVerb]',
         'model.formattedAmount': '[role=amount]',
-        'model.url': {
+        'model.ledgerUrl': {
             type: 'attribute',
             role: 'balance',
             name: 'href'
