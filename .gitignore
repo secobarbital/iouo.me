@@ -1,0 +1,9 @@
+.codio
+.env
+.DS_Store
+*.swp
+node_modules/**/examples
+node_modules/**/fixtures
+node_modules/**/samples
+node_modules/**/test
+node_modules/**/tests
