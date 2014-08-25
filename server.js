@@ -2,7 +2,7 @@ var Hapi = require('hapi');
 var config = require('getconfig');
 var server = new Hapi.Server(config.http.listen, config.http.port);
 var moonbootsConfig = require('./moonbootsConfig');
-var fakeApi = require('./fakeApi');
+var api = require('./api');
 var internals = {};
 
 // set clientconfig cookie
@@ -27,7 +27,7 @@ server.ext('onPreResponse', function(request, reply) {
 // require moonboots_hapi plugin
 server.pack.register({plugin: require('moonboots_hapi'), options: moonbootsConfig}, function (err) {
     if (err) throw err;
-    server.pack.register(fakeApi, function (err) {
+    server.pack.register(api, function (err) {
         if (err) throw err;
         // If everything loaded correctly, start the server:
         server.start(function (err) {
