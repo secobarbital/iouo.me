@@ -29,14 +29,7 @@ exports.register.attributes = {
 
 function balances(request, reply) {
     var options = { group_level: 1 };
-    db.view('iouome', 'balances', options, function(err, res) {
-        if (err) {
-            return reply(plugin.hapi.error.internal(err));
-        }
-        reply(res.rows.filter(function(balance) {
-            return balance.value !== 0;
-        }));
-    });
+    reply(db.view('iouome', 'balances', options));
 }
 
 function balance(request, reply) {
@@ -46,14 +39,7 @@ function balance(request, reply) {
         startkey: [ower],
         endkey: [ower, {}]
     };
-    db.view('iouome', 'balances', options, function(err, res) {
-        if (err) {
-            return reply(plugin.hapi.error.internal(err));
-        }
-        reply(res.rows.filter(function(balance) {
-            return balance.value !== 0;
-        }));
-    });
+    reply(db.view('iouome', 'balances', options));
 }
 
 function transactions(request, reply) {
@@ -66,10 +52,5 @@ function transactions(request, reply) {
         endkey: [ower, owee],
         include_docs: true
     };
-    db.view('iouome', 'balances', options, function(err, res) {
-        if (err) {
-            return reply(plugin.hapi.error.internal(err));
-        }
-        reply(res.rows);
-    });
+    reply(db.view('iouome', 'balances', options));
 }

@@ -63,11 +63,23 @@ module.exports = AmpersandModel.extend({
             }
         }
     },
-    parse: function(attrs) {
-        return {
-            ower: attrs.key[0],
-            owee: attrs.key[1],
-            amount: attrs.value
-        };
+    parse: function(res) {
+        var transactions;
+        if (transactions = res.rows) {
+            return {
+                ower: transactions[0].key[0],
+                owee: transactions[0].key[1],
+                transactions: transactions,
+                amount: transactions.reduce(function(sum, transaction) {
+                    return sum + transaction.value;
+                }, 0) 
+            };
+        } else {
+            return {
+                ower: res.key[0],
+                owee: res.key[1],
+                amount: res.value
+            };
+        }
     }
 });

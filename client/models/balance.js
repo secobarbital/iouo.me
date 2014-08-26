@@ -2,6 +2,7 @@ var AmpersandModel = require('ampersand-model');
 var accounting = require('accounting');
 
 var CrossBalances = require('./xbalances');
+var outstanding = require('../helpers/outstanding');
 
 module.exports = AmpersandModel.extend({
     idAttribute: 'ower',
@@ -38,19 +39,20 @@ module.exports = AmpersandModel.extend({
     collections: {
         owees: CrossBalances
     },
-    parse: function(attrs) {
-        if (attrs instanceof Array) {
+    parse: function(res) {
+        var owees;
+        if (owees = res.rows) {
             return {
-                ower: attrs[0].key[0],
-                owees: attrs,
-                amount: attrs.reduce(function(sum, xbalance) {
+                ower: owees[0].key[0],
+                owees: owees.filter(outstanding),
+                amount: owees.reduce(function(sum, xbalance) {
                     return sum + xbalance.value;
                 }, 0)
-            }
+            };
         } else {
             return {
-                ower: attrs.key[0],
-                amount: attrs.value
+                ower: res.key[0],
+                amount: res.value
             };
         }
     }

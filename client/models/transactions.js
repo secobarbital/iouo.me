@@ -9,5 +9,8 @@ module.exports = Collection.extend({
     },
     url: function() {
         return this.parent && this.parent.url();
+    },
+    parse: function(res) {
+        return res.rows;
     }
 });

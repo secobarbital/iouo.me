@@ -1,5 +1,6 @@
 var Collection = require('ampersand-rest-collection');
 var Balance = require('./balance');
+var outstanding = require('../helpers/outstanding');
 
 
 module.exports = Collection.extend({
@@ -16,5 +17,8 @@ module.exports = Collection.extend({
             this.reset();
             this.fetch();
         }
+    },
+    parse: function(res) {
+        return res.rows.filter(outstanding);
     }
 });
