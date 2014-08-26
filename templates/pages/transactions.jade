@@ -1,15 +1,15 @@
 section.page.transactions
   .panel.panel-default
     .panel-heading.clearfix
-      a(role='subjectLink') @
-        span(role='subject')
+      a(data-hook='subjectLink') @
+        span(data-hook='subject')
       = ' owes '
-      a(role='objectLink') @
-        span(role='object')
+      a(data-hook='objectLink') @
+        span(data-hook='object')
       .panel-heading-rhs
         span.currency= '$ '
-        span.amount(role='total')
-    .list-group(role='transactions')
+        span.amount(data-hook='total')
+    .list-group(data-hook='transactions')
   footer
-    a.btn.btn-primary.btn-block(role='owe') Owe @
-      span(role='owee')
+    a.btn.btn-primary.btn-block(data-hook='owe') Owe @
+      span(data-hook='owee')

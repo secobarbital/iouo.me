@@ -5,36 +5,36 @@ var templates = require('../templates');
 module.exports = View.extend({
     template: templates.includes.transaction,
     bindings: {
-        'model.ower': '[role=ower]',
-        'model.text': '[role=text]',
-        'model.prettyDate': '[role=timestamp]',
+        'model.ower': '[data-hook=ower]',
+        'model.text': '[data-hook=text]',
+        'model.prettyDate': '[data-hook=timestamp]',
         'model.isoTime': {
             type: 'attribute',
-            role: 'timestamp',
+            hook: 'timestamp',
             name: 'datetime'
         },
         'model.ltr': [
             {
                 type: 'booleanClass',
-                role: 'image',
+                hook: 'image',
                 yes: 'pull-left',
                 no: 'pull-right'
             },
             {
                 type: 'booleanClass',
-                role: 'body',
+                hook: 'body',
                 yes: 'text-left',
                 no: 'text-right'
             }
         ],
         'model.externalUrl': {
             type: 'attribute',
-            role: 'transaction',
+            hook: 'transaction',
             name: 'href'
         },
         'model.profileImageUrl': {
             type: 'attribute',
-            role: 'image',
+            hook: 'image',
             name: 'src'
         }
     }

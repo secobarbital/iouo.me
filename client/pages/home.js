@@ -8,7 +8,7 @@ module.exports = PageView.extend({
     template: templates.pages.home,
     render: function() {
         this.renderWithTemplate();
-        this.renderCollection(this.collection, BalanceView, this.getByRole('balances'));
+        this.renderCollection(this.collection, BalanceView, this.queryByHook('balances'));
         if (!this.collection.length) {
             this.fetchCollection();
         }

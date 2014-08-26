@@ -8,12 +8,12 @@ module.exports = PageView.extend({
     pageTitle: 'view balance',
     template: templates.pages.balance,
     bindings: {
-        'model.ower': '[role=ower]',
-        'model.verb': '[role=verb]',
-        'model.formattedAmount': '[role=total]',
+        'model.ower': '[data-hook=ower]',
+        'model.verb': '[data-hook=verb]',
+        'model.formattedAmount': '[data-hook=total]',
         'model.oweUrl': {
             type: 'attribute',
-            role: 'owe',
+            hook: 'owe',
             name: 'href'
         }
     },
@@ -29,7 +29,7 @@ module.exports = PageView.extend({
     },
     render: function() {
         this.renderWithTemplate();
-        this.deferredRenderCollection(this.collection, XBalanceView, this.getByRole('balances'));
+        this.deferredRenderCollection(this.collection, XBalanceView, this.queryByHook('balances'));
     },
     deferredRenderCollection: function(collection, view, el) {
         if (arguments.length === 1 && this.renderCollectionDeferred) {

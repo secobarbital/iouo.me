@@ -8,23 +8,23 @@ module.exports = PageView.extend({
     pageTitle: 'transactions',
     template: templates.pages.transactions,
     bindings: {
-        'model.owee': '[role=owee]',
-        'model.subject': '[role=subject]',
+        'model.owee': '[data-hook=owee]',
+        'model.subject': '[data-hook=subject]',
         'model.subjectUrl': {
             type: 'attribute',
-            role: 'subjectLink',
+            hook: 'subjectLink',
             name: 'href'
         },
-        'model.object': '[role=object]',
+        'model.object': '[data-hook=object]',
         'model.objectUrl': {
             type: 'attribute',
-            role: 'objectLink',
+            hook: 'objectLink',
             name: 'href'
         },
-        'model.formattedAmount': '[role=total]',
+        'model.formattedAmount': '[data-hook=total]',
         'model.oweUrl': {
             type: 'attribute',
-            role: 'owe',
+            hook: 'owe',
             name: 'href'
         }
     },
@@ -42,7 +42,7 @@ module.exports = PageView.extend({
     },
     render: function() {
         this.renderWithTemplate();
-        this.deferredRenderCollection(this.collection, TransactionView, this.getByRole('transactions'));
+        this.deferredRenderCollection(this.collection, TransactionView, this.queryByHook('transactions'));
     },
     deferredRenderCollection: function(collection, view, el) {
         if (arguments.length === 1 && this.renderCollectionDeferred) {

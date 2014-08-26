@@ -5,13 +5,13 @@ var templates = require('../templates');
 module.exports = View.extend({
     template: templates.includes.xbalance,
     bindings: {
-        'model.owee': '[role=subject]',
-        'model.prefixVerb': '[role=prefixVerb]',
-        'model.suffixVerb': '[role=suffixVerb]',
-        'model.formattedAmount': '[role=amount]',
+        'model.owee': '[data-hook=subject]',
+        'model.prefixVerb': '[data-hook=prefixVerb]',
+        'model.suffixVerb': '[data-hook=suffixVerb]',
+        'model.formattedAmount': '[data-hook=amount]',
         'model.ledgerUrl': {
             type: 'attribute',
-            role: 'balance',
+            hook: 'balance',
             name: 'href'
         }
     }

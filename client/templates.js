@@ -3,6 +3,8 @@
         define([], factory);
     } else if (typeof exports === 'object') {
         module.exports = factory();
+    } else if (typeof root === 'undefined' || root !== Object(root)) {
+        throw new Error('templatizer: window does not exist or is not an object');
     } else {
         root.templatizer = factory();
     }
@@ -15,7 +17,7 @@
 
     // body.jade compiled template
     templatizer["body"] = function tmpl_body() {
-        return '<body><nav role="navigation" class="navbar"><div class="navbar-header"><a href="/" class="navbar-brand"><span class="logotype">IOU</span></a></div></nav><div class="container"><main role="page-container"></main></div></body>';
+        return '<body><nav role="navigation" class="navbar"><div class="navbar-header"><a href="/" class="navbar-brand"><span class="logotype">IOU</span></a></div></nav><div class="container"><main data-hook="page-container"></main></div></body>';
     };
 
     // head.jade compiled template
@@ -25,32 +27,32 @@
 
     // includes/balance.jade compiled template
     templatizer["includes"]["balance"] = function tmpl_includes_balance() {
-        return '<a role="balance" class="list-group-item list-group-link"><span class="subject">@<span role="subject"></span></span> <span role="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
+        return '<a data-hook="balance" class="list-group-item list-group-link"><span class="subject">@<span data-hook="subject"></span></span> <span data-hook="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span data-hook="amount" class="amount"></span></div></a>';
     };
 
     // includes/transaction.jade compiled template
     templatizer["includes"]["transaction"] = function tmpl_includes_transaction() {
-        return '<a role="transaction" class="list-group-item media list-group-link list-group-media"><img role="image" class="media-object"/><div role="body" class="media-body"><div role="text"></div><small class="text-muted">&mdash; <span role="ower"></span> <time role="timestamp"></time></small></div></a>';
+        return '<a data-hook="transaction" class="list-group-item media list-group-link list-group-media"><img data-hook="image" class="media-object"/><div data-hook="body" class="media-body"><div data-hook="text"></div><small class="text-muted">&mdash; <span data-hook="ower"></span> <time data-hook="timestamp"></time></small></div></a>';
     };
 
     // includes/xbalance.jade compiled template
     templatizer["includes"]["xbalance"] = function tmpl_includes_xbalance() {
-        return '<a role="balance" class="list-group-item list-group-link"><span role="prefixVerb" class="verb"></span> <span class="subject">@<span role="subject"></span></span> <span role="suffixVerb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span role="amount" class="amount"></span></div></a>';
+        return '<a data-hook="balance" class="list-group-item list-group-link"><span data-hook="prefixVerb" class="verb"></span> <span class="subject">@<span data-hook="subject"></span></span> <span data-hook="suffixVerb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span data-hook="amount" class="amount"></span></div></a>';
     };
 
     // pages/balance.jade compiled template
     templatizer["pages"]["balance"] = function tmpl_pages_balance() {
-        return '<section class="page balance"><div class="panel panel-default"><div class="panel-heading clearfix"><span role="ower" class="subject"></span> <span role="verb" class="verb"></span><div class="panel-heading-rhs"><span class="currency">$ </span><span role="total" class="amount"></span></div></div><div role="balances" class="list-group"></div></div><footer><a role="owe" class="btn btn-primary btn-block">Owe @<span role="ower"></span></a></footer></section>';
+        return '<section class="page balance"><div class="panel panel-default"><div class="panel-heading clearfix"><span data-hook="ower" class="subject"></span> <span data-hook="verb" class="verb"></span><div class="panel-heading-rhs"><span class="currency">$ </span><span data-hook="total" class="amount"></span></div></div><div data-hook="balances" class="list-group"></div></div><footer><a data-hook="owe" class="btn btn-primary btn-block">Owe @<span data-hook="ower"></span></a></footer></section>';
     };
 
     // pages/home.jade compiled template
     templatizer["pages"]["home"] = function tmpl_pages_home() {
-        return '<section class="page home"><div role="balances" class="list-group"></div><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer></section>';
+        return '<section class="page home"><div data-hook="balances" class="list-group"></div><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer></section>';
     };
 
     // pages/transactions.jade compiled template
     templatizer["pages"]["transactions"] = function tmpl_pages_transactions() {
-        return '<section class="page transactions"><div class="panel panel-default"><div class="panel-heading clearfix"><a role="subjectLink">@<span role="subject"></span></a> owes <a role="objectLink">@<span role="object"></span></a><div class="panel-heading-rhs"><span class="currency">$ </span><span role="total" class="amount"></span></div></div><div role="transactions" class="list-group"></div></div><footer><a role="owe" class="btn btn-primary btn-block">Owe @<span role="owee"></span></a></footer></section>';
+        return '<section class="page transactions"><div class="panel panel-default"><div class="panel-heading clearfix"><a data-hook="subjectLink">@<span data-hook="subject"></span></a> owes <a data-hook="objectLink">@<span data-hook="object"></span></a><div class="panel-heading-rhs"><span class="currency">$ </span><span data-hook="total" class="amount"></span></div></div><div data-hook="transactions" class="list-group"></div></div><footer><a data-hook="owe" class="btn btn-primary btn-block">Owe @<span data-hook="owee"></span></a></footer></section>';
     };
 
     return templatizer;

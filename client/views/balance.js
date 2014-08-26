@@ -5,12 +5,12 @@ var templates = require('../templates');
 module.exports = View.extend({
     template: templates.includes.balance,
     bindings: {
-        'model.ower': '[role=subject]',
-        'model.verb': '[role=verb]',
-        'model.formattedAmount': '[role=amount]',
+        'model.ower': '[data-hook=subject]',
+        'model.verb': '[data-hook=verb]',
+        'model.formattedAmount': '[data-hook=amount]',
         'model.balanceUrl': {
             type: 'attribute',
-            role: 'balance',
+            hook: 'balance',
             name: 'href'
         }
     }
