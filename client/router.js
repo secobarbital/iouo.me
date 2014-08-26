@@ -1,57 +1,35 @@
 /*global me, app*/
 var Router = require('ampersand-router');
 var HomePage = require('./pages/home');
-var CollectionDemo = require('./pages/collection-demo');
-var InfoPage = require('./pages/info');
-var PersonAddPage = require('./pages/person-add');
-var PersonEditPage = require('./pages/person-edit');
-var PersonViewPage = require('./pages/person-view');
+var BalancePage = require('./pages/balance');
+var TransactionsPage = require('./pages/transactions');
 
 
 module.exports = Router.extend({
     routes: {
         '': 'home',
-        'collections': 'collectionDemo',
-        'info': 'info',
-        'person/add': 'personAdd',
-        'person/:id': 'personView',
-        'person/:id/edit': 'personEdit',
+        'balances/:ower': 'balance',
+        'transactions/:ower/:owee': 'transactions',
         '(*path)': 'catchAll'
     },
 
     // ------- ROUTE HANDLERS ---------
-    home: function () {
+    home: function() {
         this.trigger('page', new HomePage({
-            model: me
+            collection: app.balances
         }));
     },
 
-    collectionDemo: function () {
-        this.trigger('page', new CollectionDemo({
-            model: me,
-            collection: app.people
+    balance: function(ower) {
+        this.trigger('page', new BalancePage({
+            ower: ower
         }));
     },
 
-    info: function () {
-        this.trigger('page', new InfoPage({
-            model: me
-        }));
-    },
-
-    personAdd: function () {
-        this.trigger('page', new PersonAddPage());
-    },
-
-    personEdit: function (id) {
-        this.trigger('page', new PersonEditPage({
-            id: id
-        }));
-    },
-
-    personView: function (id) {
-        this.trigger('page', new PersonViewPage({
-            id: id
+    transactions: function(ower, owee) {
+        this.trigger('page', new TransactionsPage({
+            ower: ower,
+            owee: owee
         }));
     },
 

@@ -6,8 +6,7 @@ var config = require('clientconfig');
 var Router = require('./router');
 var tracking = require('./helpers/metrics');
 var MainView = require('./views/main');
-var Me = require('./models/me');
-var People = require('./models/persons');
+var Balances = require('./models/balances');
 var domReady = require('domready');
 
 
@@ -16,9 +15,8 @@ module.exports = {
     blastoff: function () {
         var self = window.app = this;
 
-        // create our global 'me' object and an empty collection for our people models.
-        window.me = new Me();
-        this.people = new People();
+        // create our global 'me' object and an empty collection
+        this.balances = new Balances();
 
         // init our URL handlers and the history tracker
         this.router = new Router();
@@ -28,7 +26,6 @@ module.exports = {
         domReady(function () {
             // init our main view
             var mainView = self.view = new MainView({
-                model: me,
                 el: document.body
             });
 

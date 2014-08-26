@@ -1,0 +1,14 @@
+section.page.balance
+  .panel.panel-default
+    .panel-heading.clearfix
+      span.subject(role='ower')
+      = ' '
+      span.verb(role='verb')
+      .panel-heading-rhs
+        span.currency= '$ '
+        span.amount(role='total')
+    .list-group(role='balances')
+  footer
+    a.btn.btn-primary.btn-block(role='owe') Owe @
+      span(role='ower')
+

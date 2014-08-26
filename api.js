@@ -4,13 +4,13 @@ exports.register = function(plugin, options, next) {
     plugin.route({
         method: 'GET',
         path: '/api/balances',
-        handler: list
+        handler: balances
     });
 
     plugin.route({
         method: 'GET',
         path: '/api/balances/{ower}',
-        handler: get
+        handler: balance
     });
 
     plugin.route({
@@ -27,7 +27,7 @@ exports.register.attributes = {
     version: '1.0.0'
 };
 
-function list(request, reply) {
+function balances(request, reply) {
     var options = { group_level: 1 };
     db.view('iouome', 'balances', options, function(err, res) {
         if (err) {
@@ -39,7 +39,7 @@ function list(request, reply) {
     });
 }
 
-function get(request, reply) {
+function balance(request, reply) {
     var ower = request.params.ower;
     var options = {
         group_level: 2,

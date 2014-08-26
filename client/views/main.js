@@ -27,7 +27,7 @@ module.exports = View.extend({
         document.head.appendChild(domify(templates.head()));
 
         // main renderer
-        this.renderWithTemplate({me: me});
+        this.renderWithTemplate();
 
         // init and configure our page switcher
         this.pageSwitcher = new ViewSwitcher(this.getByRole('page-container'), {
@@ -58,7 +58,7 @@ module.exports = View.extend({
     },
 
     handleLinkClick: function (e) {
-        var aTag = e.target;
+        var aTag = e.delegateTarget;
         var local = aTag.host === window.location.host;
 
         // if it's a plain click (no modifier keys)
