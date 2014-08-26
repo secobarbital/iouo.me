@@ -9,12 +9,6 @@ module.exports = PageView.extend({
     render: function() {
         this.renderWithTemplate();
         this.renderCollection(this.collection, BalanceView, this.queryByHook('balances'));
-        if (!this.collection.length) {
-            this.fetchCollection();
-        }
-    },
-    fetchCollection: function() {
-        this.collection.fetch();
-        return false;
+        this.collection.fetchIfNotFetched();
     }
 });
