@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "main": "server.js",
   "dependencies": {
-    "accounting": "^0.3.2",
+    "accounting": "^0.4.1",
     "ampersand-dom": "^1.2.1",
     "ampersand-form-view": "^1.0.2",
     "ampersand-input-view": "^1.2.4",
