@@ -72,7 +72,7 @@ module.exports = View.extend({
     updateActiveNav: function () {
         var path = window.location.pathname.slice(1);
 
-        this.getAll('.nav a[href]').forEach(function (aTag) {
+        this.queryAll('.nav a[href]').forEach(function (aTag) {
             var aPath = aTag.pathname.slice(1);
 
             if ((!aPath && !path) || (aPath && path.indexOf(aPath) === 0)) {
