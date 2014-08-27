@@ -3,11 +3,6 @@ var config = require('getconfig');
 var server = new Hapi.Server(config.http.listen, config.http.port);
 var moonbootsConfig = require('./moonbootsConfig');
 var internals = {};
-var staticHandler = {
-    directory: {
-        path: 'public'
-    }
-};
 
 // set clientconfig cookie
 internals.configStateConfig = {
