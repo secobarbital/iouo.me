@@ -5,7 +5,6 @@ var TransactionView = require('../views/transaction');
 
 
 module.exports = PageView.extend({
-    pageTitle: 'transactions',
     template: templates.pages.transactions,
     bindings: {
         'model.owee': '[data-hook=owee]',
@@ -29,6 +28,7 @@ module.exports = PageView.extend({
         }
     },
     initialize: function(spec) {
+        this.pageTitle = 'Transactions between @' + spec.ower + ' and @' + spec.owee;
         app.balances.getOrFetch(spec.ower, function(err, balance) {
             if (err) {
                 return alert('Did not find a balance for: ' + spec.ower);

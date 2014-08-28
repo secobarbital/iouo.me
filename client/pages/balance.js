@@ -5,7 +5,6 @@ var XBalanceView = require('../views/xbalance');
 
 
 module.exports = PageView.extend({
-    pageTitle: 'view balance',
     template: templates.pages.balance,
     bindings: {
         'model.ower': '[data-hook=ower]',
@@ -18,6 +17,7 @@ module.exports = PageView.extend({
         }
     },
     initialize: function(spec) {
+        this.pageTitle = 'Balances for @' + spec.ower;
         app.balances.getOrFetch(spec.ower, function(err, model) {
             if (err) {
                 return alert('did not find a balance for: ' + spec.ower);
