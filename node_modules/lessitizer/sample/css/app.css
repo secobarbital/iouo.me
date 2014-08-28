@@ -1,0 +1,10 @@
+.comp-one {
+  background: red;
+}
+.comp-two {
+  background: blue;
+}
+body {
+  padding-top: 200px;
+  background-color: #fff666;
+}

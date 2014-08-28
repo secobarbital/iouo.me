@@ -1,4 +1,6 @@
+var async = require('async');
 var config = require('getconfig');
+var lessitizer = require('lessitizer');
 var stylizer = require('stylizer');
 var templatizer = require('templatizer');
 
@@ -50,19 +52,37 @@ module.exports = {
                 done();
                 return;
             }
-            // Re-compile stylus to css each time the app's main css file is requested.
-            // In addition there's a "watch" option that will make stylizer also be able
-            // to talk to livereaload (http://livereload.com/) browser plugins for sneakily
-            // refreshing styles without waiting for you to refresh or running/configuring
-            // the live reload app.
-            stylizer({
-                infile: cssDir + '/app.styl',
-                outfile: cssDir + '/app.css',
-                development: true,
-                // Beware there's an issue with watch on OSX that causes issues with
-                // watch if you're not running node 0.10.25 or later.
-                watch: cssDir + '/**/*.styl'
-            }, done);
+
+            async.parallel([
+                function(done) {
+                    // Re-compile stylus to css each time the app's main css file is requested.
+                    // In addition there's a "watch" option that will make stylizer also be able
+                    // to talk to livereaload (http://livereload.com/) browser plugins for sneakily
+                    // refreshing styles without waiting for you to refresh or running/configuring
+                    // the live reload app.
+                    stylizer({
+                        infile: cssDir + '/app.styl',
+                        outfile: cssDir + '/app.css',
+                        development: true,
+                        // Beware there's an issue with watch on OSX that causes issues with
+                        // watch if you're not running node 0.10.25 or later.
+                        watch: cssDir + '/**/*.styl'
+                    }, done);
+                },
+                function(done) {
+                    lessitizer({
+                        files: cssDir + '/bootstrap.less',
+                        outputDir: cssDir,
+                        developmentMode: true,
+                        less: {
+                            paths: [__dirname + '/node_modules/bootstrap/less']
+                        }
+                    }, done);
+                }
+            ], function(err, res) {
+                if (err) console.error('beforeBuildCSS', err);
+                done();
+            });
         }
     }
 };
