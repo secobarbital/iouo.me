@@ -1,24 +1,22 @@
+var fs = require('fs');
 var path = require('path');
+var publicPath = path.join(__dirname, 'public');
+var faviconsPath = path.join(publicPath, 'favicons');
 
 exports.register = function(plugin, options, next) {
-    plugin.path(path.join(__dirname, 'public'));
+    plugin.path(publicPath);
 
-    plugin.route({
-        method: 'GET',
-        path: '/favicon.ico',
-        handler: {
-            file: './favicons/favicon.ico'
-        }
-    });
-
-    plugin.route({
-        method: 'GET',
-        path: '/favicons/{file}',
-        handler: {
-            directory: {
-                path: './favicons'
-            }
-        }
+    fs.readdir(faviconsPath, function(err, files) {
+        if (err) return console.err('Error reading favicons directory', faviconsPath, ':', err);
+        files.forEach(function(file) {
+            plugin.route({
+                method: 'GET',
+                path: '/' + file,
+                handler: {
+                    file: path.join(faviconsPath, file)
+                }
+            });
+        });
     });
 
     plugin.route({
