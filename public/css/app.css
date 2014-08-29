@@ -1,6 +1,10 @@
 body {
   background: #fff;
 }
+.container {
+  max-width: 480px;
+  margin: auto;
+}
 @font-face {
   font-family: 'fontawesome';
   src: url("/fonts/fontawesome82497.eot");
