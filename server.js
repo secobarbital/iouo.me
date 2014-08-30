@@ -25,7 +25,10 @@ server.ext('onPreResponse', function(request, reply) {
 async.parallel([
     function(done) {
         // require moonboots_hapi plugin
-        server.pack.register({plugin: require('moonboots_hapi'), options: moonbootsConfig}, done);
+        server.pack.register({
+            plugin: require('moonboots_hapi'),
+            options: moonbootsConfig
+        }, done);
     },
     function(done) {
         server.pack.register(require('./static_files'), done);

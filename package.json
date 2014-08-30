@@ -27,6 +27,7 @@
     "nano": "^5.10.0",
     "stylizer": "^1.0.0",
     "templatizer": "^1.0.0",
+    "through2": "^0.6.1",
     "twit": "^1.1.9",
     "underscore": "^1.6.0"
   },

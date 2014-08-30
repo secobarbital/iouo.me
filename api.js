@@ -1,4 +1,5 @@
 var db = require('./config/db');
+var through2 = require('through2');
 
 exports.register = function(plugin, options, next) {
     plugin.route({
@@ -29,7 +30,8 @@ exports.register.attributes = {
 
 function balances(request, reply) {
     var options = { group_level: 1 };
-    reply(db.view('iouome', 'balances', options));
+    reply(db.view('iouome', 'balances', options).pipe(through2()))
+        .header('Cache-Control', 'must-revalidate');
 }
 
 function balance(request, reply) {
@@ -39,7 +41,8 @@ function balance(request, reply) {
         startkey: [ower],
         endkey: [ower, {}]
     };
-    reply(db.view('iouome', 'balances', options));
+    reply(db.view('iouome', 'balances', options).pipe(through2()))
+        .header('Cache-Control', 'must-revalidate');
 }
 
 function transactions(request, reply) {
@@ -52,5 +55,6 @@ function transactions(request, reply) {
         endkey: [ower, owee],
         include_docs: true
     };
-    reply(db.view('iouome', 'balances', options));
+    reply(db.view('iouome', 'balances', options).pipe(through2()))
+        .header('Cache-Control', 'must-revalidate');
 }
