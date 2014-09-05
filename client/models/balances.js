@@ -14,8 +14,9 @@ module.exports = Collection.extend({
     fetchIfNotFetched: function() {
         if (!this.fetched) {
             this.fetched = true;
-            this.reset();
-            this.fetch();
+            this.fetch({
+                reset: true
+            });
         }
     },
     parse: function(res) {
