@@ -1,6 +1,6 @@
 var fs = require('fs');
 var path = require('path');
-var publicPath = path.join(__dirname, 'public');
+var publicPath = path.join(__dirname, '..', 'public');
 var faviconsPath = path.join(publicPath, 'favicons');
 var yearInSeconds = 360*24*60*60;
 
@@ -8,7 +8,9 @@ exports.register = function(plugin, options, next) {
     plugin.path(publicPath);
 
     fs.readdir(faviconsPath, function(err, files) {
-        if (err) return console.err('Error reading favicons directory', faviconsPath, ':', err);
+        if (err) {
+            return console.error('Error reading favicons directory', faviconsPath, ':', err);
+        }
         files.forEach(function(file) {
             plugin.route({
                 method: 'GET',

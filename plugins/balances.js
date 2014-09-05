@@ -1,5 +1,5 @@
-var db = require('./config/db');
 var through2 = require('through2');
+var db = require('../config/db');
 
 exports.register = function(plugin, options, next) {
     plugin.route({

@@ -2,8 +2,8 @@ var _ = require('underscore');
 var accounting = require('accounting');
 var events = require('events');
 var stream = require('stream');
-var db = require('./config/db');
-var geodb = require('./config/geodb');
+var db = require('../config/db');
+var geodb = require('../config/geodb');
 var emitter = new events.EventEmitter();
 
 exports.register = function(plugin, options, next) {
