@@ -34,10 +34,10 @@ async.parallel([
         }, done);
     },
     function(done) {
-        server.pack.register(require('./static_files'), done);
+        server.pack.register(require('./plugins/static_files'), done);
     },
     function(done) {
-        server.pack.register(require('./api'), done);
+        server.pack.register(require('./plugins/balances'), done);
     }
 ], function(err) {
     if (err) throw err;
