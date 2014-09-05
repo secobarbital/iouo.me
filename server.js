@@ -12,10 +12,10 @@ internals.configStateConfig = {
     isSecure: config.isSecure
 };
 server.state('config', internals.configStateConfig);
-internals.clientConfig = {
+internals.clientConfig = JSON.stringify({
     cdnUrl: process.env.CDN_URL,
     gaPropertyId: process.env.GA_PROPERTY_ID
-}
+});
 server.ext('onPreResponse', function(request, reply) {
     if (!request.state.config) {
         var response = request.response;
