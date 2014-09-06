@@ -15,7 +15,7 @@ module.exports = {
     blastoff: function () {
         var self = window.app = this;
 
-        // create our global 'me' object and an empty collection
+        // create our global model caches
         this.balances = new Balances();
 
         // init our URL handlers and the history tracker

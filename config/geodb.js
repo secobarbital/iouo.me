@@ -1,7 +1,7 @@
 var async = require('async');
 var MongoClient = require('mongodb').MongoClient;
 
-var geo = require('../lib/geo');
+var geo = require('./geo');
 
 var url = process.env.MONGODB_URL || process.env.MONGOLAB_URI || 'mongodb://localhost/iouome';
 

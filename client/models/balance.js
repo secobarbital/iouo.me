@@ -34,6 +34,12 @@ module.exports = AmpersandModel.extend({
             fn: function() {
                 return 'https://twitter.com/intent/tweet?text=@' + encodeURIComponent(this.ower + ' #iou $');
             }
+        },
+        rouletteUrl: {
+            deps: ['ower'],
+            fn: function() {
+                return '/roulette/' + this.ower;
+            }
         }
     },
     collections: {

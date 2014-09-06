@@ -37,17 +37,22 @@
 
     // includes/xbalance.jade compiled template
     templatizer["includes"]["xbalance"] = function tmpl_includes_xbalance() {
-        return '<a data-hook="balance" class="list-group-item list-group-link"><span data-hook="prefixVerb" class="verb"></span> <span class="subject">@<span data-hook="subject"></span></span> <span data-hook="suffixVerb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span data-hook="amount" class="amount"></span></div></a>';
+        return '<a data-hook="balance" class="list-group-item list-group-link"><span data-hook="prefix-verb" class="verb"></span> <span class="subject">@<span data-hook="subject"></span></span> <span data-hook="suffix-verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span data-hook="amount" class="amount"></span></div></a>';
     };
 
     // pages/balance.jade compiled template
     templatizer["pages"]["balance"] = function tmpl_pages_balance() {
-        return '<section class="page balance"><div class="panel panel-default"><div class="panel-heading clearfix"><span data-hook="ower" class="subject"></span> <span data-hook="verb" class="verb"></span><div class="panel-heading-rhs"><span class="currency">$ </span><span data-hook="total" class="amount"></span></div></div><div data-hook="balances" class="list-group"></div></div><footer><a data-hook="owe" class="btn btn-primary btn-block">Owe @<span data-hook="ower"></span></a></footer></section>';
+        return '<section class="page balance"><div class="panel panel-default"><div class="panel-heading clearfix"><span data-hook="ower" class="subject"></span> <span data-hook="verb" class="verb"></span><div class="panel-heading-rhs"><span class="currency">$ </span><span data-hook="total" class="amount"></span></div></div><div data-hook="balances" class="list-group"></div></div><footer><a data-hook="owe" class="btn btn-primary btn-block">Owe @<span data-hook="ower"></span></a><a data-hook="roulette" class="btn btn-default btn-block roulette-link">Who pays?</a></footer></section>';
     };
 
     // pages/home.jade compiled template
     templatizer["pages"]["home"] = function tmpl_pages_home() {
         return '<section class="page home"><div data-hook="balances" class="list-group"></div><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer></section>';
+    };
+
+    // pages/roulette.jade compiled template
+    templatizer["pages"]["roulette"] = function tmpl_pages_roulette() {
+        return '<section class="page roulette"><h1 data-hook="headline" class="roulette-headline">0.00</h1><div class="panel panel-default roulette-panel"><div class="panel-heading clearfix roulette-heading"><span data-hook="heading-prefix-verb" class="verb roulette-owed"></span> <a data-hook="heading-balance-url">@<span data-hook="heading-user" class="subject"></span></a> <span data-hook="heading-suffix-verb" class="verb roulette-owes"></span><div data-hook="heading-amount-container" class="panel-heading-rhs"><span class="currency">$ </span><span data-hook="heading-amount" class="amount"></span></div></div><div data-hook="neighbors" class="list-group roulette-neighbors"></div></div><div data-hook="no-neighbors" class="roulette-no-neighbors">Nobody here! :-(</div><div data-hook="geo-features-missing" class="alert alert-danger roulette-features-missing">Sorry! IOU Roulette requires a browser with<a href="http://html5test.com/compare/feature/location-geolocation/communication-eventSource.html">Geolocation and Server-Sent Events</a></div><div data-hook="geo-permission-denied" class="alert alert-danger roulette-geo-permission-denied">IOU Roulette needs to know your location in order to find other users nearby.<a href="#" class="roulette-geo-enable">Let\'s try again</a></div><div data-hook="geo-position-unavailable" class="alert alert-danger roulette-geo-position-unavailable">Position unavailable.<a href="#" class="roulette-geo-enable">Let\'s try again</a></div><div data-hook="geo-timeout" class="alert alert-danger roulette-geo-timeout">Timeout trying to determine your position.<a href="#" class="roulette-geo-enable">Let\'s try again</a></div><div data-hook="geo-error" class="alert alert-danger roulette-geo-error">Unable to determine your position:<span data-hook="geo-error-message" class="roulette-geo-error-message"></span><a href="#" class="roulette-geo-enable">Let\'s try again</a></div><div data-hook="post-error" class="alert alert-danger roulette-post-error">Unable to contact server:<span data-hook="post-error-message" class="roulette-post-error-message"></span><a href="#" class="roulette-geo-enable">Let\'s try again</a></div></section>';
     };
 
     // pages/transactions.jade compiled template

@@ -14,6 +14,11 @@ module.exports = PageView.extend({
             type: 'attribute',
             hook: 'owe',
             name: 'href'
+        },
+        'model.rouletteUrl': {
+            type: 'attribute',
+            hook: 'roulette',
+            name: 'href'
         }
     },
     initialize: function(spec) {

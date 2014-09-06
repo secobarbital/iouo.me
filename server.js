@@ -38,6 +38,9 @@ async.parallel([
     },
     function(done) {
         server.pack.register(require('./plugins/balances'), done);
+    },
+    function(done) {
+        server.pack.register(require('./plugins/roulette'), done);
     }
 ], function(err) {
     if (err) throw err;

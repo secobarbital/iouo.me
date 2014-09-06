@@ -5,8 +5,11 @@ var stream = require('stream');
 var db = require('../config/db');
 var geodb = require('../config/geodb');
 var emitter = new events.EventEmitter();
+var hapiError;
 
 exports.register = function(plugin, options, next) {
+    hapiError = plugin.hapi.error;
+
     plugin.route({
         method: 'POST',
         path: '/roulette/{user}',
@@ -28,16 +31,13 @@ exports.register.attributes = {
 };
 
 function announce(channel, user, neighbors) {
-  if (neighbors.indexOf(user) < 0) {
-    return;
-  }
+    if (neighbors.indexOf(user) < 0) {
+        return;
+    }
 
-  var neighbors = _.without(neighbors, user);
-  channel.write('data: ');
-  channel.write(JSON.stringify({
-      neighbors: neighbors
-  }));
-  channel.write('\n\n');
+    var neighbors = _.without(neighbors, user);
+    var payload = JSON.stringify({ neighbors: neighbors });
+    channel.write('data: ' + payload + '\n\n');
 }
 
 function updatePosition(request, reply) {
@@ -46,7 +46,7 @@ function updatePosition(request, reply) {
 
     geodb.update(user, position, function(err) {
         if (err) {
-            return reply(plugin.hapi.error.internal(err));
+            return reply(hapiError.internal(err));
         }
         reply().code(202);
     });
@@ -72,7 +72,8 @@ function nearby(request, reply) {
 
     emitter.on('nearby', myAnnounce);
 
-    response.code(200)
+    response
+        .code(200)
         .type('text/event-stream')
         .header('Cache-Control', 'no-cache')
         .header('Connection', 'keep-alive')

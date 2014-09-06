@@ -1,0 +1,35 @@
+section.page.roulette
+  h1.roulette-headline(data-hook='headline') 0.00
+  .panel.panel-default.roulette-panel
+    .panel-heading.clearfix.roulette-heading
+      span.verb.roulette-owed(data-hook='heading-prefix-verb')
+      = ' '
+      a(data-hook='heading-balance-url') @
+        span.subject(data-hook='heading-user')
+      = ' '
+      span.verb.roulette-owes(data-hook='heading-suffix-verb')
+      .panel-heading-rhs(data-hook='heading-amount-container')
+        span.currency= '$ '
+        span.amount(data-hook='heading-amount')
+    .list-group.roulette-neighbors(data-hook='neighbors')
+  .roulette-no-neighbors(data-hook='no-neighbors') Nobody here! :-(
+  .alert.alert-danger.roulette-features-missing(data-hook='geo-features-missing')
+    | Sorry! IOU Roulette requires a browser with
+    a(href='http://html5test.com/compare/feature/location-geolocation/communication-eventSource.html') Geolocation and Server-Sent Events
+  .alert.alert-danger.roulette-geo-permission-denied(data-hook='geo-permission-denied')
+    | IOU Roulette needs to know your location in order to find other users nearby.
+    a.roulette-geo-enable(href='#') Let's try again
+  .alert.alert-danger.roulette-geo-position-unavailable(data-hook='geo-position-unavailable')
+    | Position unavailable.
+    a.roulette-geo-enable(href='#') Let's try again
+  .alert.alert-danger.roulette-geo-timeout(data-hook='geo-timeout')
+    | Timeout trying to determine your position.
+    a.roulette-geo-enable(href='#') Let's try again
+  .alert.alert-danger.roulette-geo-error(data-hook='geo-error')
+    | Unable to determine your position:
+    span.roulette-geo-error-message(data-hook='geo-error-message')
+    a.roulette-geo-enable(href='#') Let's try again
+  .alert.alert-danger.roulette-post-error(data-hook='post-error')
+    | Unable to contact server:
+    span.roulette-post-error-message(data-hook='post-error-message')
+    a.roulette-geo-enable(href='#') Let's try again
