@@ -109,13 +109,17 @@ module.exports = AmpersandModel.extend({
         location.reload();
     },
     listenForNeighbors: function() {
-        var source = new EventSource(location.pathname + '/nearby');
-        source.addEventListener('neighbors', function(e) {
-            this.handleNeighbors(JSON.parse(e.data));
-        }.bind(this), false);
-        source.addEventListener('position', function() {
+        this.eventSource = new EventSource(location.pathname + '/nearby');
+        this.eventSource.addEventListener('open', function() {
             this.enableGeo();
         }.bind(this), false);
+        this.eventSource.addEventListener('neighbors', function(e) {
+            this.handleNeighbors(JSON.parse(e.data));
+        }.bind(this), false);
+    },
+    stopListeningForNeighbors: function() {
+        this.eventSource.close();
+        this.eventSource = null;
     },
     handleNeighbors: function(neighbors) {
         this.balancePromise.then(function(balance) {
@@ -138,7 +142,7 @@ module.exports = AmpersandModel.extend({
             }
         }, function(err, resp, body) {
             if (err) {
-                return this.postErrorMessage = err;
+                return this.postErrorMessage = err.toString();
             }
         }.bind(this));
     },

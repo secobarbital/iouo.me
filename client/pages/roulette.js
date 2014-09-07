@@ -57,10 +57,11 @@ module.exports = PageView.extend({
     },
     initialize: function(spec) {
         this.pageTitle = 'IOU Roulette with @' + spec.user;
-        this.model = app.roulette = new Roulette({
+        this.model = new Roulette({
             user: spec.user
         });
         this.collection = this.model.neighbors;
+        this.on('remove', this.model.stopListeningForNeighbors.bind(this.model));
     },
     render: function() {
         this.renderWithTemplate();

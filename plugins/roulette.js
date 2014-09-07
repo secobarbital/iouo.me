@@ -87,8 +87,6 @@ function nearby(request, reply) {
         .header('Connection', 'keep-alive')
         .header('Content-Encoding', 'identity');
 
-    channel.write('event: position\ndata: {}\n\n');
-
     request.once('disconnect', function() {
         emitter.removeListener('nearby', myAnnounce);
         geodb.remove(user, function(err, doc) {
