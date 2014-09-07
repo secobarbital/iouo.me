@@ -96,7 +96,6 @@ module.exports = AmpersandModel.extend({
 
         if (('geolocation' in navigator) && ('EventSource' in window)) {
             this.listenForNeighbors();
-            this.enableGeo();
         } else {
             this.featuresMissing = true;
         }
@@ -111,15 +110,15 @@ module.exports = AmpersandModel.extend({
     },
     listenForNeighbors: function() {
         var source = new EventSource(location.pathname + '/nearby');
-        source.addEventListener('message', function(e) {
-            console.log('message', e.data);
-            var data = JSON.parse(e.data);
-            this.handleNeighbors(data.neighbors);
+        source.addEventListener('neighbors', function(e) {
+            this.handleNeighbors(JSON.parse(e.data));
+        }.bind(this), false);
+        source.addEventListener('position', function() {
+            this.enableGeo();
         }.bind(this), false);
     },
     handleNeighbors: function(neighbors) {
         this.balancePromise.then(function(balance) {
-            console.log('handleNeighbors', neighbors, balance);
             var xbalances = neighbors.map(function(neighbor) {
                 return balance.owees.get(neighbor) || new CrossBalance({
                     amount: 0,
@@ -139,7 +138,7 @@ module.exports = AmpersandModel.extend({
             }
         }, function(err, resp, body) {
             if (err) {
-                this.postErrorMessage = err;
+                return this.postErrorMessage = err;
             }
         }.bind(this));
     },
@@ -160,7 +159,7 @@ module.exports = AmpersandModel.extend({
         }
     },
     enableGeo: function() {
-        navigator.geolocation.getCurrentPosition(this.handleGeo, this.handleGeoError, {
+        navigator.geolocation.getCurrentPosition(this.handleGeo.bind(this), this.handleGeoError.bind(this), {
             enableHighAccuracy: true,
             timeout: 5000
         });

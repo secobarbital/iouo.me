@@ -36,8 +36,8 @@ function announce(channel, user, neighbors) {
     }
 
     var neighbors = _.without(neighbors, user);
-    var payload = JSON.stringify({ neighbors: neighbors });
-    channel.write('data: ' + payload + '\n\n');
+    var payload = JSON.stringify(neighbors);
+    channel.write('event: neighbors\ndata: ' + payload + '\n\n');
 }
 
 function updatePosition(request, reply) {
@@ -50,17 +50,25 @@ function updatePosition(request, reply) {
         }
         reply().code(202);
     });
+    getNeighbors(position, function(err, neighbors) {
+        if (err) {
+            return console.error('Error getting neighbors on update', err);
+        }
+        if (neighbors.indexOf(user) < 0) {
+            neighbors.push(user);
+        }
+        emitter.emit('nearby', neighbors);
+    });
+}
+
+function getNeighbors(position, cb) {
     geodb.nearby(position, function(err, neighbors) {
         if (err) {
-            return console.error(err);
+            return cb(err);
         }
-        var neighborUsers = neighbors.map(function(neighbor) {
+        cb(null, neighbors.map(function(neighbor) {
             return neighbor.user;
-        });
-        if (neighborUsers.indexOf(user) < 0) {
-            neighborUsers.push(user);
-        }
-        emitter.emit('nearby', neighborUsers);
+        }));
     });
 }
 
@@ -79,6 +87,8 @@ function nearby(request, reply) {
         .header('Connection', 'keep-alive')
         .header('Content-Encoding', 'identity');
 
+    channel.write('event: position\ndata: {}\n\n');
+
     request.once('disconnect', function() {
         emitter.removeListener('nearby', myAnnounce);
         geodb.remove(user, function(err, doc) {
@@ -86,13 +96,11 @@ function nearby(request, reply) {
                 return console.error('Error removing ' + user + ' from geodb', err);
             }
             if (doc) {
-                geodb.nearby(doc.raw, function(err, neighbors) {
+                getNeighbors(doc.raw, function(err, neighbors) {
                     if (err) {
-                        return console.error('Error getting neighbors on exit');
+                        return console.error('Error getting neighbors on exit', err);
                     }
-                    emitter.emit('nearby', neighbors.map(function(neighbor) {
-                        return neighbor.user;
-                    }));
+                    emitter.emit('nearby', neighbors);
                 });
             }
         });
