@@ -17,7 +17,7 @@ exports.register = function(plugin, options, next) {
                 path: '/' + file,
                 handler: function(request, reply) {
                     reply.file(path.join(faviconsPath, file))
-                        .header('Cache-Control', 'max-age=' + yearInSeconds);
+                        .header('Cache-Control', 'max-age=' + yearInSeconds + ', must-revalidate');
                 }
             });
         });
@@ -28,7 +28,7 @@ exports.register = function(plugin, options, next) {
         path: '/fonts/{file}',
         handler: function(request, reply) {
             reply.file(path.join(publicPath, request.path))
-                .header('Cache-Control', 'max-age=' + yearInSeconds);
+                .header('Cache-Control', 'max-age=' + yearInSeconds + ', must-revalidate');
         }
     });
 
