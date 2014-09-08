@@ -55,11 +55,5 @@ footer {
 }
 .roulette-no-neighbors {
   text-align: center;
-}
-.roulette-features-missing,
-.roulette-geo-permission-denied,
-.roulette-geo-position-unavailable,
-.roulette-geo-timeout,
-.roulette-geo-error {
-  display: none;
+  margin-bottom: 20px;
 }

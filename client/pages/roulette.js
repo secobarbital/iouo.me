@@ -69,6 +69,6 @@ module.exports = PageView.extend({
     },
     retryGeo: function(e) {
         e.preventDefault();
-        this.resetGeo();
+        this.model.retryGeo();
     }
 });

@@ -11,11 +11,11 @@ module.exports = AmpersandModel.extend({
     props: {
         user: 'string',
         featuresMissing: 'boolean',
+        postError: 'boolean',
         geoPermissionDenied: 'boolean',
         geoPositionUnavailable: 'boolean',
         geoTimeout: 'boolean',
         geoErrorMessage: 'string',
-        postErrorMessage: 'string',
         neighborsUpdatedAt: 'number'
     },
     derived: {
@@ -76,12 +76,6 @@ module.exports = AmpersandModel.extend({
             fn: function() {
                 return !!this.geoErrorMessage;
             }
-        },
-        postError: {
-            deps: ['postErrorMessage'],
-            fn: function() {
-                return !!this.postErrorMessage;
-            }
         }
     },
     collections: {
@@ -104,18 +98,18 @@ module.exports = AmpersandModel.extend({
         this.geoPermissionDenied = false;
         this.geoPositionUnavailable = false;
         this.geoTimeout = false;
+        this.postError = false;
         this.geoErrorMessage = null;
-        this.postErrorMessage = null;
-        location.reload();
+        this.enableGeo();
     },
     listenForNeighbors: function() {
         this.eventSource = new EventSource(location.pathname + '/nearby');
         this.eventSource.addEventListener('open', function() {
             this.enableGeo();
-        }.bind(this), false);
+        }.bind(this));
         this.eventSource.addEventListener('neighbors', function(e) {
             this.handleNeighbors(JSON.parse(e.data));
-        }.bind(this), false);
+        }.bind(this));
     },
     stopListeningForNeighbors: function() {
         this.eventSource.close();
@@ -142,7 +136,7 @@ module.exports = AmpersandModel.extend({
             }
         }, function(err, resp, body) {
             if (err) {
-                return this.postErrorMessage = err.toString();
+                return this.postError = true;
             }
         }.bind(this));
     },
