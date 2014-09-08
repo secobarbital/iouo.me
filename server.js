@@ -17,8 +17,8 @@ internals.clientConfig = JSON.stringify({
     gaPropertyId: process.env.GA_PROPERTY_ID
 });
 server.ext('onPreResponse', function(request, reply) {
-    if (!request.state.config) {
-        var response = request.response;
+    var response = request.response;
+    if (!request.state.config && response.state) {
         return reply(response.state('config', encodeURIComponent(internals.clientConfig)));
     } else {
         return reply();
