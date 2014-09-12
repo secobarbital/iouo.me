@@ -9,7 +9,19 @@ var BareInput = InputView.extend({
 
 module.exports = FormView.extend({
     fields: function() {
+        var textInput = new BareInput({
+            name: 'text',
+            type: 'hidden',
+            required: true,
+            parent: this
+        });
+        textInput.listenTo(this, 'change:owee change:amount', function() {
+            var data = this.parent.getData();
+            this.setValue('@' + data.owee + ' #iou $' + data.amount);
+        });
+
         return [
+            textInput,
             new InputGroup({
                 id: 'oweScreenName',
                 name: 'owee',
@@ -35,6 +47,7 @@ module.exports = FormView.extend({
                 required: true,
                 parent: this,
                 tests: [
+
                     function(val) {
                         if (val <= 0) {
                             return 'Must be positive';
@@ -46,18 +59,7 @@ module.exports = FormView.extend({
                         }
                     }
                 ]
-            }),
-            new BareInput({
-                name: 'text',
-                type: 'hidden',
-                required: true,
-                parent: this
             })
         ];
-    },
-    beforeSubmit: function() {
-        FormView.prototype.beforeSubmit.apply(this);
-        this.model.set(this.getData());
-        this.getField('text').setValue(this.model.text);
     }
 });
