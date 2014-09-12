@@ -30,6 +30,11 @@
         return '<a data-hook="balance" class="list-group-item list-group-link"><span class="subject">@<span data-hook="subject"></span></span> <span data-hook="verb" class="verb"></span> <div class="list-group-link-rhs"><span class="currency">$ </span><span data-hook="amount" class="amount"></span></div></a>';
     };
 
+    // includes/inputGroup.jade compiled template
+    templatizer["includes"]["inputGroup"] = function tmpl_includes_inputGroup() {
+        return '<div class="form-group"><label data-hook="label"></label><div class="input-group"><span data-hook="prefix" class="input-group-addon"></span><input class="form-control"/></div></div>';
+    };
+
     // includes/transaction.jade compiled template
     templatizer["includes"]["transaction"] = function tmpl_includes_transaction() {
         return '<a data-hook="transaction" class="list-group-item media list-group-link list-group-media"><img data-hook="image" class="media-object"/><div data-hook="body" class="media-body"><div data-hook="text"></div><small class="text-muted">&mdash; <span data-hook="ower"></span> <time data-hook="timestamp"></time></small></div></a>';
@@ -48,6 +53,11 @@
     // pages/home.jade compiled template
     templatizer["pages"]["home"] = function tmpl_pages_home() {
         return '<section class="page home"><div data-hook="balances" class="list-group"></div><footer><a href="/owe" class="btn btn-primary btn-block">Owe someone</a></footer></section>';
+    };
+
+    // pages/owe.jade compiled template
+    templatizer["pages"]["owe"] = function tmpl_pages_owe() {
+        return '<section class="page owe"><form action="https://twitter.com/intent/tweet"><fieldset data-hook="field-container"><legend>Owe someone</legend></fieldset><button type="submit" class="btn btn-default">Tweet It</button></form></section>';
     };
 
     // pages/roulette.jade compiled template

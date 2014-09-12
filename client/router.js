@@ -4,11 +4,13 @@ var HomePage = require('./pages/home');
 var BalancePage = require('./pages/balance');
 var TransactionsPage = require('./pages/transactions');
 var RoulettePage = require('./pages/roulette');
+var OwePage = require('./pages/owe');
 
 
 module.exports = Router.extend({
     routes: {
         '': 'home',
+        'owe': 'owe',
         'balances/:ower': 'balance',
         'transactions/:ower/:owee': 'transactions',
         'roulette/:user': 'roulette',
@@ -20,6 +22,10 @@ module.exports = Router.extend({
         this.trigger('page', new HomePage({
             collection: app.balances
         }));
+    },
+
+    owe: function() {
+        this.trigger('page', new OwePage());
     },
 
     balance: function(ower) {
