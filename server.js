@@ -1,10 +1,10 @@
 var async = require('async');
 var config = require('getconfig');
 var Hapi = require('hapi');
-var Jade = require('jade');
 var address = config.http.listen;
 var port = process.env.PORT || config.http.port;
 var moonbootsConfig = require('./moonbootsConfig');
+var Jade = require('./config/jade');
 var internals = {};
 
 var server = new Hapi.Server(address, port, {
