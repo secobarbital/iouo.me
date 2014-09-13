@@ -1,9 +1,10 @@
 var Collection = require('ampersand-rest-collection');
 var Balance = require('./balance');
 var outstanding = require('../helpers/outstanding');
+var PegasusMixin = require('../helpers/pegasus-mixin.js');
 
 
-module.exports = Collection.extend({
+module.exports = Collection.extend(PegasusMixin, {
     mainIndex: 'ower',
     model: Balance,
     url: '/api/balances',
