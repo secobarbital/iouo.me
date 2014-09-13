@@ -1,0 +1,7 @@
+doctype html
+script.
+  include pegasus.min.js
+  pegasus.url = '/api/balances' + location.pathname;
+  pegasus.request = pegasus(pegasus.url);
+script(src='/' + locals.jsFileName)
+link(rel='stylesheet', href='/' + locals.cssFileName)

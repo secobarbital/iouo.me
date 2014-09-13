@@ -1,9 +1,20 @@
 var async = require('async');
-var Hapi = require('hapi');
 var config = require('getconfig');
-var server = new Hapi.Server(config.http.listen, process.env.PORT || config.http.port);
+var Hapi = require('hapi');
+var Jade = require('jade');
+var address = config.http.listen;
+var port = process.env.PORT || config.http.port;
 var moonbootsConfig = require('./moonbootsConfig');
 var internals = {};
+
+var server = new Hapi.Server(address, port, {
+    views: {
+        engines: {
+            jade: Jade
+        },
+        path: 'views'
+    }
+});
 
 // set clientconfig cookie
 internals.configStateConfig = {

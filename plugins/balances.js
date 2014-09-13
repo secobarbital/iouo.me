@@ -20,6 +20,25 @@ exports.register = function(plugin, options, next) {
         handler: transactions
     });
 
+    // pegasus aliases
+    plugin.route({
+        method: 'GET',
+        path: '/api/balances/',
+        handler: balances
+    });
+
+    plugin.route({
+        method: 'GET',
+        path: '/api/balances/balances/{ower}',
+        handler: balance
+    });
+
+    plugin.route({
+        method: 'GET',
+        path: '/api/balances/transactions/{ower}/{owee}',
+        handler: transactions
+    });
+
     next();
 };
 

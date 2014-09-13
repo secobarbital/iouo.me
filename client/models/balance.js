@@ -1,10 +1,11 @@
 var AmpersandModel = require('ampersand-model');
 var accounting = require('accounting');
-
 var CrossBalances = require('./xbalances');
 var outstanding = require('../helpers/outstanding');
+var PegasusMixin = require('../helpers/pegasus-mixin');
 
-module.exports = AmpersandModel.extend({
+
+module.exports = AmpersandModel.extend(PegasusMixin, {
     idAttribute: 'ower',
     props: {
         ower: 'string',
@@ -61,5 +62,8 @@ module.exports = AmpersandModel.extend({
                 amount: res.value
             };
         }
+    },
+    pegasusUrl: function() {
+        return '/api/balances/balances/' + this.ower;
     }
 });
