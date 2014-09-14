@@ -1,4 +1,5 @@
 /*global app, alert*/
+var CollectionView = require('ampersand-collection-view');
 var PageView = require('./base');
 var templates = require('../templates');
 var XBalanceView = require('../views/xbalance');
@@ -21,37 +22,30 @@ module.exports = PageView.extend({
             name: 'href'
         }
     },
+    subviews: {
+        owees: {
+            hook: 'balances',
+            waitFor: 'collection',
+            prepareView: function(el) {
+                if (this.collection.isEmpty()) {
+                    this.collection.fetch();
+                }
+                return new CollectionView({
+                    el: el,
+                    collection: this.collection,
+                    view: XBalanceView
+                });
+            }
+        }
+    },
     initialize: function(spec) {
         this.pageTitle = 'Balances for @' + spec.ower;
         app.balances.getOrFetch(spec.ower, function(err, model) {
             if (err) {
-                return alert('did not find a balance for: ' + spec.ower);
+                return alert('Did not find a balance for: ' + spec.ower);
             }
             this.model = model;
             this.collection = model.owees;
-            this.deferredRenderCollection(this.collection);
         }.bind(this));
-    },
-    render: function() {
-        this.renderWithTemplate();
-        this.deferredRenderCollection(this.collection, XBalanceView, this.queryByHook('balances'));
-    },
-    deferredRenderCollection: function(collection, view, el) {
-        if (arguments.length === 1 && this.renderCollectionDeferred) {
-            view = this.renderCollectionDeferred[1];
-            el = this.renderCollectionDeferred[2];
-        }
-        if (collection && view && el) {
-            delete this.renderCollectionDeferred;
-            this.renderCollection(collection, view, el);
-            this.fetchCollectionIfEmpty();
-        } else {
-            this.renderCollectionDeferred = arguments;
-        }
-    },
-    fetchCollectionIfEmpty: function() {
-        if (this.collection.isEmpty()) {
-            this.collection.fetch();
-        }
     }
 });

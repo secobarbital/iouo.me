@@ -1,4 +1,5 @@
 /*global app, alert*/
+var CollectionView = require('ampersand-collection-view');
 var PageView = require('./base');
 var templates = require('../templates');
 var TransactionView = require('../views/transaction');
@@ -27,6 +28,22 @@ module.exports = PageView.extend({
             name: 'href'
         }
     },
+    subviews: {
+        transactions: {
+            hook: 'transactions',
+            waitFor: 'collection',
+            prepareView: function(el) {
+                if (this.collection.isEmpty()) {
+                    this.collection.fetch();
+                }
+                return new CollectionView({
+                    el: el,
+                    collection: this.collection,
+                    view: TransactionView
+                });
+            }
+        }
+    },
     initialize: function(spec) {
         this.pageTitle = 'Transactions between @' + spec.ower + ' and @' + spec.owee;
         app.balances.getOrFetch(spec.ower, function(err, balance) {
@@ -36,30 +53,7 @@ module.exports = PageView.extend({
             balance.owees.getOrFetch(spec.owee, function(err, model) {
                 this.model = model;
                 this.collection = model.transactions;
-                this.deferredRenderCollection(this.collection);
             }.bind(this));
         }.bind(this));
-    },
-    render: function() {
-        this.renderWithTemplate();
-        this.deferredRenderCollection(this.collection, TransactionView, this.queryByHook('transactions'));
-    },
-    deferredRenderCollection: function(collection, view, el) {
-        if (arguments.length === 1 && this.renderCollectionDeferred) {
-            view = this.renderCollectionDeferred[1];
-            el = this.renderCollectionDeferred[2];
-        }
-        if (collection && view && el) {
-            delete this.renderCollectionDeferred;
-            this.renderCollection(collection, view, el);
-            this.fetchCollectionIfEmpty();
-        } else {
-            this.renderCollectionDeferred = arguments;
-        }
-    },
-    fetchCollectionIfEmpty: function() {
-        if (this.collection.isEmpty()) {
-            this.collection.fetch();
-        }
     }
 });
