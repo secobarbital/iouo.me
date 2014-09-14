@@ -45,6 +45,9 @@ async.parallel([
         }, function() {
             server.plugins['moonboots_hapi'].clientApp(0, function(clientApp) {
                 clientApp.result.html.context.cdnUrl = process.env.CDN_URL || '';
+                if (process.env.CDN_URL && clientApp.result.css.source) {
+                    clientApp.result.css.source = clientApp.result.css.source.split('url("/').join('url("' + process.env.CDN_URL + '/');
+                }
                 done();
             });
         });
@@ -61,7 +64,7 @@ async.parallel([
 ], function(err) {
     if (err) throw err;
     // If everything loaded correctly, start the server:
-    server.start(function (err) {
+    server.start(function(err) {
         if (err) throw err;
         console.log("iouo.me is running at: http://" + server.info.host + ":" + server.info.port + " Yep. That\'s pretty awesome.");
     });
