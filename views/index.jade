@@ -1,7 +1,5 @@
-- var prefix = 'CDN_URL' in locals.env ? locals.env.CDN_URL + '/' : '/';
-
 doctype html
 script
-  include pegasus.min.js
-script(src=prefix + locals.jsFileName)
-link(rel='stylesheet', href=prefix + locals.cssFileName)
+  include ../public/js/pegasus.min.js
+script(src=[locals.cdnUrl, locals.jsFileName].join('/'))
+link(rel='stylesheet', href=[locals.cdnUrl, locals.cssFileName].join('/'))

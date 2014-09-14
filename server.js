@@ -1,10 +1,10 @@
 var async = require('async');
 var config = require('getconfig');
 var Hapi = require('hapi');
+var Jade = require('jade');
 var address = config.http.listen;
 var port = process.env.PORT || config.http.port;
 var moonbootsConfig = require('./moonbootsConfig');
-var Jade = require('./config/jade');
 var internals = {};
 
 var server = new Hapi.Server(address, port, {
@@ -42,7 +42,12 @@ async.parallel([
         server.pack.register({
             plugin: require('moonboots_hapi'),
             options: moonbootsConfig
-        }, done);
+        }, function() {
+            server.plugins['moonboots_hapi'].clientApp(0, function(clientApp) {
+                clientApp.result.html.context.cdnUrl = process.env.CDN_URL || '';
+                done();
+            });
+        });
     },
     function(done) {
         server.pack.register(require('./plugins/static_files'), done);
