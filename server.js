@@ -8,6 +8,8 @@ var moonbootsConfig = require('./moonbootsConfig');
 var internals = {};
 
 var server = new Hapi.Server(address, port, {
+    cors: true,
+    security: true,
     views: {
         engines: {
             jade: Jade
