@@ -4,6 +4,7 @@ var Hapi = require('hapi');
 var Jade = require('jade');
 var address = config.http.listen;
 var port = process.env.PORT || config.http.port;
+var ddocs = require('./ddocs');
 var moonbootsConfig = require('./moonbootsConfig');
 var internals = {};
 
@@ -17,6 +18,8 @@ var server = new Hapi.Server(address, port, {
         path: 'views'
     }
 });
+
+ddocs.update();
 
 // set clientconfig cookie
 internals.configStateConfig = {
