@@ -2,42 +2,18 @@ var through2 = require('through2');
 var db = require('../config/db');
 
 exports.register = function(plugin, options, next) {
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances',
-        handler: balances
-    });
-
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances/{ower}',
-        handler: balance
-    });
-
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances/{ower}/{owee}',
-        handler: transactions
-    });
+    plugin.route([
+        { method: 'GET', path: '/api/balances', handler: balances },
+        { method: 'GET', path: '/api/balances/{ower}', handler: balance },
+        { method: 'GET', path: '/api/balances/{ower}/{owee}', handler: transactions }
+    ]);
 
     // pegasus aliases
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances/',
-        handler: balances
-    });
-
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances/balances/{ower}',
-        handler: balance
-    });
-
-    plugin.route({
-        method: 'GET',
-        path: '/api/balances/transactions/{ower}/{owee}',
-        handler: transactions
-    });
+    plugin.route([
+        { method: 'GET', path: '/api/balances/', handler: balances },
+        { method: 'GET', path: '/api/balances/balances/{ower}', handler: balance },
+        { method: 'GET', path: '/api/balances/transactions/{ower}/{owee}', handler: transactions }
+    ]);
 
     next();
 };
@@ -47,10 +23,32 @@ exports.register.attributes = {
     version: '1.0.0'
 };
 
+var dbHeaderWhitelist = [
+    'cache-control',
+    'content-type',
+    'date',
+    'etag',
+    'transfer-encoding'
+];
+
+function pipefilter(response, dbResponse) {
+    Object.keys(dbResponse.headers).filter(function(name) {
+        return dbHeaderWhitelist.indexOf(name) > -1;
+    }).forEach(function(name) {
+        var value = dbResponse.headers[name];
+        response.header(name, value);
+    });
+    response.send();
+};
+
+function streamRequest(dbRequest, reply) {
+    var response = reply(dbRequest.pipe(through2())).hold();
+    dbRequest.pipefilter = pipefilter.bind(null, response);
+}
+
 function balances(request, reply) {
     var options = { group_level: 1 };
-    reply(db.view('iouome', 'balances', options).pipe(through2()))
-        .header('Cache-Control', 'must-revalidate');
+    streamRequest(db.view('iouome', 'balances', options), reply);
 }
 
 function balance(request, reply) {
@@ -60,8 +58,7 @@ function balance(request, reply) {
         startkey: [ower],
         endkey: [ower, {}]
     };
-    reply(db.view('iouome', 'balances', options).pipe(through2()))
-        .header('Cache-Control', 'must-revalidate');
+    streamRequest(db.view('iouome', 'balances', options), reply);
 }
 
 function transactions(request, reply) {
@@ -74,6 +71,5 @@ function transactions(request, reply) {
         endkey: [ower, owee],
         include_docs: true
     };
-    reply(db.view('iouome', 'balances', options).pipe(through2()))
-        .header('Cache-Control', 'must-revalidate');
+    streamRequest(db.view('iouome', 'balances', options), reply);
 }
