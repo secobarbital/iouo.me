@@ -1,9 +1,10 @@
 var express = require('express');
+var db = require('../config/db');
 var router = express.Router();
 
-/* GET users listing. */
 router.get('/', function(req, res) {
-  res.send('respond with a resource');
+    var params = { group_level: 1 };
+    db.view('iouome', 'balances', params).pipe(res);
 });
 
 module.exports = router;
