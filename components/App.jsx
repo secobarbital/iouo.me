@@ -1,13 +1,13 @@
 var React = require('react');
 var HeaderBar = require('./HeaderBar');
-var Content = require('./Content');
+var OwersPage = require('./OwersPage');
 
 var App = React.createClass({
     render: function() {
         return (
             <div>
                 <HeaderBar />
-                <Content /> 
+                <OwersPage /> 
             </div>
         );
     }
