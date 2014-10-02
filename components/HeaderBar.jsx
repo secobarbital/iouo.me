@@ -4,7 +4,7 @@ var HeaderBar = React.createClass({
     render: function() {
         return (
             <header className="bar bar-nav">
-                <h1 className="title">React</h1>
+                <h1 className="title">iouo.me</h1>
             </header>
         );
     }
