@@ -1,8 +1,10 @@
 var React = require('react');
-var HeaderBar = require('./components/HeaderBar.jsx');
+var App = require('./components/App.jsx');
+
+require('ratchet/sass/ratchet.scss');
 require('./public/stylesheets/style.styl');
 
 React.renderComponent(
-    HeaderBar(),
+    App(),
     document.body
 );
