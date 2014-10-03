@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 var React = require('react');
 var HeaderBar = require('./HeaderBar');
 var OwersPage = require('./OwersPage');
@@ -5,9 +7,11 @@ var OwersPage = require('./OwersPage');
 var App = React.createClass({
     render: function() {
         return (
-            <div>
+            <div className="app">
                 <HeaderBar />
-                <OwersPage /> 
+                <div className="content">
+                    {this.props.children}
+                </div>
             </div>
         );
     }

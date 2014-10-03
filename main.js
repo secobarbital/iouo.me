@@ -1,10 +1,10 @@
 var React = require('react');
-var App = require('./components/App.jsx');
+var OwersPage = require('./components/OwersPage');
 
 require('ratchet/sass/ratchet.scss');
 require('./public/stylesheets/style.styl');
 
 React.renderComponent(
-    App(),
-    document.body
+    OwersPage(initialData),
+    document.querySelector('.content')
 );

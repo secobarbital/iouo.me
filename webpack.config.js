@@ -6,7 +6,7 @@ module.exports = {
     },
     module: {
         loaders: [
-            { test: /\.jsx$/, loader: 'jsx?harmony&insertPragma=React.DOM' },
+            { test: /\.jsx$/, loader: 'jsx?harmony' },
             { test: /\.styl$/, loader: 'style!css!stylus' },
             { test: /\.scss$/, loader: 'style!css!sass' },
             { test: /\.woff$/, loader: 'file' },

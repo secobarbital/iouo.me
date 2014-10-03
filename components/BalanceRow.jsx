@@ -1,3 +1,5 @@
+/** @jsx React.DOM */
+
 var accounting = require('accounting');
 var React = require('react');
 
