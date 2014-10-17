@@ -7,21 +7,24 @@ var BalanceTable = require('./BalanceTable');
 
 var OwersPage = React.createClass({
     getInitialState: function() {
+        var initialData = this.props.initialData;
         var owers = [];
-        if (this.props.rows) {
-            owers = this.getOwersFromData(this.props);
+        if (initialData) {
+            owers = this.getOwersFromData(initialData);
         }
-        return { source: '/api', owers: owers };
+        return {
+            source: '/api',
+            owers: owers
+        };
     },
 
     componentDidMount: function() {
-        if (!this.props.rows) {
-            this.fetch();
-        }
+        this.fetch();
     },
 
     fetch: function() {
-        request.get(this.state.source, function(res) {
+        var source = this.state.source;
+        request.get(source, function(res) {
             if (this.isMounted()) {
                 this.setState({ owers: this.getOwersFromData(res.body) });
             }

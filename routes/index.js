@@ -1,9 +1,9 @@
 var express = require('express');
-var React = require('react');
+var Router = require('react-router');
+var RoutesFactory = require('../components/RoutesFactory');
 var db = require('../config/db');
 var layout = require('./layout');
-var App = require('../components/App');
-var OwersPage = require('../components/OwersPage');
+var safeStringify = require('../helpers/safeStringify');
 var router = express.Router();
 
 router.get('/', function(req, res, next) {
@@ -13,9 +13,10 @@ router.get('/', function(req, res, next) {
         if (err) {
             return next(err);
         }
-        var page = React.renderComponentToString(OwersPage(data));
-        res.write(React.renderComponentToString(App(null, page)));
-        res.end(layout.epilogue.replace('DATA', JSON.stringify(data)));
+        Router.renderRoutesToString(RoutesFactory(data), req.originalUrl, function(error, abortReason, html) {
+            res.write(html);
+            res.end(layout.epilogue.replace('DATA', safeStringify(data)));
+        });
     });
 });
 
