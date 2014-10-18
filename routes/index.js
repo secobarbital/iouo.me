@@ -13,7 +13,38 @@ router.get('/', function(req, res, next) {
         if (err) {
             return next(err);
         }
-        Router.renderRoutesToString(RoutesFactory(data), req.originalUrl, function(error, abortReason, html) {
+        Router.renderRoutesToString(RoutesFactory(data), req.originalUrl, function(err, abortReason, html) {
+            if (err) {
+                return next(err);
+            }
+            if (abortReason) {
+                return next(abortReason);
+            }
+            res.write(html);
+            res.end(layout.epilogue.replace('DATA', safeStringify(data)));
+        });
+    });
+});
+
+router.get('/:ower', function(req, res, next) {
+    var ower = req.params.ower;
+    var params = {
+        group_level: 2,
+        startkey: [ower],
+        endkey: [ower, {}]
+    };
+    res.write(layout.prologue);
+    db.view('iouome', 'balances', params, function(err, data) {
+        if (err) {
+            return next(err);
+        }
+        Router.renderRoutesToString(RoutesFactory(data), req.originalUrl, function(err, abortReason, html) {
+            if (err) {
+                return next(err);
+            }
+            if (abortReason) {
+                return next(abortReason);
+            }
             res.write(html);
             res.end(layout.epilogue.replace('DATA', safeStringify(data)));
         });

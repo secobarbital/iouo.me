@@ -1,15 +1,17 @@
 /** @jsx React.DOM */
 
-var accounting = require('accounting');
 var React = require('react');
 var request = require('superagent');
-var OwerRow = require('./OwerRow');
+var OwerDivider = require('./OwerDivider');
+var OweeRow = require('./OweeRow');
 
-var OwersPage = React.createClass({
+var OweesPage = React.createClass({
     getInitialState: function() {
         var initialData = this.props.initialData;
+        var ower = this.props.params.ower;
         return {
-            source: '/api',
+            source: '/api/' + ower,
+            ower: ower,
             data: initialData || {
                 rows: []
             }
@@ -33,43 +35,34 @@ var OwersPage = React.createClass({
         }.bind(this));
     },
 
-    getOwersFromData: function(data) {
-        return data.rows.map(function(row) {
-            var link = '/' + name;
-            return {
-                name: name,
-                verb: verb,
-                amount: amount,
-                link: link
-            };
-        }).sort(function(a, b) {
-            return b.amount - a.amount;
-        });
-    },
-
     render: function() {
         var data = this.state.data;
-        var owerRows = data.rows.filter(function(row) {
+        var ower = this.state.ower;
+        var total = data.rows.reduce(function(sum, row) {
+            return sum + row.value;
+        }, 0);
+        var oweeRows = data.rows.filter(function(row) {
             return row.value !== 0;
         }).sort(function(a, b) {
             return b.value - a.value;
         }).map(function(row) {
-            var ower = row.key[0];
-            var verb = amount > 0 ? 'owes' : 'is owed';
+            var owee = row.key[1];
             var amount = row.value;
             var params = {
-                ower: ower
+                ower: ower,
+                owee: owee
             };
             return (
-                <OwerRow key={'balance-' + ower} ower={ower} amount={amount} to="owees" params={params} />
+                <OweeRow key={'balance-' + ower + '-' + owee} owee={owee} amount={amount} to="transactions" params={params} />
             );
         });
         return (
             <ul className="table-view">
-                {owerRows}
+                <OwerDivider ower={ower} amount={total} />
+                {oweeRows}
             </ul>
         );
     }
 });
 
-module.exports = OwersPage;
+module.exports = OweesPage;

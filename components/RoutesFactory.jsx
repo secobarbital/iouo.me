@@ -7,7 +7,7 @@ var DefaultRoute = Router.DefaultRoute;
 var NotFoundRoute = Router.NotFoundRoute;
 var AppFactory = require('./AppFactory');
 var OwersPage = require('./OwersPage');
-var OweesPage = OwersPage;
+var OweesPage = require('./OweesPage');
 var TransactionsPage = OwersPage;
 var NotFound = OwersPage;
 
