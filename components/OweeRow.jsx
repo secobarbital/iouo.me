@@ -11,9 +11,9 @@ var OweeRow = React.createClass({
         var owee = this.props.owee;
         var amount = this.props.amount;
         var formattedAmount = accounting.formatMoney(Math.abs(amount), '');
-        var subject = <span className="subject">{owee}</span>;
+        var subject = <span className="subject">@{owee}</span>;
         var verb = <span className="verb">owes</span>;
-        var lhs = amount > 0 ? <span>{verb} @{subject}</span> : <span>@{subject} {verb}</span>;
+        var lhs = amount > 0 ? <span>{verb} {subject}</span> : <span>{subject} {verb}</span>;
         return (
             <li className="table-view-cell">
                 <Link to={this.props.to} params={this.props.params} className="navigate-right">

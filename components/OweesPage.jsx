@@ -4,6 +4,7 @@ var React = require('react');
 var request = require('superagent');
 var OwerDivider = require('./OwerDivider');
 var OweeRow = require('./OweeRow');
+var Loading = require('./Loading');
 
 var OweesPage = React.createClass({
     getInitialState: function() {
@@ -12,9 +13,7 @@ var OweesPage = React.createClass({
         return {
             source: '/api/' + ower,
             ower: ower,
-            data: initialData || {
-                rows: []
-            }
+            data: initialData || {}
         };
     },
 
@@ -37,6 +36,9 @@ var OweesPage = React.createClass({
 
     render: function() {
         var data = this.state.data;
+        if (!data.rows) {
+            return <Loading />
+        }
         var ower = this.state.ower;
         var total = data.rows.reduce(function(sum, row) {
             return sum + row.value;

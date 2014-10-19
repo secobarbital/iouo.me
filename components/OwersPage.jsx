@@ -4,15 +4,14 @@ var accounting = require('accounting');
 var React = require('react');
 var request = require('superagent');
 var OwerRow = require('./OwerRow');
+var Loading = require('./Loading');
 
 var OwersPage = React.createClass({
     getInitialState: function() {
         var initialData = this.props.initialData;
         return {
             source: '/api',
-            data: initialData || {
-                rows: []
-            }
+            data: initialData || {}
         };
     },
 
@@ -49,6 +48,9 @@ var OwersPage = React.createClass({
 
     render: function() {
         var data = this.state.data;
+        if (!data.rows) {
+            return <Loading />
+        }
         var owerRows = data.rows.filter(function(row) {
             return row.value !== 0;
         }).sort(function(a, b) {
