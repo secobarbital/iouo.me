@@ -1,8 +1,6 @@
 /** @jsx React.DOM */
 
 var React = require('react');
-var Router = require('react-router');
-var Link = Router.Link;
 var request = require('superagent');
 var OwerHeader = require('./OwerHeader');
 var OweeRow = require('./OweeRow');
@@ -24,9 +22,7 @@ var OweesPage = React.createClass({
             this.fetch();
         }
         this.props.setTitle('@' + this.state.ower);
-        this.props.setLeftNav(function() {
-            return <Link to="owers" className="icon icon-left-nav pull-left" />;
-        });
+        this.props.setLeftNav({ to: 'owers' });
     },
 
     componentWillUnmount: function() {
