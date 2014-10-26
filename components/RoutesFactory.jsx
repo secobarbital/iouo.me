@@ -8,7 +8,7 @@ var NotFoundRoute = Router.NotFoundRoute;
 var AppFactory = require('./AppFactory');
 var OwersPage = require('./OwersPage');
 var OweesPage = require('./OweesPage');
-var TransactionsPage = OwersPage;
+var TransactionsPage = require('./TransactionsPage');
 var NotFound = OwersPage;
 
 var RoutesFactory = function(initialData) {

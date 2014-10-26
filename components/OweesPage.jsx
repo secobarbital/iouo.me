@@ -1,17 +1,53 @@
 /** @jsx React.DOM */
 
+var accounting = require('accounting');
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 var request = require('superagent');
-var OwerHeader = require('./OwerHeader');
-var OweeRow = require('./OweeRow');
 var Loading = require('./Loading');
+
+var OweesHeader = React.createClass({
+    render: function() {
+        var ower = this.props.ower;
+        var amount = this.props.amount;
+        var verb = amount > 0 ? 'owes' : 'is owed';
+        var formattedAmount = accounting.formatMoney(Math.abs(amount));
+        return (
+            <div className="content-padded balance-header">
+                {verb} {formattedAmount}
+            </div>
+        );
+    }
+});
+
+var OweeRow = React.createClass({
+    render: function() {
+        var ower = this.props.ower;
+        var owee = this.props.owee;
+        var amount = this.props.amount;
+        var formattedAmount = accounting.formatMoney(Math.abs(amount), '');
+        var subject = <span className="subject">@{owee}</span>;
+        var verb = <span className="verb">owes</span>;
+        var lhs = amount > 0 ? <span>{verb} {subject}</span> : <span>{subject} {verb}</span>;
+        return (
+            <li className="table-view-cell">
+                <Link to={this.props.to} params={this.props.params} className="navigate-right">
+                    <div className="balance-row-rhs">
+                        <span className="currency">$</span> <span className="amount">{formattedAmount}</span>
+                    </div>
+                    {lhs}
+                </Link>
+            </li>
+        );
+    }
+});
 
 var OweesPage = React.createClass({
     getInitialState: function() {
         var initialData = this.props.initialData;
         var ower = this.props.params.ower;
         return {
-            source: '/api/' + ower,
             ower: ower,
             data: initialData || {}
         };
@@ -21,8 +57,12 @@ var OweesPage = React.createClass({
         if (!this.props.initialData) {
             this.fetch();
         }
-        this.props.setTitle('@' + this.state.ower);
-        this.props.setLeftNav({ to: 'owers' });
+        setTimeout(function() {
+            if (this.isMounted()) {
+                this.props.setTitle('@' + this.state.ower);
+                this.props.setLeftNav({ to: 'owers' });
+            }
+        }.bind(this), 0);
     },
 
     componentWillUnmount: function() {
@@ -33,8 +73,9 @@ var OweesPage = React.createClass({
     },
 
     fetch: function() {
-        var source = this.state.source;
-        request.get(source, function(res) {
+        var ower = this.state.ower;
+        var endpoint = '/api/' + ower;
+        request.get(endpoint, function(res) {
             if (this.isMounted()) {
                 this.setState({
                     data: res.body
@@ -69,7 +110,7 @@ var OweesPage = React.createClass({
         });
         return (
             <div className="content">
-                <OwerHeader ower={ower} amount={total} />
+                <OweesHeader ower={ower} amount={total} />
                 <ul className="table-view">
                     {oweeRows}
                 </ul>
