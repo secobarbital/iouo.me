@@ -57,19 +57,21 @@ var OwersPage = React.createClass({
             return b.value - a.value;
         }).map(function(row) {
             var ower = row.key[0];
-            var verb = amount > 0 ? 'owes' : 'is owed';
             var amount = row.value;
+            var verb = amount > 0 ? 'owes' : 'is owed';
             var params = {
                 ower: ower
             };
             return (
-                <OwerRow key={'balance-' + ower} ower={ower} amount={amount} to="owees" params={params} />
+                <OwerRow key={'balance-' + ower} ower={ower} verb={verb} amount={amount} to="owees" params={params} />
             );
         });
         return (
-            <ul className="table-view">
-                {owerRows}
-            </ul>
+            <div className="content">
+                <ul className="table-view">
+                    {owerRows}
+                </ul>
+            </div>
         );
     }
 });

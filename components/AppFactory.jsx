@@ -15,15 +15,28 @@ var AppFactory = function(initialData) {
             this.setState({ data: null });
         },
 
+        setLeftNav: function(leftNav) {
+            this.setState({ leftNav: leftNav });
+        },
+
+        setTitle: function(title) {
+            this.setState({ title: title });
+            if (title) {
+                document.title = title + ' - iouo.me';
+            } else {
+                document.title = 'iouo.me';
+            }
+        },
+
         render: function() {
             var activeRouteHandler = this.props.activeRouteHandler;
             var data = this.state.data;
+            var leftNav = this.state.leftNav;
+            var title = this.state.title;
             return (
                 <div className="app">
-                    <HeaderBar />
-                    <div className="content">
-                        <activeRouteHandler initialData={data} />
-                    </div>
+                    <HeaderBar title={title} leftNav={leftNav} />
+                    <activeRouteHandler initialData={data} setLeftNav={this.setLeftNav} setTitle={this.setTitle} />
                 </div>
             );
         }

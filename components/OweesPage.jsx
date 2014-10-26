@@ -1,8 +1,10 @@
 /** @jsx React.DOM */
 
 var React = require('react');
+var Router = require('react-router');
+var Link = Router.Link;
 var request = require('superagent');
-var OwerDivider = require('./OwerDivider');
+var OwerHeader = require('./OwerHeader');
 var OweeRow = require('./OweeRow');
 var Loading = require('./Loading');
 
@@ -21,6 +23,17 @@ var OweesPage = React.createClass({
         if (!this.props.initialData) {
             this.fetch();
         }
+        this.props.setTitle('@' + this.state.ower);
+        this.props.setLeftNav(function() {
+            return <Link to="owers" className="icon icon-left-nav pull-left" />;
+        });
+    },
+
+    componentWillUnmount: function() {
+        setTimeout(function() {
+            this.props.setLeftNav(null);
+            this.props.setTitle(null);
+        }.bind(this), 0);
     },
 
     fetch: function() {
@@ -59,10 +72,12 @@ var OweesPage = React.createClass({
             );
         });
         return (
-            <ul className="table-view">
-                <OwerDivider ower={ower} amount={total} />
-                {oweeRows}
-            </ul>
+            <div className="content">
+                <OwerHeader ower={ower} amount={total} />
+                <ul className="table-view">
+                    {oweeRows}
+                </ul>
+            </div>
         );
     }
 });
