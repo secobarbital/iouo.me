@@ -27,7 +27,7 @@ db.getBalances = function(reqParams, cb) {
         params = { group_level: 1 };
     }
 
-    db.view('iouome', 'balances', params, cb);
+    return db.view('iouome', 'balances', params, cb);
 }
 
 module.exports = db;

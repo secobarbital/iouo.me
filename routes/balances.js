@@ -2,32 +2,12 @@ var express = require('express');
 var db = require('../config/db');
 var router = express.Router();
 
-router.get('/', function(req, res) {
-    var params = { group_level: 1 };
-    db.view('iouome', 'balances', params).pipe(res);
-});
+function handler(req, res) {
+    db.getBalances(req.params).pipe(res);
+}
 
-router.get('/:ower', function(req, res) {
-    var ower = req.params.ower;
-    var params = {
-        group_level: 2,
-        startkey: [ower],
-        endkey: [ower, {}]
-    };
-    db.view('iouome', 'balances', params).pipe(res);
-});
-
-router.get('/:ower/:owee', function(req, res) {
-    var ower = req.params.ower;
-    var owee = req.params.owee;
-    var params = {
-        startkey: [ower, owee, {}],
-        endkey: [ower, owee],
-        descending: true,
-        reduce: false,
-        include_docs: true
-    };
-    db.view('iouome', 'balances', params).pipe(res);
-});
+router.get('/', handler);
+router.get('/:ower', handler);
+router.get('/:ower/:owee', handler);
 
 module.exports = router;
