@@ -1,9 +1,9 @@
 var express = require('express');
 var Router = require('react-router');
-var RoutesFactory = require('../components/RoutesFactory');
+var RoutesFactory = require('../app/components/RoutesFactory');
 var db = require('../config/db');
 var layout = require('./layout');
-var safeStringify = require('../helpers/safeStringify');
+var safeStringify = require('../lib/safeStringify');
 var router = express.Router();
 
 function handler(req, res, next) {
