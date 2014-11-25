@@ -1,4 +1,3 @@
-require('node-jsx').install({ harmony: true, extension: '.jsx' });
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
