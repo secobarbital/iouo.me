@@ -44,9 +44,9 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Cycle = __webpack_require__(2);
+	var Cycle = __webpack_require__(5);
 	var xhr = __webpack_require__(1);
-	var style = __webpack_require__(3);
+	var style = __webpack_require__(2);
 	var h = Cycle.h;
 	var Rx = Cycle.Rx;
 	var xhrSource = Rx.Observable.fromNodeCallback(xhr, null, function(args) {
@@ -100,17 +100,38 @@
 	    };
 	});
 
-	Cycle.createRenderer('#app').inject(OwersView);
+	var RouteModel = Cycle.createModel([], function(intent) {
+	    return {
+	        route$: Rx.Observable.just('/')
+	    };
+	});
+
+	var RouteView = Cycle.createView(['route$'], ['vtree$'], function(model, owersView) {
+	    return {
+	        events: [],
+	        vtree$: owersView.vtree$
+	    };
+	});
+
+	var RouteIntent = Cycle.createIntent([], function(view) {
+	    return {
+	    };
+	});
+
+	Cycle.createRenderer('#app').inject(RouteView);
 	Cycle.circularInject(OwersModel, OwersView, OwersIntent);
+	RouteIntent.inject(RouteView);
+	RouteView.inject(RouteModel, OwersView);
+	RouteModel.inject(RouteIntent);
 
 
 /***/ },
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var window = __webpack_require__(12)
-	var once = __webpack_require__(13)
-	var parseHeaders = __webpack_require__(14)
+	var window = __webpack_require__(13)
+	var once = __webpack_require__(14)
+	var parseHeaders = __webpack_require__(15)
 
 	var messages = {
 	    "0": "Internal XMLHttpRequest Error",
@@ -290,181 +311,13 @@
 /* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
-	'use strict';
-	var h = __webpack_require__(15);
-	var Rx = __webpack_require__(19);
-	var DataFlowNode = __webpack_require__(6);
-	var DataFlowSink = __webpack_require__(6);
-	var Rendering = __webpack_require__(7);
-	var PropertyHook = __webpack_require__(8);
-
-	var Cycle = {
-	  /**
-	   * Creates a DataFlowNode.
-	   *
-	   * `inputInterface1` is an array of strings, defining which  Observables are expected to
-	   * exist in the first input. It defines the 'type' of the input, since JavaScript has no
-	   * strong types. The `inputInterface1` is optional if the DataFlowNode does not have any
-	   * input. In that case, the function `definitionFn` should not have any parameter
-	   * either. There can be an arbitrary number of input interfaces, but the number of input
-	   * interfaces must match the number of arguments that `definitionFn` has. The arguments
-	   * to `definitionFn` are objects that should fulfil the respective interfaces.
-	   *
-	   * @param {Array<String>} [inputInterface1] property names that are expected to exist
-	   * as RxJS Observables in the first input parameter for `definitionFn`.
-	   * @param {} ...
-	   * @param {Function} definitionFn a function expecting objects as parameters (as many as
-	   * there are interfaces), satisfying the type requirement given by `inputInterface1`,
-	   * `inputInterface2`, etc. Should return an object containing RxJS Observables as
-	   * properties.
-	   * @return {DataFlowNode} a DataFlowNode, containing a `inject(inputs...)` function.
-	   */
-	  createDataFlowNode: function createDataFlowNode() {
-	    return DataFlowNode.apply({}, arguments);
-	  },
-
-	  /**
-	   * Creates a DataFlowSink, given a definition function that receives injected inputs.
-	   *
-	   * @param {Function} definitionFn a function expecting some DataFlowNode(s) as
-	   * arguments. The function should subscribe to Observables of the input DataFlowNodes
-	   * and should return a `Rx.Disposable` subscription.
-	   * @return {DataFlowSink} a DataFlowSink, containing a `inject(inputs...)` function.
-	   */
-	  createDataFlowSink: function createDataFlowSink() {
-	    return DataFlowSink.apply({}, arguments);
-	  },
-
-	  /**
-	   * Returns a DataFlowNode representing a Model, having some Intent as input.
-	   *
-	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
-	   * interfaces and multiple inputs in `definitionFn`.
-	   *
-	   * @param {Array<String>} [intentInterface] property names that are expected to exist as
-	   * RxJS Observables in the input Intent.
-	   * @param {Function} definitionFn a function expecting an Intent object as parameter.
-	   * Should return an object containing RxJS Observables as properties.
-	   * @return {DataFlowNode} a DataFlowNode representing a Model, containing a
-	   * `inject(intent)` function.
-	   * @function createModel
-	   */
-	  createModel: __webpack_require__(9),
-
-	  /**
-	   * Returns a DataFlowNode representing a View, having some Model as input.
-	   *
-	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
-	   * interfaces and multiple inputs in `definitionFn`.
-	   *
-	   * @param {Array<String>} [modelInterface] property names that are expected to exist as
-	   * RxJS Observables in the input Model.
-	   * @param {Function} definitionFn a function expecting a Model object as parameter.
-	   * Should return an object containing RxJS Observables as properties. The object **must
-	   * contain** two properties: `vtree$` and `events`. The value of `events` must be an
-	   * array of strings with the names of the Observables that carry DOM events. `vtree$`
-	   * should be an Observable emitting instances of VTree (Virtual DOM elements).
-	   * @return {DataFlowNode} a DataFlowNode representing a View, containing a
-	   * `inject(model)` function.
-	   * @function createView
-	   */
-	  createView: __webpack_require__(10),
-
-	  /**
-	   * Returns a DataFlowNode representing an Intent, having some View as input.
-	   *
-	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
-	   * interfaces and multiple inputs in `definitionFn`.
-	   *
-	   * @param {Array<String>} [viewInterface] property names that are expected to exist as
-	   * RxJS Observables in the input View.
-	   * @param {Function} definitionFn a function expecting a View object as parameter.
-	   * Should return an object containing RxJS Observables as properties.
-	   * @return {DataFlowNode} a DataFlowNode representing an Intent, containing a
-	   * `inject(view)` function.
-	   * @function createIntent
-	   */
-	  createIntent: __webpack_require__(11),
-
-	  /**
-	   * Returns a Renderer (a DataFlowSink) bound to a DOM container element. Contains an
-	   * `inject` function that should be called with a View as argument.
-	   *
-	   * @param {(String|HTMLElement)} container the DOM selector for the element (or the
-	   * element itself) to contain the rendering of the VTrees.
-	   * @return {Renderer} a Renderer object containing an `inject(view)` function.
-	   * @function createRenderer
-	   */
-	  createRenderer: function createRenderer(container) {
-	    return new Rendering.Renderer(container);
-	  },
-
-	  /**
-	   * Ties together the given input DataFlowNodes, making them be circular dependencies
-	   * to each other. Calls `inject()` on each of the given DataFlowNodes, in reverse order.
-	   * This function can be called with an arbitrary number of inputs, but it is commonly
-	   * used for the Model-View-Intent triple of nodes.
-	   *
-	   * @param {DataFlowNode} model a Model node.
-	   * @param {DataFlowNode} view a View node.
-	   * @param {DataFlowNode} intent an Intent node.
-	   * @function circularInject
-	   */
-	  circularInject: function circularInject() {
-	    for (var i = arguments.length - 1; i >= 0; i--) {
-	      var current = arguments[i];
-	      var previous = arguments[(i - 1 >= 0) ? i - 1 : arguments.length - 1];
-	      if (typeof current === 'undefined' || typeof current.inject !== 'function') {
-	        throw new Error('Bad input. circularInject() expected a DataFlowNode as input');
-	      }
-	      if (current) {
-	        current.inject(previous);
-	      }
-	    }
-	  },
-
-	  /**
-	   * Returns a hook for manipulating an element from the real DOM. This is a helper for
-	   * creating VTrees in Views. Useful for calling `focus()` on the DOM element, or doing
-	   * similar mutations.
-	   *
-	   * See https://github.com/Raynos/mercury/blob/master/docs/faq.md for more details.
-	   *
-	   * @param {Function} fn a function with two arguments: `element`, `property`.
-	   * @return {PropertyHook} a hook
-	   */
-	  vdomPropHook: function (fn) {
-	    return new PropertyHook(fn);
-	  },
-
-	  /**
-	   * A shortcut to the root object of [RxJS](https://github.com/Reactive-Extensions/RxJS).
-	   * @name Rx
-	   */
-	  Rx: Rx,
-
-	  /**
-	   * A shortcut to [virtual-hyperscript](https://github.com/Raynos/virtual-hyperscript).
-	   * This is a helper for creating VTrees in Views.
-	   * @name h
-	   */
-	  h: h
-	};
-
-	module.exports = Cycle;
-
-
-/***/ },
-/* 3 */
-/***/ function(module, exports, __webpack_require__) {
-
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 
 	// load the styles
-	var content = __webpack_require__(4);
+	var content = __webpack_require__(3);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(5)(content, {});
+	var update = __webpack_require__(4)(content, {});
 	// Hot Module Replacement
 	if(false) {
 		// When the styles change, update the <style> tags
@@ -478,14 +331,14 @@
 	}
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(18)();
+	exports = module.exports = __webpack_require__(12)();
 	exports.push([module.id, ".balance-row-rhs {\n  float: right;\n  margin-right: -23px;\n}\n.balance-header {\n  text-align: center;\n}\n.subject {\n  font-weight: bold;\n}\n.amount {\n  font-size: 1.3em;\n}\n.amount,\n.currency,\n.roulette-headline {\n  font-family: Georgia, Palatino, serif;\n  line-height: 1;\n}\n.transaction {\n  padding-right: 15px;\n}\n.transaction-link {\n  margin-right: -15px !important;\n}\n.transaction-avatar {\n  height: 42px;\n  width: 42px;\n}\n.transaction-right {\n  text-align: right;\n}\n.roulette-headline {\n  font-size: 6.8em;\n  text-align: center;\n}\n.roulette-no-neighbors {\n  text-align: center;\n  margin-bottom: 20px;\n}\n", ""]);
 
 /***/ },
-/* 5 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -681,12 +534,180 @@
 
 
 /***/ },
+/* 5 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	var h = __webpack_require__(16);
+	var Rx = __webpack_require__(19);
+	var DataFlowNode = __webpack_require__(6);
+	var DataFlowSink = __webpack_require__(6);
+	var Rendering = __webpack_require__(7);
+	var PropertyHook = __webpack_require__(8);
+
+	var Cycle = {
+	  /**
+	   * Creates a DataFlowNode.
+	   *
+	   * `inputInterface1` is an array of strings, defining which  Observables are expected to
+	   * exist in the first input. It defines the 'type' of the input, since JavaScript has no
+	   * strong types. The `inputInterface1` is optional if the DataFlowNode does not have any
+	   * input. In that case, the function `definitionFn` should not have any parameter
+	   * either. There can be an arbitrary number of input interfaces, but the number of input
+	   * interfaces must match the number of arguments that `definitionFn` has. The arguments
+	   * to `definitionFn` are objects that should fulfil the respective interfaces.
+	   *
+	   * @param {Array<String>} [inputInterface1] property names that are expected to exist
+	   * as RxJS Observables in the first input parameter for `definitionFn`.
+	   * @param {} ...
+	   * @param {Function} definitionFn a function expecting objects as parameters (as many as
+	   * there are interfaces), satisfying the type requirement given by `inputInterface1`,
+	   * `inputInterface2`, etc. Should return an object containing RxJS Observables as
+	   * properties.
+	   * @return {DataFlowNode} a DataFlowNode, containing a `inject(inputs...)` function.
+	   */
+	  createDataFlowNode: function createDataFlowNode() {
+	    return DataFlowNode.apply({}, arguments);
+	  },
+
+	  /**
+	   * Creates a DataFlowSink, given a definition function that receives injected inputs.
+	   *
+	   * @param {Function} definitionFn a function expecting some DataFlowNode(s) as
+	   * arguments. The function should subscribe to Observables of the input DataFlowNodes
+	   * and should return a `Rx.Disposable` subscription.
+	   * @return {DataFlowSink} a DataFlowSink, containing a `inject(inputs...)` function.
+	   */
+	  createDataFlowSink: function createDataFlowSink() {
+	    return DataFlowSink.apply({}, arguments);
+	  },
+
+	  /**
+	   * Returns a DataFlowNode representing a Model, having some Intent as input.
+	   *
+	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
+	   * interfaces and multiple inputs in `definitionFn`.
+	   *
+	   * @param {Array<String>} [intentInterface] property names that are expected to exist as
+	   * RxJS Observables in the input Intent.
+	   * @param {Function} definitionFn a function expecting an Intent object as parameter.
+	   * Should return an object containing RxJS Observables as properties.
+	   * @return {DataFlowNode} a DataFlowNode representing a Model, containing a
+	   * `inject(intent)` function.
+	   * @function createModel
+	   */
+	  createModel: __webpack_require__(9),
+
+	  /**
+	   * Returns a DataFlowNode representing a View, having some Model as input.
+	   *
+	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
+	   * interfaces and multiple inputs in `definitionFn`.
+	   *
+	   * @param {Array<String>} [modelInterface] property names that are expected to exist as
+	   * RxJS Observables in the input Model.
+	   * @param {Function} definitionFn a function expecting a Model object as parameter.
+	   * Should return an object containing RxJS Observables as properties. The object **must
+	   * contain** two properties: `vtree$` and `events`. The value of `events` must be an
+	   * array of strings with the names of the Observables that carry DOM events. `vtree$`
+	   * should be an Observable emitting instances of VTree (Virtual DOM elements).
+	   * @return {DataFlowNode} a DataFlowNode representing a View, containing a
+	   * `inject(model)` function.
+	   * @function createView
+	   */
+	  createView: __webpack_require__(10),
+
+	  /**
+	   * Returns a DataFlowNode representing an Intent, having some View as input.
+	   *
+	   * Is a specialized case of `createDataFlowNode()`, hence can also receive multiple
+	   * interfaces and multiple inputs in `definitionFn`.
+	   *
+	   * @param {Array<String>} [viewInterface] property names that are expected to exist as
+	   * RxJS Observables in the input View.
+	   * @param {Function} definitionFn a function expecting a View object as parameter.
+	   * Should return an object containing RxJS Observables as properties.
+	   * @return {DataFlowNode} a DataFlowNode representing an Intent, containing a
+	   * `inject(view)` function.
+	   * @function createIntent
+	   */
+	  createIntent: __webpack_require__(11),
+
+	  /**
+	   * Returns a Renderer (a DataFlowSink) bound to a DOM container element. Contains an
+	   * `inject` function that should be called with a View as argument.
+	   *
+	   * @param {(String|HTMLElement)} container the DOM selector for the element (or the
+	   * element itself) to contain the rendering of the VTrees.
+	   * @return {Renderer} a Renderer object containing an `inject(view)` function.
+	   * @function createRenderer
+	   */
+	  createRenderer: function createRenderer(container) {
+	    return new Rendering.Renderer(container);
+	  },
+
+	  /**
+	   * Ties together the given input DataFlowNodes, making them be circular dependencies
+	   * to each other. Calls `inject()` on each of the given DataFlowNodes, in reverse order.
+	   * This function can be called with an arbitrary number of inputs, but it is commonly
+	   * used for the Model-View-Intent triple of nodes.
+	   *
+	   * @param {DataFlowNode} model a Model node.
+	   * @param {DataFlowNode} view a View node.
+	   * @param {DataFlowNode} intent an Intent node.
+	   * @function circularInject
+	   */
+	  circularInject: function circularInject() {
+	    for (var i = arguments.length - 1; i >= 0; i--) {
+	      var current = arguments[i];
+	      var previous = arguments[(i - 1 >= 0) ? i - 1 : arguments.length - 1];
+	      if (typeof current === 'undefined' || typeof current.inject !== 'function') {
+	        throw new Error('Bad input. circularInject() expected a DataFlowNode as input');
+	      }
+	      if (current) {
+	        current.inject(previous);
+	      }
+	    }
+	  },
+
+	  /**
+	   * Returns a hook for manipulating an element from the real DOM. This is a helper for
+	   * creating VTrees in Views. Useful for calling `focus()` on the DOM element, or doing
+	   * similar mutations.
+	   *
+	   * See https://github.com/Raynos/mercury/blob/master/docs/faq.md for more details.
+	   *
+	   * @param {Function} fn a function with two arguments: `element`, `property`.
+	   * @return {PropertyHook} a hook
+	   */
+	  vdomPropHook: function (fn) {
+	    return new PropertyHook(fn);
+	  },
+
+	  /**
+	   * A shortcut to the root object of [RxJS](https://github.com/Reactive-Extensions/RxJS).
+	   * @name Rx
+	   */
+	  Rx: Rx,
+
+	  /**
+	   * A shortcut to [virtual-hyperscript](https://github.com/Raynos/virtual-hyperscript).
+	   * This is a helper for creating VTrees in Views.
+	   * @name h
+	   */
+	  h: h
+	};
+
+	module.exports = Cycle;
+
+
+/***/ },
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	var Rx = __webpack_require__(19);
-	var errors = __webpack_require__(16);
+	var errors = __webpack_require__(17);
 	var CycleInterfaceError = errors.CycleInterfaceError;
 
 	function replicate(source, subject) {
@@ -793,13 +814,13 @@
 
 	'use strict';
 
-	var h = __webpack_require__(15);
+	var h = __webpack_require__(16);
 	var VDOM = {
 	  diff: __webpack_require__(22),
 	  patch: __webpack_require__(23)
 	};
 	var DOMDelegator = __webpack_require__(20);
-	var DataFlowSink = __webpack_require__(17);
+	var DataFlowSink = __webpack_require__(18);
 
 	var delegator = new DOMDelegator();
 
@@ -878,7 +899,7 @@
 
 	'use strict';
 	var DataFlowNode = __webpack_require__(6);
-	var errors = __webpack_require__(16);
+	var errors = __webpack_require__(17);
 
 	function createModel() {
 	  var model = DataFlowNode.apply({}, arguments);
@@ -902,7 +923,7 @@
 	'use strict';
 	var Rx = __webpack_require__(19);
 	var DataFlowNode = __webpack_require__(6);
-	var errors = __webpack_require__(16);
+	var errors = __webpack_require__(17);
 
 	function getFunctionForwardIntoStream(stream) {
 	  return function forwardIntoStream(ev) { stream.onNext(ev); };
@@ -976,7 +997,7 @@
 
 	'use strict';
 	var DataFlowNode = __webpack_require__(6);
-	var errors = __webpack_require__(16);
+	var errors = __webpack_require__(17);
 
 	function createIntent() {
 	  var intent = DataFlowNode.apply({}, arguments);
@@ -997,6 +1018,27 @@
 /* 12 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = function() {
+		var list = [];
+		list.toString = function toString() {
+			var result = [];
+			for(var i = 0; i < this.length; i++) {
+				var item = this[i];
+				if(item[2]) {
+					result.push("@media " + item[2] + "{" + item[1] + "}");
+				} else {
+					result.push(item[1]);
+				}
+			}
+			return result.join("");
+		};
+		return list;
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function(global) {if (typeof window !== "undefined") {
 	    module.exports = window;
 	} else if (typeof global !== "undefined") {
@@ -1010,7 +1052,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = once
@@ -1035,7 +1077,7 @@
 
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var trim = __webpack_require__(28)
@@ -1071,7 +1113,7 @@
 	}
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var VNode = __webpack_require__(30)
@@ -1203,7 +1245,7 @@
 
 
 /***/ },
-/* 16 */
+/* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1238,7 +1280,7 @@
 
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1258,27 +1300,6 @@
 
 	module.exports = DataFlowSink;
 
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = function() {
-		var list = [];
-		list.toString = function toString() {
-			var result = [];
-			for(var i = 0; i < this.length; i++) {
-				var item = this[i];
-				if(item[2]) {
-					result.push("@media " + item[2] + "{" + item[1] + "}");
-				} else {
-					result.push(item[1]);
-				}
-			}
-			return result.join("");
-		};
-		return list;
-	}
 
 /***/ },
 /* 19 */
@@ -11516,7 +11537,7 @@
 /* 43 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var inherits = __webpack_require__(67)
+	var inherits = __webpack_require__(68)
 
 	var ALL_PROPS = [
 	    "altKey", "bubbles", "cancelable", "ctrlKey",
@@ -11656,12 +11677,12 @@
 	var isArray = __webpack_require__(70)
 	var isObject = __webpack_require__(71)
 
-	var VPatch = __webpack_require__(59)
-	var isVNode = __webpack_require__(60)
-	var isVText = __webpack_require__(61)
-	var isWidget = __webpack_require__(62)
-	var isThunk = __webpack_require__(63)
-	var handleThunk = __webpack_require__(64)
+	var VPatch = __webpack_require__(57)
+	var isVNode = __webpack_require__(58)
+	var isVText = __webpack_require__(59)
+	var isWidget = __webpack_require__(60)
+	var isThunk = __webpack_require__(61)
+	var handleThunk = __webpack_require__(62)
 
 	module.exports = diff
 
@@ -12002,8 +12023,8 @@
 	var document = __webpack_require__(77)
 	var isArray = __webpack_require__(70)
 
-	var domIndex = __webpack_require__(57)
-	var patchOp = __webpack_require__(58)
+	var domIndex = __webpack_require__(63)
+	var patchOp = __webpack_require__(64)
 	module.exports = patch
 
 	function patch(rootNode, patches) {
@@ -12227,7 +12248,7 @@
 /* 52 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var hiddenStore = __webpack_require__(68);
+	var hiddenStore = __webpack_require__(67);
 
 	module.exports = createStore;
 
@@ -12404,6 +12425,128 @@
 /* 57 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var version = __webpack_require__(73)
+
+	VirtualPatch.NONE = 0
+	VirtualPatch.VTEXT = 1
+	VirtualPatch.VNODE = 2
+	VirtualPatch.WIDGET = 3
+	VirtualPatch.PROPS = 4
+	VirtualPatch.ORDER = 5
+	VirtualPatch.INSERT = 6
+	VirtualPatch.REMOVE = 7
+	VirtualPatch.THUNK = 8
+
+	module.exports = VirtualPatch
+
+	function VirtualPatch(type, vNode, patch) {
+	    this.type = Number(type)
+	    this.vNode = vNode
+	    this.patch = patch
+	}
+
+	VirtualPatch.prototype.version = version
+	VirtualPatch.prototype.type = "VirtualPatch"
+
+
+/***/ },
+/* 58 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var version = __webpack_require__(73)
+
+	module.exports = isVirtualNode
+
+	function isVirtualNode(x) {
+	    return x && x.type === "VirtualNode" && x.version === version
+	}
+
+
+/***/ },
+/* 59 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var version = __webpack_require__(73)
+
+	module.exports = isVirtualText
+
+	function isVirtualText(x) {
+	    return x && x.type === "VirtualText" && x.version === version
+	}
+
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = isWidget
+
+	function isWidget(w) {
+	    return w && w.type === "Widget"
+	}
+
+
+/***/ },
+/* 61 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = isThunk
+
+	function isThunk(t) {
+	    return t && t.type === "Thunk"
+	}
+
+
+/***/ },
+/* 62 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isVNode = __webpack_require__(58)
+	var isVText = __webpack_require__(59)
+	var isWidget = __webpack_require__(60)
+	var isThunk = __webpack_require__(61)
+
+	module.exports = handleThunk
+
+	function handleThunk(a, b) {
+	    var renderedA = a
+	    var renderedB = b
+
+	    if (isThunk(b)) {
+	        renderedB = renderThunk(b, a)
+	    }
+
+	    if (isThunk(a)) {
+	        renderedA = renderThunk(a, null)
+	    }
+
+	    return {
+	        a: renderedA,
+	        b: renderedB
+	    }
+	}
+
+	function renderThunk(thunk, previous) {
+	    var renderedThunk = thunk.vnode
+
+	    if (!renderedThunk) {
+	        renderedThunk = thunk.vnode = thunk.render(previous)
+	    }
+
+	    if (!(isVNode(renderedThunk) ||
+	            isVText(renderedThunk) ||
+	            isWidget(renderedThunk))) {
+	        throw new Error("thunk did not return a valid node");
+	    }
+
+	    return renderedThunk
+	}
+
+
+/***/ },
+/* 63 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 	// We don't want to read all of the DOM nodes in the tree so we use
 	// the in-order tree indexing to eliminate recursion down certain branches.
@@ -12492,16 +12635,16 @@
 
 
 /***/ },
-/* 58 */
+/* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var applyProperties = __webpack_require__(73)
+	var applyProperties = __webpack_require__(74)
 
-	var isWidget = __webpack_require__(62)
-	var VPatch = __webpack_require__(59)
+	var isWidget = __webpack_require__(60)
+	var VPatch = __webpack_require__(57)
 
-	var render = __webpack_require__(74)
-	var updateWidget = __webpack_require__(75)
+	var render = __webpack_require__(75)
+	var updateWidget = __webpack_require__(76)
 
 	module.exports = applyPatch
 
@@ -12666,128 +12809,6 @@
 
 
 /***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(76)
-
-	VirtualPatch.NONE = 0
-	VirtualPatch.VTEXT = 1
-	VirtualPatch.VNODE = 2
-	VirtualPatch.WIDGET = 3
-	VirtualPatch.PROPS = 4
-	VirtualPatch.ORDER = 5
-	VirtualPatch.INSERT = 6
-	VirtualPatch.REMOVE = 7
-	VirtualPatch.THUNK = 8
-
-	module.exports = VirtualPatch
-
-	function VirtualPatch(type, vNode, patch) {
-	    this.type = Number(type)
-	    this.vNode = vNode
-	    this.patch = patch
-	}
-
-	VirtualPatch.prototype.version = version
-	VirtualPatch.prototype.type = "VirtualPatch"
-
-
-/***/ },
-/* 60 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(76)
-
-	module.exports = isVirtualNode
-
-	function isVirtualNode(x) {
-	    return x && x.type === "VirtualNode" && x.version === version
-	}
-
-
-/***/ },
-/* 61 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(76)
-
-	module.exports = isVirtualText
-
-	function isVirtualText(x) {
-	    return x && x.type === "VirtualText" && x.version === version
-	}
-
-
-/***/ },
-/* 62 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = isWidget
-
-	function isWidget(w) {
-	    return w && w.type === "Widget"
-	}
-
-
-/***/ },
-/* 63 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = isThunk
-
-	function isThunk(t) {
-	    return t && t.type === "Thunk"
-	}
-
-
-/***/ },
-/* 64 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isVNode = __webpack_require__(60)
-	var isVText = __webpack_require__(61)
-	var isWidget = __webpack_require__(62)
-	var isThunk = __webpack_require__(63)
-
-	module.exports = handleThunk
-
-	function handleThunk(a, b) {
-	    var renderedA = a
-	    var renderedB = b
-
-	    if (isThunk(b)) {
-	        renderedB = renderThunk(b, a)
-	    }
-
-	    if (isThunk(a)) {
-	        renderedA = renderThunk(a, null)
-	    }
-
-	    return {
-	        a: renderedA,
-	        b: renderedB
-	    }
-	}
-
-	function renderThunk(thunk, previous) {
-	    var renderedThunk = thunk.vnode
-
-	    if (!renderedThunk) {
-	        renderedThunk = thunk.vnode = thunk.render(previous)
-	    }
-
-	    if (!(isVNode(renderedThunk) ||
-	            isVText(renderedThunk) ||
-	            isWidget(renderedThunk))) {
-	        throw new Error("thunk did not return a valid node");
-	    }
-
-	    return renderedThunk
-	}
-
-
-/***/ },
 /* 65 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -12840,6 +12861,28 @@
 /* 67 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = hiddenStore;
+
+	function hiddenStore(obj, key) {
+	    var store = { identity: key };
+	    var valueOf = obj.valueOf;
+
+	    Object.defineProperty(obj, "valueOf", {
+	        value: function (value) {
+	            return value !== key ?
+	                valueOf.apply(this, arguments) : store;
+	        },
+	        writable: true
+	    });
+
+	    return store;
+	}
+
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
 	if (typeof Object.create === 'function') {
 	  // implementation from standard node.js 'util' module
 	  module.exports = function inherits(ctor, superCtor) {
@@ -12862,28 +12905,6 @@
 	    ctor.prototype = new TempCtor()
 	    ctor.prototype.constructor = ctor
 	  }
-	}
-
-
-/***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = hiddenStore;
-
-	function hiddenStore(obj, key) {
-	    var store = { identity: key };
-	    var valueOf = obj.valueOf;
-
-	    Object.defineProperty(obj, "valueOf", {
-	        value: function (value) {
-	            return value !== key ?
-	                valueOf.apply(this, arguments) : store;
-	        },
-	        writable: true
-	    });
-
-	    return store;
 	}
 
 
@@ -12962,6 +12983,13 @@
 
 /***/ },
 /* 73 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = "1"
+
+
+/***/ },
+/* 74 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isObject = __webpack_require__(71)
@@ -13059,17 +13087,17 @@
 
 
 /***/ },
-/* 74 */
+/* 75 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var document = __webpack_require__(77)
 
-	var applyProperties = __webpack_require__(73)
+	var applyProperties = __webpack_require__(74)
 
-	var isVNode = __webpack_require__(60)
-	var isVText = __webpack_require__(61)
-	var isWidget = __webpack_require__(62)
-	var handleThunk = __webpack_require__(64)
+	var isVNode = __webpack_require__(58)
+	var isVText = __webpack_require__(59)
+	var isWidget = __webpack_require__(60)
+	var handleThunk = __webpack_require__(62)
 
 	module.exports = createElement
 
@@ -13111,10 +13139,10 @@
 
 
 /***/ },
-/* 75 */
+/* 76 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isWidget = __webpack_require__(62)
+	var isWidget = __webpack_require__(60)
 
 	module.exports = updateWidget
 
@@ -13129,13 +13157,6 @@
 
 	    return false
 	}
-
-
-/***/ },
-/* 76 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "1"
 
 
 /***/ },

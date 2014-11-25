@@ -54,5 +54,26 @@ var OwersIntent = Cycle.createIntent([], function(view) {
     };
 });
 
-Cycle.createRenderer('#app').inject(OwersView);
+var RouteModel = Cycle.createModel([], function(intent) {
+    return {
+        route$: Rx.Observable.just('/')
+    };
+});
+
+var RouteView = Cycle.createView(['route$'], ['vtree$'], function(model, owersView) {
+    return {
+        events: [],
+        vtree$: owersView.vtree$
+    };
+});
+
+var RouteIntent = Cycle.createIntent([], function(view) {
+    return {
+    };
+});
+
+Cycle.createRenderer('#app').inject(RouteView);
 Cycle.circularInject(OwersModel, OwersView, OwersIntent);
+RouteIntent.inject(RouteView);
+RouteView.inject(RouteModel, OwersView);
+RouteModel.inject(RouteIntent);
