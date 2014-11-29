@@ -114,9 +114,9 @@
 	    };
 	});
 
-	var RouteIntent = Cycle.createIntent([], ['route$'], ['route$'], function(view, owersIntent, oweesIntent) {
+	var RouteIntent = Cycle.createIntent([], ['changeRoute$'], ['changeRoute$'], function(view, owersIntent, oweesIntent) {
 	    return {
-	        changeRoute$: Rx.Observable.merge(owersIntent.route$, oweesIntent.route$)
+	        changeRoute$: Rx.Observable.merge(owersIntent.changeRoute$, oweesIntent.changeRoute$)
 	    };
 	});
 
@@ -144,9 +144,12 @@
 	        });
 	}
 
-	var OwersModel = Cycle.createModel(['fetch$'], function(intent) {
+	var OwersModel = Cycle.createModel(['changeRoute$'], function(intent) {
 	    return {
-	        owers$: intent.fetch$
+	        owers$: intent.changeRoute$
+	            .map(function(route) {
+	                return '/api';
+	            })
 	            .flatMap(xhr.jsonSource)
 	            .map(function(body) {
 	                return body.rows
@@ -179,14 +182,8 @@
 	});
 
 	var OwersIntent = Cycle.createIntent([], function(view) {
-	    var route$ = page.namedPageSource('owers', '/');
-
 	    return {
-	        route$: route$,
-	        fetch$: route$
-	            .map(function(route) {
-	                return '/api';
-	            })
+	        changeRoute$: page.namedPageSource('owers', '/')
 	    };
 	});
 
@@ -216,9 +213,12 @@
 	        })
 	}
 
-	var OweesModel = Cycle.createModel(['fetch$'], function(intent) {
+	var OweesModel = Cycle.createModel(['changeRoute$'], function(intent) {
 	    return {
-	        owees$: intent.fetch$
+	        owees$: intent.changeRoute$
+	            .map(function(route) {
+	                return '/api' + route.ctx.pathname
+	            })
 	            .flatMap(xhr.jsonSource)
 	            .map(function(body) {
 	                return body.rows
@@ -252,13 +252,8 @@
 	});
 
 	var OweesIntent = Cycle.createIntent([], function(view) {
-	    var route$ = page.namedPageSource('owees', '/:ower');
 	    return {
-	        route$: route$,
-	        fetch$: route$
-	            .map(function(route) {
-	                return '/api' + route.ctx.pathname
-	            })
+	        changeRoute$: page.namedPageSource('owees', '/:ower')
 	    };
 	});
 
@@ -1562,9 +1557,9 @@
 /* 20 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var window = __webpack_require__(33)
-	var once = __webpack_require__(34)
-	var parseHeaders = __webpack_require__(35)
+	var window = __webpack_require__(32)
+	var once = __webpack_require__(35)
+	var parseHeaders = __webpack_require__(34)
 
 	var messages = {
 	    "0": "Internal XMLHttpRequest Error",
@@ -11480,7 +11475,7 @@
 	var cuid = __webpack_require__(55)
 	var globalDocument = __webpack_require__(51)
 
-	var DOMDelegator = __webpack_require__(32)
+	var DOMDelegator = __webpack_require__(33)
 
 	var versionKey = "11"
 	var cacheKey = "__DOM_DELEGATOR_CACHE@" + versionKey
@@ -11597,7 +11592,7 @@
 /* 27 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var diff = __webpack_require__(54)
+	var diff = __webpack_require__(53)
 
 	module.exports = diff
 
@@ -11606,7 +11601,7 @@
 /* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var patch = __webpack_require__(53)
+	var patch = __webpack_require__(54)
 
 	module.exports = patch
 
@@ -11684,9 +11679,25 @@
 /* 32 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function(global) {if (typeof window !== "undefined") {
+	    module.exports = window;
+	} else if (typeof global !== "undefined") {
+	    module.exports = global;
+	} else if (typeof self !== "undefined"){
+	    module.exports = self;
+	} else {
+	    module.exports = {};
+	}
+	
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
+
+/***/ },
+/* 33 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var globalDocument = __webpack_require__(51)
 	var DataSet = __webpack_require__(56)
-	var createStore = __webpack_require__(58)
+	var createStore = __webpack_require__(60)
 
 	var addEvent = __webpack_require__(47)
 	var removeEvent = __webpack_require__(48)
@@ -11860,52 +11871,11 @@
 
 
 /***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(global) {if (typeof window !== "undefined") {
-	    module.exports = window;
-	} else if (typeof global !== "undefined") {
-	    module.exports = global;
-	} else if (typeof self !== "undefined"){
-	    module.exports = self;
-	} else {
-	    module.exports = {};
-	}
-	
-	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
-
-/***/ },
 /* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	module.exports = once
-
-	once.proto = once(function () {
-	  Object.defineProperty(Function.prototype, 'once', {
-	    value: function () {
-	      return once(this)
-	    },
-	    configurable: true
-	  })
-	})
-
-	function once (fn) {
-	  var called = false
-	  return function () {
-	    if (called) return
-	    called = true
-	    return fn.apply(this, arguments)
-	  }
-	}
-
-
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var trim = __webpack_require__(59)
-	  , forEach = __webpack_require__(60)
+	var trim = __webpack_require__(58)
+	  , forEach = __webpack_require__(59)
 	  , isArray = function(arg) {
 	      return Object.prototype.toString.call(arg) === '[object Array]';
 	    }
@@ -11935,6 +11905,31 @@
 
 	  return result
 	}
+
+/***/ },
+/* 35 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = once
+
+	once.proto = once(function () {
+	  Object.defineProperty(Function.prototype, 'once', {
+	    value: function () {
+	      return once(this)
+	    },
+	    configurable: true
+	  })
+	})
+
+	function once (fn) {
+	  var called = false
+	  return function () {
+	    if (called) return
+	    called = true
+	    return fn.apply(this, arguments)
+	  }
+	}
+
 
 /***/ },
 /* 36 */
@@ -12458,97 +12453,15 @@
 /* 53 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var document = __webpack_require__(84)
-	var isArray = __webpack_require__(77)
-
-	var domIndex = __webpack_require__(64)
-	var patchOp = __webpack_require__(65)
-	module.exports = patch
-
-	function patch(rootNode, patches) {
-	    return patchRecursive(rootNode, patches)
-	}
-
-	function patchRecursive(rootNode, patches, renderOptions) {
-	    var indices = patchIndices(patches)
-
-	    if (indices.length === 0) {
-	        return rootNode
-	    }
-
-	    var index = domIndex(rootNode, patches.a, indices)
-	    var ownerDocument = rootNode.ownerDocument
-
-	    if (!renderOptions) {
-	        renderOptions = { patch: patchRecursive }
-	        if (ownerDocument !== document) {
-	            renderOptions.document = ownerDocument
-	        }
-	    }
-
-	    for (var i = 0; i < indices.length; i++) {
-	        var nodeIndex = indices[i]
-	        rootNode = applyPatch(rootNode,
-	            index[nodeIndex],
-	            patches[nodeIndex],
-	            renderOptions)
-	    }
-
-	    return rootNode
-	}
-
-	function applyPatch(rootNode, domNode, patchList, renderOptions) {
-	    if (!domNode) {
-	        return rootNode
-	    }
-
-	    var newNode
-
-	    if (isArray(patchList)) {
-	        for (var i = 0; i < patchList.length; i++) {
-	            newNode = patchOp(patchList[i], domNode, renderOptions)
-
-	            if (domNode === rootNode) {
-	                rootNode = newNode
-	            }
-	        }
-	    } else {
-	        newNode = patchOp(patchList, domNode, renderOptions)
-
-	        if (domNode === rootNode) {
-	            rootNode = newNode
-	        }
-	    }
-
-	    return rootNode
-	}
-
-	function patchIndices(patches) {
-	    var indices = []
-
-	    for (var key in patches) {
-	        if (key !== "a") {
-	            indices.push(Number(key))
-	        }
-	    }
-
-	    return indices
-	}
-
-
-/***/ },
-/* 54 */
-/***/ function(module, exports, __webpack_require__) {
-
 	var isArray = __webpack_require__(77)
 	var isObject = __webpack_require__(78)
 
-	var VPatch = __webpack_require__(66)
-	var isVNode = __webpack_require__(67)
-	var isVText = __webpack_require__(68)
-	var isWidget = __webpack_require__(69)
-	var isThunk = __webpack_require__(70)
-	var handleThunk = __webpack_require__(71)
+	var VPatch = __webpack_require__(64)
+	var isVNode = __webpack_require__(65)
+	var isVText = __webpack_require__(66)
+	var isWidget = __webpack_require__(67)
+	var isThunk = __webpack_require__(68)
+	var handleThunk = __webpack_require__(69)
 
 	module.exports = diff
 
@@ -12883,6 +12796,88 @@
 
 
 /***/ },
+/* 54 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var document = __webpack_require__(84)
+	var isArray = __webpack_require__(77)
+
+	var domIndex = __webpack_require__(70)
+	var patchOp = __webpack_require__(71)
+	module.exports = patch
+
+	function patch(rootNode, patches) {
+	    return patchRecursive(rootNode, patches)
+	}
+
+	function patchRecursive(rootNode, patches, renderOptions) {
+	    var indices = patchIndices(patches)
+
+	    if (indices.length === 0) {
+	        return rootNode
+	    }
+
+	    var index = domIndex(rootNode, patches.a, indices)
+	    var ownerDocument = rootNode.ownerDocument
+
+	    if (!renderOptions) {
+	        renderOptions = { patch: patchRecursive }
+	        if (ownerDocument !== document) {
+	            renderOptions.document = ownerDocument
+	        }
+	    }
+
+	    for (var i = 0; i < indices.length; i++) {
+	        var nodeIndex = indices[i]
+	        rootNode = applyPatch(rootNode,
+	            index[nodeIndex],
+	            patches[nodeIndex],
+	            renderOptions)
+	    }
+
+	    return rootNode
+	}
+
+	function applyPatch(rootNode, domNode, patchList, renderOptions) {
+	    if (!domNode) {
+	        return rootNode
+	    }
+
+	    var newNode
+
+	    if (isArray(patchList)) {
+	        for (var i = 0; i < patchList.length; i++) {
+	            newNode = patchOp(patchList[i], domNode, renderOptions)
+
+	            if (domNode === rootNode) {
+	                rootNode = newNode
+	            }
+	        }
+	    } else {
+	        newNode = patchOp(patchList, domNode, renderOptions)
+
+	        if (domNode === rootNode) {
+	            rootNode = newNode
+	        }
+	    }
+
+	    return rootNode
+	}
+
+	function patchIndices(patches) {
+	    var indices = []
+
+	    for (var key in patches) {
+	        if (key !== "a") {
+	            indices.push(Number(key))
+	        }
+	    }
+
+	    return indices
+	}
+
+
+/***/ },
 /* 55 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -13002,7 +12997,7 @@
 /* 56 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var createStore = __webpack_require__(58)
+	var createStore = __webpack_require__(60)
 	var Individual = __webpack_require__(46)
 
 	var createHash = __webpack_require__(73)
@@ -13032,29 +13027,6 @@
 /* 58 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var hiddenStore = __webpack_require__(74);
-
-	module.exports = createStore;
-
-	function createStore() {
-	    var key = {};
-
-	    return function (obj) {
-	        if (typeof obj !== 'object' || obj === null) {
-	            throw new Error('Weakmap-shim: Key must be object')
-	        }
-
-	        var store = obj.valueOf(key);
-	        return store && store.identity === key ?
-	            store : hiddenStore(obj, key);
-	    };
-	}
-
-
-/***/ },
-/* 59 */
-/***/ function(module, exports, __webpack_require__) {
-
 	
 	exports = module.exports = trim;
 
@@ -13072,7 +13044,7 @@
 
 
 /***/ },
-/* 60 */
+/* 59 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var isFunction = __webpack_require__(85)
@@ -13120,6 +13092,29 @@
 	            iterator.call(context, object[k], k, object)
 	        }
 	    }
+	}
+
+
+/***/ },
+/* 60 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var hiddenStore = __webpack_require__(74);
+
+	module.exports = createStore;
+
+	function createStore() {
+	    var key = {};
+
+	    return function (obj) {
+	        if (typeof obj !== 'object' || obj === null) {
+	            throw new Error('Weakmap-shim: Key must be object')
+	        }
+
+	        var store = obj.valueOf(key);
+	        return store && store.identity === key ?
+	            store : hiddenStore(obj, key);
+	    };
 	}
 
 
@@ -13260,6 +13255,128 @@
 /* 64 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var version = __webpack_require__(80)
+
+	VirtualPatch.NONE = 0
+	VirtualPatch.VTEXT = 1
+	VirtualPatch.VNODE = 2
+	VirtualPatch.WIDGET = 3
+	VirtualPatch.PROPS = 4
+	VirtualPatch.ORDER = 5
+	VirtualPatch.INSERT = 6
+	VirtualPatch.REMOVE = 7
+	VirtualPatch.THUNK = 8
+
+	module.exports = VirtualPatch
+
+	function VirtualPatch(type, vNode, patch) {
+	    this.type = Number(type)
+	    this.vNode = vNode
+	    this.patch = patch
+	}
+
+	VirtualPatch.prototype.version = version
+	VirtualPatch.prototype.type = "VirtualPatch"
+
+
+/***/ },
+/* 65 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var version = __webpack_require__(80)
+
+	module.exports = isVirtualNode
+
+	function isVirtualNode(x) {
+	    return x && x.type === "VirtualNode" && x.version === version
+	}
+
+
+/***/ },
+/* 66 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var version = __webpack_require__(80)
+
+	module.exports = isVirtualText
+
+	function isVirtualText(x) {
+	    return x && x.type === "VirtualText" && x.version === version
+	}
+
+
+/***/ },
+/* 67 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = isWidget
+
+	function isWidget(w) {
+	    return w && w.type === "Widget"
+	}
+
+
+/***/ },
+/* 68 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = isThunk
+
+	function isThunk(t) {
+	    return t && t.type === "Thunk"
+	}
+
+
+/***/ },
+/* 69 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isVNode = __webpack_require__(65)
+	var isVText = __webpack_require__(66)
+	var isWidget = __webpack_require__(67)
+	var isThunk = __webpack_require__(68)
+
+	module.exports = handleThunk
+
+	function handleThunk(a, b) {
+	    var renderedA = a
+	    var renderedB = b
+
+	    if (isThunk(b)) {
+	        renderedB = renderThunk(b, a)
+	    }
+
+	    if (isThunk(a)) {
+	        renderedA = renderThunk(a, null)
+	    }
+
+	    return {
+	        a: renderedA,
+	        b: renderedB
+	    }
+	}
+
+	function renderThunk(thunk, previous) {
+	    var renderedThunk = thunk.vnode
+
+	    if (!renderedThunk) {
+	        renderedThunk = thunk.vnode = thunk.render(previous)
+	    }
+
+	    if (!(isVNode(renderedThunk) ||
+	            isVText(renderedThunk) ||
+	            isWidget(renderedThunk))) {
+	        throw new Error("thunk did not return a valid node");
+	    }
+
+	    return renderedThunk
+	}
+
+
+/***/ },
+/* 70 */
+/***/ function(module, exports, __webpack_require__) {
+
 	// Maps a virtual DOM tree onto a real DOM tree in an efficient manner.
 	// We don't want to read all of the DOM nodes in the tree so we use
 	// the in-order tree indexing to eliminate recursion down certain branches.
@@ -13348,16 +13465,16 @@
 
 
 /***/ },
-/* 65 */
+/* 71 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var applyProperties = __webpack_require__(80)
+	var applyProperties = __webpack_require__(81)
 
-	var isWidget = __webpack_require__(69)
-	var VPatch = __webpack_require__(66)
+	var isWidget = __webpack_require__(67)
+	var VPatch = __webpack_require__(64)
 
-	var render = __webpack_require__(81)
-	var updateWidget = __webpack_require__(82)
+	var render = __webpack_require__(82)
+	var updateWidget = __webpack_require__(83)
 
 	module.exports = applyPatch
 
@@ -13518,128 +13635,6 @@
 	    }
 
 	    return newRoot;
-	}
-
-
-/***/ },
-/* 66 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(83)
-
-	VirtualPatch.NONE = 0
-	VirtualPatch.VTEXT = 1
-	VirtualPatch.VNODE = 2
-	VirtualPatch.WIDGET = 3
-	VirtualPatch.PROPS = 4
-	VirtualPatch.ORDER = 5
-	VirtualPatch.INSERT = 6
-	VirtualPatch.REMOVE = 7
-	VirtualPatch.THUNK = 8
-
-	module.exports = VirtualPatch
-
-	function VirtualPatch(type, vNode, patch) {
-	    this.type = Number(type)
-	    this.vNode = vNode
-	    this.patch = patch
-	}
-
-	VirtualPatch.prototype.version = version
-	VirtualPatch.prototype.type = "VirtualPatch"
-
-
-/***/ },
-/* 67 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(83)
-
-	module.exports = isVirtualNode
-
-	function isVirtualNode(x) {
-	    return x && x.type === "VirtualNode" && x.version === version
-	}
-
-
-/***/ },
-/* 68 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var version = __webpack_require__(83)
-
-	module.exports = isVirtualText
-
-	function isVirtualText(x) {
-	    return x && x.type === "VirtualText" && x.version === version
-	}
-
-
-/***/ },
-/* 69 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = isWidget
-
-	function isWidget(w) {
-	    return w && w.type === "Widget"
-	}
-
-
-/***/ },
-/* 70 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = isThunk
-
-	function isThunk(t) {
-	    return t && t.type === "Thunk"
-	}
-
-
-/***/ },
-/* 71 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var isVNode = __webpack_require__(67)
-	var isVText = __webpack_require__(68)
-	var isWidget = __webpack_require__(69)
-	var isThunk = __webpack_require__(70)
-
-	module.exports = handleThunk
-
-	function handleThunk(a, b) {
-	    var renderedA = a
-	    var renderedB = b
-
-	    if (isThunk(b)) {
-	        renderedB = renderThunk(b, a)
-	    }
-
-	    if (isThunk(a)) {
-	        renderedA = renderThunk(a, null)
-	    }
-
-	    return {
-	        a: renderedA,
-	        b: renderedB
-	    }
-	}
-
-	function renderThunk(thunk, previous) {
-	    var renderedThunk = thunk.vnode
-
-	    if (!renderedThunk) {
-	        renderedThunk = thunk.vnode = thunk.render(previous)
-	    }
-
-	    if (!(isVNode(renderedThunk) ||
-	            isVText(renderedThunk) ||
-	            isWidget(renderedThunk))) {
-	        throw new Error("thunk did not return a valid node");
-	    }
-
-	    return renderedThunk
 	}
 
 
@@ -13820,6 +13815,13 @@
 /* 80 */
 /***/ function(module, exports, __webpack_require__) {
 
+	module.exports = "1"
+
+
+/***/ },
+/* 81 */
+/***/ function(module, exports, __webpack_require__) {
+
 	var isObject = __webpack_require__(78)
 	var isHook = __webpack_require__(88)
 
@@ -13915,17 +13917,17 @@
 
 
 /***/ },
-/* 81 */
+/* 82 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var document = __webpack_require__(84)
 
-	var applyProperties = __webpack_require__(80)
+	var applyProperties = __webpack_require__(81)
 
-	var isVNode = __webpack_require__(67)
-	var isVText = __webpack_require__(68)
-	var isWidget = __webpack_require__(69)
-	var handleThunk = __webpack_require__(71)
+	var isVNode = __webpack_require__(65)
+	var isVText = __webpack_require__(66)
+	var isWidget = __webpack_require__(67)
+	var handleThunk = __webpack_require__(69)
 
 	module.exports = createElement
 
@@ -13967,10 +13969,10 @@
 
 
 /***/ },
-/* 82 */
+/* 83 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isWidget = __webpack_require__(69)
+	var isWidget = __webpack_require__(67)
 
 	module.exports = updateWidget
 
@@ -13985,13 +13987,6 @@
 
 	    return false
 	}
-
-
-/***/ },
-/* 83 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = "1"
 
 
 /***/ },

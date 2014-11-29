@@ -22,9 +22,9 @@ var RouteView = Cycle.createView(['route$'], ['vtree$'], ['vtree$'], function(mo
     };
 });
 
-var RouteIntent = Cycle.createIntent([], ['route$'], ['route$'], function(view, owersIntent, oweesIntent) {
+var RouteIntent = Cycle.createIntent([], ['changeRoute$'], ['changeRoute$'], function(view, owersIntent, oweesIntent) {
     return {
-        changeRoute$: Rx.Observable.merge(owersIntent.route$, oweesIntent.route$)
+        changeRoute$: Rx.Observable.merge(owersIntent.changeRoute$, oweesIntent.changeRoute$)
     };
 });
 

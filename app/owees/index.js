@@ -13,9 +13,12 @@ function vrenderOwees(owees) {
         })
 }
 
-var OweesModel = Cycle.createModel(['fetch$'], function(intent) {
+var OweesModel = Cycle.createModel(['changeRoute$'], function(intent) {
     return {
-        owees$: intent.fetch$
+        owees$: intent.changeRoute$
+            .map(function(route) {
+                return '/api' + route.ctx.pathname
+            })
             .flatMap(xhr.jsonSource)
             .map(function(body) {
                 return body.rows
@@ -49,13 +52,8 @@ var OweesView = Cycle.createView(['owees$'], function(model) {
 });
 
 var OweesIntent = Cycle.createIntent([], function(view) {
-    var route$ = page.namedPageSource('owees', '/:ower');
     return {
-        route$: route$,
-        fetch$: route$
-            .map(function(route) {
-                return '/api' + route.ctx.pathname
-            })
+        changeRoute$: page.namedPageSource('owees', '/:ower')
     };
 });
 

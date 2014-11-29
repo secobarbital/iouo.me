@@ -13,9 +13,12 @@ function vrenderOwers(owers) {
         });
 }
 
-var OwersModel = Cycle.createModel(['fetch$'], function(intent) {
+var OwersModel = Cycle.createModel(['changeRoute$'], function(intent) {
     return {
-        owers$: intent.fetch$
+        owers$: intent.changeRoute$
+            .map(function(route) {
+                return '/api';
+            })
             .flatMap(xhr.jsonSource)
             .map(function(body) {
                 return body.rows
@@ -48,14 +51,8 @@ var OwersView = Cycle.createView(['owers$'], function(model) {
 });
 
 var OwersIntent = Cycle.createIntent([], function(view) {
-    var route$ = page.namedPageSource('owers', '/');
-
     return {
-        route$: route$,
-        fetch$: route$
-            .map(function(route) {
-                return '/api';
-            })
+        changeRoute$: page.namedPageSource('owers', '/')
     };
 });
 
