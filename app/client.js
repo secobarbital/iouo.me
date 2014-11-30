@@ -9,7 +9,15 @@ var page = require('./page');
 var style = require('./style.styl');
 
 Cycle.createRenderer('#app').inject(Route);
-Cycle.circularInject(Owers.Model, Owers.View, Owers.Intent);
-Cycle.circularInject(Owees.Model, Owees.View, Owees.Intent);
+
+Owers.Intent.inject(Owers.View, Route);
+Owers.View.inject(Owers.Model);
+Owers.Model.inject(Owers.Intent);
+
+Owees.Intent.inject(Owees.View, Route);
+Owees.View.inject(Owees.Model);
+Owees.Model.inject(Owees.Intent);
+
 Route.inject(Owers.View, Owees.View);
+
 page();

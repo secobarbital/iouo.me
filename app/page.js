@@ -5,15 +5,15 @@ var pageSource = Rx.Observable.fromCallback(page, null, function(args) {
     return args[0];
 });
 
-var namedPageSource = function(name, path) {
-    return Rx.Observable.just(name)
-        .combineLatest(pageSource(path), function(name, ctx) {
+var routeSource = function(path, view) {
+    return pageSource(path)
+        .map(function(ctx) {
             return {
                 ctx: ctx,
-                name: name
+                view: view
             };
         });
 };
 
-page.namedPageSource = namedPageSource;
+page.routeSource = routeSource;
 module.exports = page;

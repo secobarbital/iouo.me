@@ -50,9 +50,9 @@ var OwersView = Cycle.createView(['owers$'], function(model) {
     };
 });
 
-var OwersIntent = Cycle.createIntent([], function(view) {
+var OwersIntent = Cycle.createIntent([], ['owersRoute$'], function(view, route) {
     return {
-        changeRoute$: page.namedPageSource('owers', '/')
+        changeRoute$: route.owersRoute$
     };
 });
 

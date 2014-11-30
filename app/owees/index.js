@@ -51,9 +51,9 @@ var OweesView = Cycle.createView(['owees$'], function(model) {
     };
 });
 
-var OweesIntent = Cycle.createIntent([], function(view) {
+var OweesIntent = Cycle.createIntent([], ['oweesRoute$'], function(view, route) {
     return {
-        changeRoute$: page.namedPageSource('owees', '/:ower')
+        changeRoute$: route.oweesRoute$
     };
 });
 

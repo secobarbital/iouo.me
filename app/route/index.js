@@ -3,19 +3,19 @@ var page = require('../page');
 var Rx = Cycle.Rx;
 
 var Route = Cycle.createDataFlowNode(['vtree$'], ['vtree$'], function(owersView, oweesView) {
-    var views = {
-        owers: owersView,
-        owees: oweesView
-    };
+    var owersRoute$ = page.routeSource('/', owersView);
+    var oweesRoute$ = page.routeSource('/:ower', oweesView);
 
     return {
+        owersRoute$: owersRoute$,
+        oweesRoute$: oweesRoute$,
         vtree$: Rx.Observable
             .merge(
-                page.namedPageSource('owers', '/'),
-                page.namedPageSource('owees', '/:ower')
+                owersRoute$,
+                oweesRoute$
             )
             .flatMap(function(route) {
-                return views[route.name].vtree$;
+                return route.view.vtree$;
             })
     };
 });

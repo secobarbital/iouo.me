@@ -55,9 +55,17 @@
 	var style = __webpack_require__(5);
 
 	Cycle.createRenderer('#app').inject(Route);
-	Cycle.circularInject(Owers.Model, Owers.View, Owers.Intent);
-	Cycle.circularInject(Owees.Model, Owees.View, Owees.Intent);
+
+	Owers.Intent.inject(Owers.View, Route);
+	Owers.View.inject(Owers.Model);
+	Owers.Model.inject(Owers.Intent);
+
+	Owees.Intent.inject(Owees.View, Route);
+	Owees.View.inject(Owees.Model);
+	Owees.Model.inject(Owees.Intent);
+
 	Route.inject(Owers.View, Owees.View);
+
 	page();
 
 
@@ -72,17 +80,17 @@
 	    return args[0];
 	});
 
-	var namedPageSource = function(name, path) {
-	    return Rx.Observable.just(name)
-	        .combineLatest(pageSource(path), function(name, ctx) {
+	var routeSource = function(path, view) {
+	    return pageSource(path)
+	        .map(function(ctx) {
 	            return {
 	                ctx: ctx,
-	                name: name
+	                view: view
 	            };
 	        });
 	};
 
-	page.namedPageSource = namedPageSource;
+	page.routeSource = routeSource;
 	module.exports = page;
 
 
@@ -95,19 +103,19 @@
 	var Rx = Cycle.Rx;
 
 	var Route = Cycle.createDataFlowNode(['vtree$'], ['vtree$'], function(owersView, oweesView) {
-	    var views = {
-	        owers: owersView,
-	        owees: oweesView
-	    };
+	    var owersRoute$ = page.routeSource('/', owersView);
+	    var oweesRoute$ = page.routeSource('/:ower', oweesView);
 
 	    return {
+	        owersRoute$: owersRoute$,
+	        oweesRoute$: oweesRoute$,
 	        vtree$: Rx.Observable
 	            .merge(
-	                page.namedPageSource('owers', '/'),
-	                page.namedPageSource('owees', '/:ower')
+	                owersRoute$,
+	                oweesRoute$
 	            )
 	            .flatMap(function(route) {
-	                return views[route.name].vtree$;
+	                return route.view.vtree$;
 	            })
 	    };
 	});
@@ -171,9 +179,9 @@
 	    };
 	});
 
-	var OwersIntent = Cycle.createIntent([], function(view) {
+	var OwersIntent = Cycle.createIntent([], ['owersRoute$'], function(view, route) {
 	    return {
-	        changeRoute$: page.namedPageSource('owers', '/')
+	        changeRoute$: route.owersRoute$
 	    };
 	});
 
@@ -239,9 +247,9 @@
 	    };
 	});
 
-	var OweesIntent = Cycle.createIntent([], function(view) {
+	var OweesIntent = Cycle.createIntent([], ['oweesRoute$'], function(view, route) {
 	    return {
-	        changeRoute$: page.namedPageSource('owees', '/:ower')
+	        changeRoute$: route.oweesRoute$
 	    };
 	});
 
