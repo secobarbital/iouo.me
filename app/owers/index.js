@@ -56,8 +56,6 @@ var OwersIntent = Cycle.createIntent([], function(view) {
     };
 });
 
-Cycle.circularInject(OwersModel, OwersView, OwersIntent);
-
 exports.Model = OwersModel;
 exports.View = OwersView;
 exports.Intent = OwersIntent;

@@ -8,8 +8,8 @@ var Owees = require('./owees');
 var page = require('./page');
 var style = require('./style.styl');
 
-Cycle.createRenderer('#app').inject(Route.View);
-Route.Intent.inject(Route.View, Owers.Intent, Owees.Intent);
-Route.View.inject(Route.Model, Owers.View, Owees.View);
-Route.Model.inject(Route.Intent);
+Cycle.createRenderer('#app').inject(Route);
+Cycle.circularInject(Owers.Model, Owers.View, Owers.Intent);
+Cycle.circularInject(Owees.Model, Owees.View, Owees.Intent);
+Route.inject(Owers.View, Owees.View);
 page();

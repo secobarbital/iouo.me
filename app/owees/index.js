@@ -57,8 +57,6 @@ var OweesIntent = Cycle.createIntent([], function(view) {
     };
 });
 
-Cycle.circularInject(OweesModel, OweesView, OweesIntent);
-
 exports.Model = OweesModel;
 exports.View = OweesView;
 exports.Intent = OweesIntent;
