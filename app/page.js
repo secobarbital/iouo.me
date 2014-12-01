@@ -1,9 +1,13 @@
 var Rx = require('cyclejs').Rx;
 var page = require('page');
 
-var pageSource = Rx.Observable.fromCallback(page, null, function(args) {
-    return args[0];
-});
+var pageSource = function(path) {
+    return Rx.Observable.fromEventPattern(
+        function addHandler(h) {
+            page(path, h);
+        }
+    );
+};
 
 var routeSource = function(path, view) {
     return pageSource(path)
@@ -15,5 +19,6 @@ var routeSource = function(path, view) {
         });
 };
 
+page.pageSource = pageSource;
 page.routeSource = routeSource;
 module.exports = page;

@@ -9,15 +9,15 @@ function vrenderOwees(owees) {
         .map(function(owee) {
             return h('li',
                      h('a', { href: '/' + owee.name },
-                       owee.ower + ' owes ' + owee.owee + owee.amount));
+                       owee.ower + ' owes ' + owee.owee + ' ' + owee.amount));
         })
 }
 
-var OweesModel = Cycle.createModel(['changeRoute$'], function(intent) {
+var OweesModel = Cycle.createModel(['oweesRoute$'], function(routeModel) {
     return {
-        owees$: intent.changeRoute$
-            .map(function(route) {
-                return '/api' + route.ctx.pathname
+        owees$: routeModel.oweesRoute$
+            .map(function(ctx) {
+                return '/api' + ctx.pathname
             })
             .flatMap(xhr.jsonSource)
             .map(function(body) {
@@ -51,12 +51,5 @@ var OweesView = Cycle.createView(['owees$'], function(model) {
     };
 });
 
-var OweesIntent = Cycle.createIntent([], ['oweesRoute$'], function(view, route) {
-    return {
-        changeRoute$: route.oweesRoute$
-    };
-});
-
 exports.Model = OweesModel;
 exports.View = OweesView;
-exports.Intent = OweesIntent;

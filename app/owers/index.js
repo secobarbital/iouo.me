@@ -13,10 +13,10 @@ function vrenderOwers(owers) {
         });
 }
 
-var OwersModel = Cycle.createModel(['changeRoute$'], function(intent) {
+var OwersModel = Cycle.createModel(['owersRoute$'], function(routeModel) {
     return {
-        owers$: intent.changeRoute$
-            .map(function(route) {
+        owers$: routeModel.owersRoute$
+            .map(function() {
                 return '/api';
             })
             .flatMap(xhr.jsonSource)
@@ -50,12 +50,5 @@ var OwersView = Cycle.createView(['owers$'], function(model) {
     };
 });
 
-var OwersIntent = Cycle.createIntent([], ['owersRoute$'], function(view, route) {
-    return {
-        changeRoute$: route.owersRoute$
-    };
-});
-
 exports.Model = OwersModel;
 exports.View = OwersView;
-exports.Intent = OwersIntent;

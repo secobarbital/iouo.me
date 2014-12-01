@@ -54,17 +54,15 @@
 	var page = __webpack_require__(1);
 	var style = __webpack_require__(5);
 
-	Cycle.createRenderer('#app').inject(Route);
+	Cycle.createRenderer('#app').inject(Route.View);
 
-	Owers.Intent.inject(Owers.View, Route);
 	Owers.View.inject(Owers.Model);
-	Owers.Model.inject(Owers.Intent);
+	Owers.Model.inject(Route.Model);
 
-	Owees.Intent.inject(Owees.View, Route);
 	Owees.View.inject(Owees.Model);
-	Owees.Model.inject(Owees.Intent);
+	Owees.Model.inject(Route.Model);
 
-	Route.inject(Owers.View, Owees.View);
+	Route.View.inject(Route.Model, Owers.View, Owees.View);
 
 	page();
 
@@ -76,9 +74,13 @@
 	var Rx = __webpack_require__(9).Rx;
 	var page = __webpack_require__(10);
 
-	var pageSource = Rx.Observable.fromCallback(page, null, function(args) {
-	    return args[0];
-	});
+	var pageSource = function(path) {
+	    return Rx.Observable.fromEventPattern(
+	        function addHandler(h) {
+	            page(path, h);
+	        }
+	    );
+	};
 
 	var routeSource = function(path, view) {
 	    return pageSource(path)
@@ -90,6 +92,7 @@
 	        });
 	};
 
+	page.pageSource = pageSource;
 	page.routeSource = routeSource;
 	module.exports = page;
 
@@ -102,25 +105,43 @@
 	var page = __webpack_require__(1);
 	var Rx = Cycle.Rx;
 
-	var Route = Cycle.createDataFlowNode(['vtree$'], ['vtree$'], function(owersView, oweesView) {
-	    var owersRoute$ = page.routeSource('/', owersView);
-	    var oweesRoute$ = page.routeSource('/:ower', oweesView);
-
+	var RouteModel = Cycle.createModel(function() {
 	    return {
-	        owersRoute$: owersRoute$,
-	        oweesRoute$: oweesRoute$,
-	        vtree$: Rx.Observable
-	            .merge(
-	                owersRoute$,
-	                oweesRoute$
-	            )
-	            .flatMap(function(route) {
-	                return route.view.vtree$;
-	            })
+	        owersRoute$: page.pageSource('/'),
+	        oweesRoute$: page.pageSource('/:ower')
 	    };
 	});
 
-	module.exports = Route;
+	var RouteView = Cycle.createView(
+	    ['owersRoute$', 'oweesRoute$'], ['vtree$'], ['vtree$'],
+	    function(model, owersView, oweesView) {
+	        var owersRouteView$ = routeView(model.owersRoute$, owersView);
+	        var oweesRouteView$ = routeView(model.oweesRoute$, oweesView);
+
+	        return {
+	            events: [],
+	            vtree$: Rx.Observable
+	                .merge(owersRouteView$, oweesRouteView$)
+	                .map(function(route) {
+	                    return route.view.vtree$;
+	                })
+	                .switch()
+	        };
+	});
+
+	function routeView(route$, view) {
+	    return Rx.Observable
+	        .just(view)
+	        .combineLatest(route$, function(view, ctx) {
+	            return {
+	                ctx: ctx,
+	                view: view
+	            };
+	        })
+	}
+
+	exports.Model = RouteModel;
+	exports.View = RouteView;
 
 
 /***/ },
@@ -142,10 +163,10 @@
 	        });
 	}
 
-	var OwersModel = Cycle.createModel(['changeRoute$'], function(intent) {
+	var OwersModel = Cycle.createModel(['owersRoute$'], function(routeModel) {
 	    return {
-	        owers$: intent.changeRoute$
-	            .map(function(route) {
+	        owers$: routeModel.owersRoute$
+	            .map(function() {
 	                return '/api';
 	            })
 	            .flatMap(xhr.jsonSource)
@@ -179,15 +200,8 @@
 	    };
 	});
 
-	var OwersIntent = Cycle.createIntent([], ['owersRoute$'], function(view, route) {
-	    return {
-	        changeRoute$: route.owersRoute$
-	    };
-	});
-
 	exports.Model = OwersModel;
 	exports.View = OwersView;
-	exports.Intent = OwersIntent;
 
 
 /***/ },
@@ -205,15 +219,15 @@
 	        .map(function(owee) {
 	            return h('li',
 	                     h('a', { href: '/' + owee.name },
-	                       owee.ower + ' owes ' + owee.owee + owee.amount));
+	                       owee.ower + ' owes ' + owee.owee + ' ' + owee.amount));
 	        })
 	}
 
-	var OweesModel = Cycle.createModel(['changeRoute$'], function(intent) {
+	var OweesModel = Cycle.createModel(['oweesRoute$'], function(routeModel) {
 	    return {
-	        owees$: intent.changeRoute$
-	            .map(function(route) {
-	                return '/api' + route.ctx.pathname
+	        owees$: routeModel.oweesRoute$
+	            .map(function(ctx) {
+	                return '/api' + ctx.pathname
 	            })
 	            .flatMap(xhr.jsonSource)
 	            .map(function(body) {
@@ -247,15 +261,8 @@
 	    };
 	});
 
-	var OweesIntent = Cycle.createIntent([], ['oweesRoute$'], function(view, route) {
-	    return {
-	        changeRoute$: route.oweesRoute$
-	    };
-	});
-
 	exports.Model = OweesModel;
 	exports.View = OweesView;
-	exports.Intent = OweesIntent;
 
 
 /***/ },
