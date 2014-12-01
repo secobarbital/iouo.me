@@ -1,7 +1,6 @@
 var Cycle = require('cyclejs');
 var h = Cycle.h;
 var Rx = Cycle.Rx;
-var page = require('../page');
 var xhr = require('../xhr');
 
 function vrenderOwers(owers) {

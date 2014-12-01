@@ -5,20 +5,27 @@ var Rx = Cycle.Rx;
 var RouteModel = Cycle.createModel(function() {
     return {
         owersRoute$: page.pageSource('/'),
-        oweesRoute$: page.pageSource('/:ower')
+        oweesRoute$: page.pageSource('/:ower'),
+        txnsRoute$: page.pageSource('/:ower/:owee')
     };
 });
 
 var RouteView = Cycle.createView(
-    ['owersRoute$', 'oweesRoute$'], ['vtree$'], ['vtree$'],
-    function(model, owersView, oweesView) {
+    ['owersRoute$', 'oweesRoute$', 'txnsRoute$'],
+    ['vtree$'], ['vtree$'], ['vtree$'],
+    function(model, owersView, oweesView, txnsView) {
         var owersRouteView$ = routeView(model.owersRoute$, owersView);
         var oweesRouteView$ = routeView(model.oweesRoute$, oweesView);
+        var txnsRouteView$ = routeView(model.txnsRoute$, txnsView);
 
         return {
             events: [],
             vtree$: Rx.Observable
-                .merge(owersRouteView$, oweesRouteView$)
+                .merge(
+                    owersRouteView$,
+                    oweesRouteView$,
+                    txnsRouteView$
+                )
                 .map(function(route) {
                     return route.view.vtree$;
                 })

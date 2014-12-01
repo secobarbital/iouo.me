@@ -51,6 +51,7 @@
 	var Route = __webpack_require__(2);
 	var Owers = __webpack_require__(3);
 	var Owees = __webpack_require__(4);
+	var Txns = __webpack_require__(89);
 	var page = __webpack_require__(1);
 	var style = __webpack_require__(5);
 
@@ -62,7 +63,10 @@
 	Owees.View.inject(Owees.Model);
 	Owees.Model.inject(Route.Model);
 
-	Route.View.inject(Route.Model, Owers.View, Owees.View);
+	Txns.View.inject(Txns.Model);
+	Txns.Model.inject(Route.Model);
+
+	Route.View.inject(Route.Model, Owers.View, Owees.View, Txns.View);
 
 	page();
 
@@ -108,20 +112,27 @@
 	var RouteModel = Cycle.createModel(function() {
 	    return {
 	        owersRoute$: page.pageSource('/'),
-	        oweesRoute$: page.pageSource('/:ower')
+	        oweesRoute$: page.pageSource('/:ower'),
+	        txnsRoute$: page.pageSource('/:ower/:owee')
 	    };
 	});
 
 	var RouteView = Cycle.createView(
-	    ['owersRoute$', 'oweesRoute$'], ['vtree$'], ['vtree$'],
-	    function(model, owersView, oweesView) {
+	    ['owersRoute$', 'oweesRoute$', 'txnsRoute$'],
+	    ['vtree$'], ['vtree$'], ['vtree$'],
+	    function(model, owersView, oweesView, txnsView) {
 	        var owersRouteView$ = routeView(model.owersRoute$, owersView);
 	        var oweesRouteView$ = routeView(model.oweesRoute$, oweesView);
+	        var txnsRouteView$ = routeView(model.txnsRoute$, txnsView);
 
 	        return {
 	            events: [],
 	            vtree$: Rx.Observable
-	                .merge(owersRouteView$, oweesRouteView$)
+	                .merge(
+	                    owersRouteView$,
+	                    oweesRouteView$,
+	                    txnsRouteView$
+	                )
 	                .map(function(route) {
 	                    return route.view.vtree$;
 	                })
@@ -151,7 +162,6 @@
 	var Cycle = __webpack_require__(9);
 	var h = Cycle.h;
 	var Rx = Cycle.Rx;
-	var page = __webpack_require__(1);
 	var xhr = __webpack_require__(7);
 
 	function vrenderOwers(owers) {
@@ -218,7 +228,7 @@
 	    return owees
 	        .map(function(owee) {
 	            return h('li',
-	                     h('a', { href: '/' + owee.name },
+	                     h('a', { href: [, owee.ower, owee.owee].join('/') },
 	                       owee.ower + ' owes ' + owee.owee + ' ' + owee.amount));
 	        })
 	}
@@ -14071,6 +14081,62 @@
 	    return hook && typeof hook.hook === "function" &&
 	        !hook.hasOwnProperty("hook")
 	}
+
+
+/***/ },
+/* 89 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Cycle = __webpack_require__(9);
+	var h = Cycle.h;
+	var Rx = Cycle.Rx;
+	var xhr = __webpack_require__(7);
+
+	function vrenderTxns(txns) {
+	    return txns
+	        .map(function(txn) {
+	            return h('li',
+	                     h('a', { href: txn.href },
+	                       txn.ower + ' owed ' + txn.owee + ' ' + txn.amount));
+	        })
+	}
+
+	var TxnsModel = Cycle.createModel(['txnsRoute$'], function(routeModel) {
+	    return {
+	        txns$: routeModel.txnsRoute$
+	            .map(function(ctx) {
+	                return '/api' + ctx.pathname
+	            })
+	            .flatMap(xhr.jsonSource)
+	            .map(function(body) {
+	                return body.rows
+	                    .map(function(row) {
+	                        var tweet = row.doc.raw;
+	                        return {
+	                            ower: row.key[0],
+	                            owee: row.key[1],
+	                            amount: row.value,
+	                            href: 'http://twitter.com/' + tweet.user.id_str + '/status/' + tweet.id_str
+	                        };
+	                    });
+	            })
+	    };
+	});
+
+	var TxnsView = Cycle.createView(['txns$'], function(model) {
+	    return {
+	        events: [],
+	        vtree$: model.txns$
+	            .map(function(txns) {
+	                return h('div.page#txns',
+	                    h('ul', vrenderTxns(txns))
+	                );
+	            })
+	    };
+	});
+
+	exports.Model = TxnsModel;
+	exports.View = TxnsView;
 
 
 /***/ }

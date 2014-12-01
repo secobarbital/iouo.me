@@ -8,7 +8,7 @@ function vrenderOwees(owees) {
     return owees
         .map(function(owee) {
             return h('li',
-                     h('a', { href: '/' + owee.name },
+                     h('a', { href: [, owee.ower, owee.owee].join('/') },
                        owee.ower + ' owes ' + owee.owee + ' ' + owee.amount));
         })
 }
