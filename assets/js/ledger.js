@@ -1,3 +1,0 @@
-head(function() {
-  $('time').timeago();
-});
