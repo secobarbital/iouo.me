@@ -10,6 +10,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "connect-cachify": "0.0.17",
     "debug": "^2.1.1",
     "express": "^4.11.2",
     "jade": "^1.9.2",
