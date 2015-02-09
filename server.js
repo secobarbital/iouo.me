@@ -23,6 +23,7 @@ app.use(cachify.setup(assets, {
   production: app.get('env') === 'production'
 }));
 app.use(express.static(publicPath));
+app.use(express.static(path.join(__dirname, 'favicons')));
 
 app.use('/', routes);
 
