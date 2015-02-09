@@ -21,7 +21,7 @@ var OwerRow = React.createClass({
     if (amount < 0) verb = 'is owed';
     return (
       <Link className={cx(classes)} to="owees" params={{ ower: ower }}>
-        @<span style={styles.ower}>{ower}</span> {verb}
+        @<span style={styles.subject}>{ower}</span> {verb}
         <span style={styles.amount}>
           <span style={styles.currency}>$ </span>
           <span style={styles.value}>
@@ -42,7 +42,7 @@ var Owers = React.createClass({
 
   render: function() {
     var { owers } = this.state;
-    var owerRows = owers.map((amount, ower) => (
+    var owerRows = owers.sortBy(v => -v).map((amount, ower) => (
       <OwerRow key={ower} ower={ower} amount={amount} />
     )).toArray();
     return (
@@ -56,7 +56,7 @@ var Owers = React.createClass({
 });
 
 var styles = {
-  ower: {
+  subject: {
     'fontWeight': 'bold'
   },
   value: {

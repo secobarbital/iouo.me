@@ -1,5 +1,7 @@
 var OwerStore = require('./OwerStore');
+var OweeStore = require('./OweeStore');
 
 module.exports = {
-  OwerStore: OwerStore
+  OwerStore: OwerStore,
+  OweeStore: OweeStore
 };
