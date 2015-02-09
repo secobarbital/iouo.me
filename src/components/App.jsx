@@ -5,11 +5,13 @@ var { IntlMixin } = require('react-intl');
 var Header = React.createClass({
   render: function() {
     return (
-      <header className="nav navbar-default">
+      <nav className="nav navbar">
         <div className="container">
-          <Link to="owers" className="navbar-brand">IOU</Link>
+          <div className="navbar-header">
+            <Link to="owers" className="navbar-brand">IOU</Link>
+          </div>
         </div>
-      </header>
+      </nav>
     );
   }
 });

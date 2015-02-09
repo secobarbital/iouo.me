@@ -21,12 +21,13 @@ var OwerRow = React.createClass({
     if (amount < 0) verb = 'is owed';
     return (
       <Link className={cx(classes)} to="owees" params={{ ower: ower }}>
-        <span style={styles.ower}>{ower}</span>
-        <span style={styles.verb}> {verb} </span>
+        @<span style={styles.ower}>{ower}</span> {verb}
         <span style={styles.amount}>
-          <FormattedNumber value={value} format="USD" />
+          <span style={styles.currency}>$ </span>
+          <span style={styles.value}>
+            <FormattedNumber value={value} format="USD" />
+          </span>
         </span>
-        <span style={styles.currency}>$ </span>
       </Link>
     );
   }
@@ -58,14 +59,13 @@ var styles = {
   ower: {
     'fontWeight': 'bold'
   },
-  currency: {
-    'float': 'right'
-  },
-  amount: {
-    'float': 'right',
+  value: {
     'fontFamily': 'Georgia,Palatino,serif',
     'fontSize': '142.857143%',
     'lineHeight': 1
+  },
+  amount: {
+    'float': 'right'
   }
 };
 
