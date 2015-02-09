@@ -22,7 +22,7 @@ var serverProxy = httpProxy.createProxyServer({
   }
 });
 
-config.devtool = 'eval';
+config.devtool = 'eval-source-map';
 config.entry = [
   `webpack-dev-server/client?`,
   'webpack/hot/only-dev-server',
@@ -51,10 +51,12 @@ new WebpackDevServer(webpack(config), {
 });
 
 var proxyServer = http.createServer(function(req, res) {
+  var bundle = `${config.output.publicPath}${config.output.filename}`;
   if (
-    req.url === `${config.output.publicPath}${config.output.filename}` ||
-    req.url.indexOf('/socket.io') === 0 ||
-    req.url.match(/\.hot-update\./)
+    req.url === bundle ||
+    req.url.match(/\/socket.io\//) ||
+    req.url.match(/\.hot-update\./) ||
+    req.url.match(/\.map$/)
   ) {
     wdsProxy.web(req, res);
   } else {
