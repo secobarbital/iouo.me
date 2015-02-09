@@ -7,7 +7,7 @@ var cachify = require('connect-cachify');
 var routes = require('./routes/index');
 var publicPath = path.join(__dirname, 'public');
 var assets = {
-  '/bundle.min.js': [ '/bundle.js' ]
+  '/bundle.js': [ '/bundle.js' ]
 };
 
 var app = express();

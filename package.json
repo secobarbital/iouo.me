@@ -7,19 +7,30 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
-  },
-  "dependencies": {
-    "connect-cachify": "0.0.17",
-    "debug": "^2.1.1",
-    "express": "^4.11.2",
-    "jade": "^1.9.2",
-    "morgan": "^1.5.1",
-    "serve-favicon": "^2.2.0"
+    "start": "node ./bin/www",
+    "dev": "node ./devServer.js"
   },
   "engines": {
     "iojs": "1.1.x",
     "npm": "2.4.x"
   },
-  "devDependencies": {}
+  "dependencies": {
+    "connect-cachify": "0.0.17",
+    "debug": "^2.1.1",
+    "express": "^4.11.2",
+    "flux": "^2.0.1",
+    "jade": "^1.9.2",
+    "morgan": "^1.5.1",
+    "react": "^0.12.2",
+    "react-router": "^0.11.6",
+    "serve-favicon": "^2.2.0"
+  },
+  "devDependencies": {
+    "6to5-core": "^3.5.3",
+    "6to5-loader": "^3.0.0",
+    "http-proxy": "^1.8.1",
+    "react-hot-loader": "^1.1.4",
+    "webpack": "^1.5.3",
+    "webpack-dev-server": "^1.7.0"
+  }
 }
