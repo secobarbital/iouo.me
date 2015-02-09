@@ -5,10 +5,10 @@ var { OrderedMap, fromJS } = require('immutable');
 var CHANGE_EVENT = 'change';
 
 var _owers = fromJS({
-  "choonhongpeck":190.94999999999996,
   "hnguyen11084":-30.809999999999995,
+  "choonhongpeck":190.94999999999996,
   "secobarbital":-345.01158999999996
-});
+}).sortBy(v => -v);
 
 var OwerStore = assign({}, EventEmitter.prototype, {
   emitChange: function() {
