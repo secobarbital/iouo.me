@@ -1,0 +1,114 @@
+var React = require('react/addons');
+var { Link, State } = require('react-router');
+var { FormattedNumber, FormattedRelative } = require('react-intl');
+var cx = React.addons.classSet;
+
+var { TransactionStore } = require('../stores')
+
+var TransactionHeading = React.createClass({
+  render: function() {
+    var { ower, owee, amount } = this.props;
+    var owerLink = <Link to="owees" params={{ ower: ower }}>@{ower}</Link>;
+    var oweeLink = <Link to="owees" params={{ ower: owee }}>@{owee}</Link>;
+    var value = Math.abs(amount);
+    var content;
+    if (amount > 0) {
+      content = <span>{owerLink} owes {oweeLink}</span>
+    }
+    if (amount < 0) {
+      content = <span>{oweeLink} owes {owerLink}</span>
+    }
+    if (amount === 0) {
+      content = <span>{owerLink} and {oweeLink} are even</span>
+    }
+    return (
+      <div className="panel-heading">
+        {content}
+        <span style={styles.amount}>
+          <span style={styles.currency}>$ </span>
+          <span style={styles.value}>
+            <FormattedNumber value={value} format="USD" />
+          </span>
+        </span>
+      </div>
+    );
+  }
+});
+
+var TransactionRow = React.createClass({
+  render: function() {
+    var { doc } = this.props;
+    var ower = doc.get('ower');
+    var owee = doc.get('owee');
+    var amount = doc.get('amount');
+    var tweet = doc.get('raw');
+    var owerId = tweet.getIn(['user', 'id_str']);
+    var link = `http://twitter.com/${owerId}/status/${tweet.get('id_str')}`
+    var avatar = tweet.getIn(['user', 'profile_image_url']);
+    var screenName = tweet.getIn(['user', 'screen_name']);
+    var createdAt = tweet.get('created_at');
+    var left = screenName === owee ^ amount > 0;
+    var mediaClass = left ? 'media-left' : 'media-right';
+    var styles = {
+      body: {
+        textAlign: left ? 'left' : 'right'
+      }
+    }
+    return (
+      <a className="list-group-item media" href={link}>
+        <div className={mediaClass}>
+          <img className="media-object" src={avatar} />
+        </div>
+        <div className="media-body" style={styles.body}>
+          <div>{tweet.get('text')}</div>
+          <small className="text-muted">
+            &mdash; {screenName} <FormattedRelative value={createdAt} />
+          </small>
+        </div>
+      </a>
+    );
+  }
+});
+
+var Transactions = React.createClass({
+  mixins: [State],
+
+  getInitialState: function() {
+    var { ower, owee } = this.getParams();
+    return {
+      transactions: TransactionStore.get(ower, owee)
+    }
+  },
+
+  render: function() {
+    var { ower, owee } = this.getParams();
+    var { transactions } = this.state;
+    var total = transactions.reduce((r, v) => r + v.get('amount'), 0);
+    var transactionRows = transactions.map((doc) => (
+      <TransactionRow key={doc.get('_id')} doc={doc} />
+    )).toArray();
+    return (
+      <section className="container">
+        <div className="panel panel-default">
+          <TransactionHeading ower={ower} owee={owee} amount={total} />
+          <div className="list-group">
+            {transactionRows}
+          </div>
+        </div>
+      </section>
+    );
+  }
+});
+
+var styles = {
+  value: {
+    'fontFamily': 'Georgia,Palatino,serif',
+    'fontSize': '142.857143%',
+    'lineHeight': 1
+  },
+  amount: {
+    'float': 'right'
+  }
+}
+
+module.exports = Transactions;

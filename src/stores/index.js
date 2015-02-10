@@ -1,7 +1,9 @@
 var OwerStore = require('./OwerStore');
 var OweeStore = require('./OweeStore');
+var TransactionStore = require('./TransactionStore');
 
 module.exports = {
   OwerStore: OwerStore,
-  OweeStore: OweeStore
+  OweeStore: OweeStore,
+  TransactionStore: TransactionStore
 };

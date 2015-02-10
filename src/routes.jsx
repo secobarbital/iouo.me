@@ -6,9 +6,8 @@ var { App, Owers, Owees, Transactions } = require('./components');
 var routes = (
   <Route name="app" path="/" handler={App}>
     <DefaultRoute name="owers" handler={Owers} />
-    <Route name="owees" path=":ower" handler={Owees}>
-      <Route name="transactions" path=":owee" handler={Transactions} />
-    </Route>
+    <Route name="owees" path=":ower" handler={Owees} />
+    <Route name="transactions" path=":ower/:owee" handler={Transactions} />
   </Route>
 );
 
