@@ -4,6 +4,7 @@ var { FormattedNumber } = require('react-intl');
 var cx = React.addons.classSet;
 
 var { OwerStore } = require('../stores');
+var styles = require('./Styles').balance;
 
 var OwerRow = React.createClass({
   render: function() {
@@ -54,19 +55,5 @@ var Owers = React.createClass({
     );
   }
 });
-
-var styles = {
-  subject: {
-    'fontWeight': 'bold'
-  },
-  value: {
-    'fontFamily': 'Georgia,Palatino,serif',
-    'fontSize': '142.857143%',
-    'lineHeight': 1
-  },
-  amount: {
-    'float': 'right'
-  }
-};
 
 module.exports = Owers;

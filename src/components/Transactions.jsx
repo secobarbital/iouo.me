@@ -4,6 +4,7 @@ var { FormattedNumber, FormattedRelative } = require('react-intl');
 var cx = React.addons.classSet;
 
 var { TransactionStore } = require('../stores')
+var styles = require('./Styles').balance;
 
 var TransactionHeading = React.createClass({
   render: function() {
@@ -49,17 +50,15 @@ var TransactionRow = React.createClass({
     var createdAt = tweet.get('created_at');
     var left = screenName === owee ^ amount > 0;
     var mediaClass = left ? 'media-left' : 'media-right';
-    var styles = {
-      body: {
-        textAlign: left ? 'left' : 'right'
-      }
+    var bodyStyles = {
+      textAlign: left ? 'left' : 'right'
     }
     return (
       <a className="list-group-item media" href={link}>
         <div className={mediaClass}>
           <img className="media-object" src={avatar} />
         </div>
-        <div className="media-body" style={styles.body}>
+        <div className="media-body" style={bodyStyles}>
           <div>{tweet.get('text')}</div>
           <small className="text-muted">
             &mdash; {screenName} <FormattedRelative value={createdAt} />
@@ -99,16 +98,5 @@ var Transactions = React.createClass({
     );
   }
 });
-
-var styles = {
-  value: {
-    'fontFamily': 'Georgia,Palatino,serif',
-    'fontSize': '142.857143%',
-    'lineHeight': 1
-  },
-  amount: {
-    'float': 'right'
-  }
-}
 
 module.exports = Transactions;

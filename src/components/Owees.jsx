@@ -4,6 +4,7 @@ var { FormattedNumber } = require('react-intl');
 var cx = React.addons.classSet;
 
 var { OweeStore } = require('../stores');
+var styles = require('./Styles').balance;
 
 var OwerHeading = React.createClass({
   render: function() {
@@ -83,19 +84,5 @@ var Owees = React.createClass({
     );
   }
 });
-
-var styles = {
-  subject: {
-    'fontWeight': 'bold'
-  },
-  value: {
-    'fontFamily': 'Georgia,Palatino,serif',
-    'fontSize': '142.857143%',
-    'lineHeight': 1
-  },
-  amount: {
-    'float': 'right'
-  }
-};
 
 module.exports = Owees;
