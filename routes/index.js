@@ -23,8 +23,30 @@ router.get('/:ower/:owee', function(req, res, next) {
 });
 
 router.get('/', function(req, res, next) {
-  var options = { group_level: 1 };
-  db.view('iouome', 'balances', options).pipe(res);
+  var params = { group_level: 1 };
+  db.view('iouome', 'balances', params).pipe(res);
 });
 
+router.get('/:ower', function(req, res, next) {
+  var ower = req.params.ower;
+  var params = {
+    group_level: 2,
+    startkey: [ower],
+    endkey: [ower, {}]
+  };
+  db.view('iouome', 'balances', params).pipe(res);
+});
+
+router.get('/:ower/:owee', function(req, res, next) {
+  var ower = req.params.ower;
+  var owee = req.params.owee;
+  var params = {
+    descending: true,
+    reduce: false,
+    startkey: [ower, owee, {}],
+    endkey: [ower, owee],
+    include_docs: true
+  };
+  res.render('index', { title: `@${owee} and @${ower} on iouo.me` });
+});
 module.exports = router;

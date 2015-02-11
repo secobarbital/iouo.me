@@ -1,6 +1,6 @@
 var assign = require('object-assign');
-var { Map, fromJS } = require('immutable');
 var request = require('superagent');
+var { Map } = require('immutable');
 
 var Store = require('./Store');
 
@@ -23,14 +23,18 @@ function initialize() {
 }
 
 function fetchAll() {
+  var url = '/';
   request
-    .get('/')
+    .get(url)
     .set('Accept', 'application/json')
     .end(function(res) {
+      var rows;
       if (res.ok) {
-        process(res.body.rows);
+        rows = res.body.rows;
+        process(rows);
+        localStorage.setItem('owers', JSON.stringify(rows));
       } else {
-        console.error('Error in API request for /', res.text);
+        console.error('Error in API request', url, res.text);
       }
     })
 }
@@ -43,7 +47,6 @@ function process(rows) {
     });
   });
   OwerStore.emitChange();
-  localStorage.setItem('owers', JSON.stringify(rows));
 }
 
 module.exports = OwerStore;

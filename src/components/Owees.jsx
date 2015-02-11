@@ -1,13 +1,14 @@
 var React = require('react/addons');
 var { Link, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
+var { Map } = require('immutable');
 var cx = React.addons.classSet;
 
 var { OweeStore } = require('../stores');
 var styles = require('./Styles').balance;
 
 var OwerHeading = React.createClass({
-  render: function() {
+  render() {
     var { ower, amount } = this.props;
     var value = Math.abs(amount);
     var verb = 'is even';
@@ -28,7 +29,7 @@ var OwerHeading = React.createClass({
 });
 
 var OweeRow = React.createClass({
-  render: function() {
+  render() {
     var { ower, owee, amount } = this.props;
     var value = Math.abs(amount);
     var classes = {
@@ -58,20 +59,26 @@ var OweeRow = React.createClass({
 var Owees = React.createClass({
   mixins: [State],
 
-  getInitialState: function() {
-    var { ower } = this.getParams();
-    return {
-      owees: OweeStore.get(ower)
-    }
+  getInitialState() {
+    return this._getStateFromStores();
   },
 
-  render: function() {
+  componentDidMount() {
+    OweeStore.addChangeListener(this._onChange);
+  },
+
+  componentWillUnmount() {
+    OweeStore.removeChangeListener(this._onChange);
+  },
+
+  render() {
     var { ower } = this.getParams();
     var { owees } = this.state;
     var total = owees.reduce((r, v) => r + v, 0);
     var oweeRows = owees.sortBy(v => -v).map((amount, owee) => (
       <OweeRow key={owee} ower={ower} owee={owee} amount={amount} />
     )).toArray();
+
     return (
       <section className="container">
         <div className="panel panel-default">
@@ -82,6 +89,15 @@ var Owees = React.createClass({
         </div>
       </section>
     );
+  },
+
+  _onChange() {
+    this.setState(this._getStateFromStores());
+  },
+
+  _getStateFromStores() {
+    var { ower } = this.getParams();
+    return { owees: OweeStore.get(ower) || Map() };
   }
 });
 
