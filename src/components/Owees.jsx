@@ -34,10 +34,8 @@ var OweeRow = React.createClass({
     var value = Math.abs(amount);
     var classes = {
       'list-group-item': true,
-      'list-group-item-success': amount < -10,
-      'list-group-item-info': amount <= 0 && amount >= -10,
-      'list-group-item-warning': amount > 0 && amount <= 10,
-      'list-group-item-danger': amount > 10
+      'list-group-item-success': amount < 0,
+      'list-group-item-danger': amount > 0
     };
     var verb = 'is even';
     if (amount > 0) verb = 'owes';
@@ -77,9 +75,12 @@ var Owees = React.createClass({
     var { ower } = this.getParams();
     var { owees } = this.state;
     var total = owees.reduce((r, v) => r + v, 0);
-    var oweeRows = owees.sortBy(v => -v).map((amount, owee) => (
-      <OweeRow key={owee} ower={ower} owee={owee} amount={amount} />
-    )).toArray();
+    var oweeRows = owees
+      .filter(amount => amount !== 0)
+      .sortBy(amount => -amount)
+      .map((amount, owee) => (
+        <OweeRow key={owee} ower={ower} owee={owee} amount={amount} />
+      )).toArray();
 
     return (
       <section className="container">

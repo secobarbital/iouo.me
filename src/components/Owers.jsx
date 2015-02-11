@@ -13,10 +13,8 @@ var OwerRow = React.createClass({
     var value = Math.abs(amount);
     var classes = {
       'list-group-item': true,
-      'list-group-item-success': amount < -10,
-      'list-group-item-info': amount <= 0 && amount >= -10,
-      'list-group-item-warning': amount > 0 && amount <= 10,
-      'list-group-item-danger': amount > 10
+      'list-group-item-success': amount < 0,
+      'list-group-item-danger': amount > 0
     };
     var verb = 'is even';
     if (amount > 0) verb = 'owes';
@@ -49,9 +47,12 @@ var Owers = React.createClass({
 
   render() {
     var { owers } = this.state;
-    var owerRows = owers.sortBy(v => -v).map((amount, ower) => (
-      <OwerRow key={ower} ower={ower} amount={amount} />
-    )).toArray();
+    var owerRows = owers
+      .filter(amount => amount !== 0)
+      .sortBy(amount => -amount)
+      .map((amount, ower) => (
+        <OwerRow key={ower} ower={ower} amount={amount} />
+      )).toArray();
     return (
       <section className="container">
         <div className="list-group">
