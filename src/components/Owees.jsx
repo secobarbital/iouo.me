@@ -1,11 +1,11 @@
 var React = require('react/addons');
 var { Link, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
-var { Map } = require('immutable');
 var cx = React.addons.classSet;
 
-var { OweeStore } = require('../stores');
+var OweeActions = require('../actions/OweeActions');
 var styles = require('./Styles').balance;
+var { OweeStore } = require('../stores');
 
 var OwerHeading = React.createClass({
   render() {
@@ -64,7 +64,9 @@ var Owees = React.createClass({
   },
 
   componentDidMount() {
+    var { ower } = this.getParams();
     OweeStore.addChangeListener(this._onChange);
+    OweeActions.fetchOwees(ower);
   },
 
   componentWillUnmount() {
@@ -97,7 +99,7 @@ var Owees = React.createClass({
 
   _getStateFromStores() {
     var { ower } = this.getParams();
-    return { owees: OweeStore.get(ower) || Map() };
+    return { owees: OweeStore.get(ower) };
   }
 });
 

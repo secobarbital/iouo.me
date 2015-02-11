@@ -18,11 +18,11 @@ var OwerStore = assign({}, Store, {
 function ensure() {
   if (!_owers) {
     _owers = Map();
-    prefill();
+    fetchFromStorage();
   }
 }
 
-function prefill() {
+function fetchFromStorage() {
   var oldRows = localStorage.getItem('owers');
   if (oldRows) {
     process(JSON.parse(oldRows));
@@ -43,10 +43,6 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
   var { action } = payload;
 
   switch(action.type) {
-    case ActionTypes.INITIALIZE:
-      OwerStore.init();
-      break;
-
     case ActionTypes.RECEIVE_OWERS:
       process(action.rows);
       localStorage.setItem('owers', JSON.stringify(action.rows));

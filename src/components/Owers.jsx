@@ -3,7 +3,7 @@ var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 var cx = React.addons.classSet;
 
-var Actions = require('../actions');
+var OwerActions = require('../actions/OwerActions');
 var styles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
 
@@ -40,7 +40,7 @@ var Owers = React.createClass({
 
   componentDidMount() {
     OwerStore.addChangeListener(this._onChange);
-    Actions.fetchOwers();
+    OwerActions.fetchOwers();
   },
 
   componentWillUnmount() {
