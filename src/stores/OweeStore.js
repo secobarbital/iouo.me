@@ -8,7 +8,6 @@ var _owees = Map();
 
 var OweeStore = assign({}, Store, {
   get(ower) {
-    console.log('get', ower, _owees.toJS())
     fetch(ower);
     return _owees.get(ower);
   },

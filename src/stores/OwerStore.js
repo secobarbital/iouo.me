@@ -2,41 +2,31 @@ var assign = require('object-assign');
 var request = require('superagent');
 var { Map } = require('immutable');
 
+var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
+var { ActionTypes } = require('../constants');
 
-var _owers = Map();
+var _owers;
 
 var OwerStore = assign({}, Store, {
   getAll() {
-    fetchAll();
+    ensure();
     return _owers;
   }
 });
 
-initialize();
+function ensure() {
+  if (!_owers) {
+    _owers = Map();
+    prefill();
+  }
+}
 
-function initialize() {
+function prefill() {
   var oldRows = localStorage.getItem('owers');
   if (oldRows) {
     process(JSON.parse(oldRows));
   }
-}
-
-function fetchAll() {
-  var url = '/';
-  request
-    .get(url)
-    .set('Accept', 'application/json')
-    .end(function(res) {
-      var rows;
-      if (res.ok) {
-        rows = res.body.rows;
-        process(rows);
-        localStorage.setItem('owers', JSON.stringify(rows));
-      } else {
-        console.error('Error in API request', url, res.text);
-      }
-    })
 }
 
 function process(rows) {
@@ -48,5 +38,22 @@ function process(rows) {
   });
   OwerStore.emitChange();
 }
+
+OwerStore.dispatchToken = Dispatcher.register(payload => {
+  var { action } = payload;
+
+  switch(action.type) {
+    case ActionTypes.INITIALIZE:
+      OwerStore.init();
+      break;
+
+    case ActionTypes.RECEIVE_OWERS:
+      process(action.rows);
+      localStorage.setItem('owers', JSON.stringify(action.rows));
+      break;
+
+    default:
+  }
+})
 
 module.exports = OwerStore;
