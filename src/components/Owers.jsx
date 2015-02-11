@@ -3,9 +3,9 @@ var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 var cx = React.addons.classSet;
 
-var OwerActions = require('../actions/OwerActions');
 var styles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
+var { OwerActions } = require('../actions');
 
 var OwerRow = React.createClass({
   render() {

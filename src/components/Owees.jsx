@@ -3,8 +3,9 @@ var { Link, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 var cx = React.addons.classSet;
 
-var OweeActions = require('../actions/OweeActions');
+var Loading = require('./Loading');
 var styles = require('./Styles').balance;
+var { OweeActions } = require('../actions');
 var { OweeStore } = require('../stores');
 
 var OwerHeading = React.createClass({
@@ -74,6 +75,7 @@ var Owees = React.createClass({
   render() {
     var { ower } = this.getParams();
     var { owees } = this.state;
+    var { loading } = require('./Loading');
     var total = owees.reduce((r, v) => r + v, 0);
     var oweeRows = owees
       .filter(amount => amount !== 0)
@@ -82,7 +84,7 @@ var Owees = React.createClass({
         <OweeRow key={owee} ower={ower} owee={owee} amount={amount} />
       )).toArray();
 
-    return (
+    return owees.size ? (
       <section className="container">
         <div className="panel panel-default">
           <OwerHeading ower={ower} amount={total} />
@@ -91,7 +93,7 @@ var Owees = React.createClass({
           </div>
         </div>
       </section>
-    );
+    ) : <Loading/>;
   },
 
   _onChange() {
