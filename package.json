@@ -24,11 +24,13 @@
     "immutable": "^3.6.2",
     "jade": "^1.9.2",
     "morgan": "^1.5.1",
+    "nano": "^6.0.2",
     "object-assign": "^2.0.0",
     "react": "^0.12.2",
     "react-intl": "^1.1.0",
     "react-router": "^0.11.6",
-    "serve-favicon": "^2.2.0"
+    "serve-favicon": "^2.2.0",
+    "superagent": "^0.21.0"
   },
   "devDependencies": {
     "6to5-core": "^3.5.3",

@@ -7,7 +7,7 @@ var { OwerStore } = require('../stores');
 var styles = require('./Styles').balance;
 
 var OwerRow = React.createClass({
-  render: function() {
+  render() {
     var { ower, amount } = this.props;
     var value = Math.abs(amount);
     var classes = {
@@ -35,13 +35,17 @@ var OwerRow = React.createClass({
 });
 
 var Owers = React.createClass({
-  getInitialState: function() {
-    return {
-      owers: OwerStore.getAll()
-    }
+  getInitialState: () => ({ owers: OwerStore.getAll() }),
+
+  componentDidMount() {
+    OwerStore.addChangeListener(this._onChange);
   },
 
-  render: function() {
+  componentWillUnmount() {
+    OwerStore.removeChangeListener(this._onChange);
+  },
+
+  render() {
     var { owers } = this.state;
     var owerRows = owers.sortBy(v => -v).map((amount, ower) => (
       <OwerRow key={ower} ower={ower} amount={amount} />
@@ -53,6 +57,10 @@ var Owers = React.createClass({
         </div>
       </section>
     );
+  },
+
+  _onChange() {
+    this.setState({ owers: OwerStore.getAll() })
   }
 });
 
