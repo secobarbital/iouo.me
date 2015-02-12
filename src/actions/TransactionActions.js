@@ -19,17 +19,19 @@ var TransactionActions = {
       .end(function(res) {
         var rows;
         if (res.ok && res.body) {
-          TransactionActions.receiveTransactions(res.body.rows);
+          TransactionActions.receiveTransactions(ower, owee, res.body.rows);
         } else {
           console.error('Error in API request', url, res.text);
         }
       });
   },
 
-  receiveTransactions(rows) {
+  receiveTransactions(ower, owee, rows) {
     Dispatcher.handleAction({
       type: ActionTypes.RECEIVE_TRANSACTIONS,
-      rows: rows
+      rows: rows,
+      ower: ower,
+      owee: owee
     });
   }
 

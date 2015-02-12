@@ -44,9 +44,9 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_OWEES:
-      var ower = action.ower;
-      process(action.rows);
-      localStorage.setItem(`owees/${ower}`, JSON.stringify(action.rows));
+      var { ower, rows } = action;
+      process(rows);
+      localStorage.setItem(`owees/${ower}`, JSON.stringify(rows));
       break;
 
     default:

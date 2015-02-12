@@ -28,7 +28,8 @@ var OweeActions = {
   receiveOwees(ower, rows) {
     Dispatcher.handleAction({
       type: ActionTypes.RECEIVE_OWEES,
-      rows: rows
+      rows: rows,
+      ower: ower
     })
   }
 
