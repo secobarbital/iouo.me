@@ -1,3 +1,4 @@
+var assign = require('object-assign');
 var React = require('react/addons');
 var { Link, State } = require('react-router');
 var { FormattedNumber, FormattedRelative } = require('react-intl');
@@ -5,7 +6,6 @@ var cx = React.addons.classSet;
 
 var { TransactionActions } = require('../actions');
 var { TransactionStore } = require('../stores')
-var styles = require('./Styles').balance;
 
 var TransactionHeading = React.createClass({
   render() {
@@ -122,7 +122,7 @@ var Transactions = React.createClass({
   }
 });
 
-var styles = {
+var styles = assign({
   avatar: {
     width: 64,
     height: 64
@@ -130,6 +130,6 @@ var styles = {
   quote: {
     border: 'none'
   }
-};
+}, require('./Styles').balance);
 
 module.exports = Transactions;
