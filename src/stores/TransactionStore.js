@@ -1,6 +1,6 @@
 var assign = require('object-assign');
 var request = require('superagent');
-var { Map, fromJS } = require('immutable');
+var { Map, OrderedMap, fromJS } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
@@ -18,7 +18,7 @@ var TransactionStore = assign({}, Store, {
 function ensure(ower, owee) {
   var keyPath = [ower, owee];
   if (!_transactions.getIn(keyPath)) {
-    _transactions = _transactions.setIn(keyPath, Map());
+    _transactions = _transactions.setIn(keyPath, OrderedMap());
     fetchFromStorage(ower, owee);
   }
 }
@@ -34,7 +34,7 @@ function process(rows) {
   _transactions = _transactions.withMutations(map => {
     rows.forEach(row => {
       var { key, doc } = row;
-      var keyPath = [].concat(key, doc.id);
+      var keyPath = [].concat(key, doc._id);
       map.setIn(keyPath, fromJS(doc));
     });
   });
@@ -47,7 +47,7 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
   switch(action.type) {
     case ActionTypes.RECEIVE_TRANSACTIONS:
       var { ower, owee, rows } = action;
-      process(ower, owee, rows);
+      process(rows);
       localStorage.setItem(`transactions/${ower}/${owee}`, JSON.stringify(rows));
       break;
 
