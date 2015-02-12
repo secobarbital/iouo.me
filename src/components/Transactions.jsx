@@ -3,11 +3,12 @@ var { Link, State } = require('react-router');
 var { FormattedNumber, FormattedRelative } = require('react-intl');
 var cx = React.addons.classSet;
 
+var { TransactionActions } = require('../actions');
 var { TransactionStore } = require('../stores')
 var styles = require('./Styles').balance;
 
 var TransactionHeading = React.createClass({
-  render: function() {
+  render() {
     var { ower, owee, amount } = this.props;
     var owerLink = <Link to="owees" params={{ ower: ower }}>@{ower}</Link>;
     var oweeLink = <Link to="owees" params={{ ower: owee }}>@{owee}</Link>;
@@ -37,7 +38,7 @@ var TransactionHeading = React.createClass({
 });
 
 var TransactionRow = React.createClass({
-  render: function() {
+  render() {
     var { doc } = this.props;
     var ower = doc.get('ower');
     var owee = doc.get('owee');
@@ -72,14 +73,21 @@ var TransactionRow = React.createClass({
 var Transactions = React.createClass({
   mixins: [State],
 
-  getInitialState: function() {
-    var { ower, owee } = this.getParams();
-    return {
-      transactions: TransactionStore.get(ower, owee)
-    }
+  getInitialState() {
+    return this._getStateFromStores();
   },
 
-  render: function() {
+  componentDidMount() {
+    var { ower, owee } = this.getParams();
+    TransactionStore.addChangeListener(this._onChange);
+    TransactionActions.fetchTransactions(ower, owee);
+  },
+
+  componentWillUnmount() {
+    TransactionStore.removeChangeListener(this._onChange);
+  },
+
+  render() {
     var { ower, owee } = this.getParams();
     var { transactions } = this.state;
     var total = transactions.reduce((r, v) => r + v.get('amount'), 0);
@@ -96,6 +104,15 @@ var Transactions = React.createClass({
         </div>
       </section>
     );
+  },
+
+  _onChange() {
+    this.setState(this._getStateFromStores());
+  },
+
+  _getStateFromStores() {
+    var { ower, owee } = this.getParams();
+    return { transactions: TransactionStore.get(ower, owee) };
   }
 });
 

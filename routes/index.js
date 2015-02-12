@@ -47,6 +47,6 @@ router.get('/:ower/:owee', function(req, res, next) {
     endkey: [ower, owee],
     include_docs: true
   };
-  res.render('index', { title: `@${owee} and @${ower} on iouo.me` });
+  db.view('iouome', 'balances', params).pipe(res);
 });
 module.exports = router;
