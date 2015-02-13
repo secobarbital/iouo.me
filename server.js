@@ -21,7 +21,6 @@ app.use(logger('dev'));
 app.use(cachify);
 app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'favicons')));
-app.use(express.static(path.join(__dirname, 'node_modules', 'bootstrap', 'dist')));
 
 app.use('/', routes);
 

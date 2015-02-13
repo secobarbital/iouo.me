@@ -3,7 +3,7 @@ var assign = require('object-assign');
 
 var renderFile = jade.renderFile;
 var defaultOptions = {
-  bscdnUrl: process.env.BSCDN_URL,
+  ratchetCdnUrl: process.env.RATCHET_CDN_URL,
   cdnUrl: process.env.CDN_URL
 };
 

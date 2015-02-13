@@ -1,4 +1,4 @@
 extends layout
 
-block content
-  | !{cachify_js('/bundle.js')}
+block bundlejs
+  | !{cachify_js('/bundle.js', { defer: true, async: true })}

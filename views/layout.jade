@@ -1,4 +1,4 @@
-- var bscdn = bscdnUrl || '';
+- var ratchet = ratchetCdnUrl || '';
 - var cdn = cdnUrl || '';
 
 doctype html
@@ -15,8 +15,7 @@ html(lang='en-US')
     link(rel='apple-touch-icon-precomposed', href='#{cdn}/apple-touch-icon-precomposed.png')
     link(rel='shortcut icon', href='#{cdn}/apple-touch-icon.png')
 
-    link(rel='stylesheet', href='#{bscdn}/css/bootstrap.min.css')
-    link(rel='stylesheet', href='#{bscdn}/css/bootstrap-theme.min.css')
+    link(rel='stylesheet', href='#{ratchet}/css/ratchet.min.css')
 
     meta(name='msapplication-TileImage', content='#{cdn}/apple-touch-icon-precomposed.png')
     meta(name='msapplication-TileColor', content='#222222')
@@ -29,6 +28,8 @@ html(lang='en-US')
     meta(name='apple-mobile-web-app-capable', content='yes')
     meta(name='apple-mobile-web-app-status-bar-style', content='black')
     meta(name='apple-mobile-web-app-title', content='iouo.me')
+
+  block bundlejs
 
   body
     block content
