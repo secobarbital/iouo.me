@@ -16,6 +16,8 @@ var intlData = {
   }
 }
 
-Router.run(routes, Router.HistoryLocation, (Handler) => {
-  React.render(<Handler {...intlData} />, document.body);
+window.addEventListener('DOMContentLoaded', function() {
+  Router.run(routes, Router.HistoryLocation, (Handler) => {
+    React.render(<Handler {...intlData} />, document.body);
+  });
 });

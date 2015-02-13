@@ -1,8 +1,8 @@
 var React = require('react/addons');
 var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
-var cx = React.addons.classSet;
 
+var Header = require('./Header');
 var styles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
 var { OwerActions } = require('../actions');
@@ -10,31 +10,31 @@ var { OwerActions } = require('../actions');
 var OwerRow = React.createClass({
   render() {
     var { ower, amount } = this.props;
+    console.log('ower', ower, amount)
     var value = Math.abs(amount);
-    var classes = {
-      'list-group-item': true,
-      'list-group-item-success': amount < 0,
-      'list-group-item-danger': amount > 0
-    };
     var verb = 'is even';
     if (amount > 0) verb = 'owes';
     if (amount < 0) verb = 'is owed';
     return (
-      <Link className={cx(classes)} to="owees" params={{ ower: ower }}>
-        @<span style={styles.subject}>{ower}</span> {verb}
-        <span style={styles.amount}>
-          <span style={styles.currency}>$ </span>
-          <span style={styles.value}>
-            <FormattedNumber value={value} format="USD" />
+      <li className="table-view-cell">
+        <Link className="navigate-right" to="owees" params={{ ower: ower }}>
+          @<span style={styles.subject}>{ower}</span> {verb}
+          <span style={styles.amount}>
+            <span style={styles.currency}>$ </span>
+            <span style={styles.value}>
+              <FormattedNumber value={value} format="USD" />
+            </span>
           </span>
-        </span>
-      </Link>
+        </Link>
+      </li>
     );
   }
 });
 
 var Owers = React.createClass({
-  getInitialState: () => ({ owers: OwerStore.getAll() }),
+  getInitialState() {
+    return this._getStateFromStores();
+  },
 
   componentDidMount() {
     OwerStore.addChangeListener(this._onChange);
@@ -54,16 +54,21 @@ var Owers = React.createClass({
         <OwerRow key={ower} ower={ower} amount={amount} />
       )).toArray();
     return (
-      <section className="container">
-        <div className="list-group">
+      <div>
+        <Header/>
+        <ul className="table-view">
           {owerRows}
-        </div>
-      </section>
+        </ul>
+      </div>
     );
   },
 
   _onChange() {
-    this.setState({ owers: OwerStore.getAll() })
+    this.setState(this._getStateFromStores());
+  },
+
+  _getStateFromStores() {
+    return { owers: OwerStore.getAll() };
   }
 });
 
