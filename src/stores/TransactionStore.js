@@ -26,7 +26,7 @@ function ensure(ower, owee) {
 function fetchFromStorage(ower, owee) {
   var oldRows = LocalStore.getTransactions(ower, owee);
   if (oldRows) {
-    process(JSON.parse(oldRows));
+    process(oldRows);
   }
 }
 
@@ -35,7 +35,7 @@ function process(rows) {
     rows.forEach(row => {
       var { key, doc } = row;
       var keyPath = [].concat(key, doc._id);
-      map.setIn(keyPath, fromJS(doc));
+      map.setIn(keyPath, fromJS(row));
     });
   });
   TransactionStore.emitChange();

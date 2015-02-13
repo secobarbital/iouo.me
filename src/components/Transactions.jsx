@@ -39,15 +39,15 @@ var TransactionHeading = React.createClass({
 
 var TransactionRow = React.createClass({
   render() {
-    var { ower, owee, doc } = this.props;
-    var amount = doc.get('amount');
-    var tweet = doc.get('raw');
+    var { ower, owee, row } = this.props;
+    var amount = row.get('value');
+    var tweet = row.getIn(['doc', 'raw']);
     var owerId = tweet.getIn(['user', 'id_str']);
     var link = `http://twitter.com/${owerId}/status/${tweet.get('id_str')}`
     var avatar = tweet.getIn(['user', 'profile_image_url']);
     var screenName = tweet.getIn(['user', 'screen_name']);
     var createdAt = tweet.get('created_at');
-    var left = screenName === owee ^ amount > 0;
+    var left = screenName === ower;
     var quoteClass = cx({
       'blockquote-reverse': !left
     });
@@ -97,10 +97,10 @@ var Transactions = React.createClass({
   render() {
     var { ower, owee } = this.getParams();
     var { transactions } = this.state;
-    var total = transactions.reduce((r, v) => r + v.get('amount'), 0);
+    var total = transactions.reduce((r, v) => r + v.get('value'), 0);
     var transactionRows = transactions
-      .map(doc => (
-        <TransactionRow key={doc.get('_id')} ower={ower} owee={owee} doc={doc} />
+      .map(row => (
+        <TransactionRow key={row.get('id')} ower={ower} owee={owee} row={row} />
       )).toArray();
     return (
       <section className="container">

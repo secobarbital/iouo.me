@@ -25,7 +25,7 @@ function ensure() {
 function fetchFromStorage() {
   var oldRows = LocalStore.getOwers();
   if (oldRows) {
-    process(JSON.parse(oldRows));
+    process(oldRows);
   }
 }
 

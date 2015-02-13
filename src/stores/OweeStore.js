@@ -25,7 +25,7 @@ function ensure(ower) {
 function fetchFromStorage(ower) {
   var oldRows = LocalStore.getOwees(ower);
   if (oldRows) {
-    process(JSON.parse(oldRows));
+    process(oldRows);
   }
 }
 
