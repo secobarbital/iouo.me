@@ -2,6 +2,7 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var compression = require('compression');
 
 var cachify = require('./config/cachify');
 var jade = require('./config/jade');
@@ -14,6 +15,7 @@ var app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
+app.use(compression());
 app.use(favicon(__dirname + '/favicons/favicon.ico'));
 app.use(logger('dev'));
 app.use(cachify);
