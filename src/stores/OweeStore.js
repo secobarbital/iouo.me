@@ -4,6 +4,7 @@ var { Map } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
+var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
 var _owees = Map();
@@ -23,7 +24,7 @@ function ensure(ower) {
 }
 
 function fetchFromStorage(ower) {
-  var oldRows = localStorage.getItem(`owees/${ower}`);
+  var oldRows = LocalStore.getOwees(ower);
   if (oldRows) {
     process(JSON.parse(oldRows));
   }
@@ -46,7 +47,6 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
     case ActionTypes.RECEIVE_OWEES:
       var { ower, rows } = action;
       process(rows);
-      localStorage.setItem(`owees/${ower}`, JSON.stringify(rows));
       break;
 
     default:

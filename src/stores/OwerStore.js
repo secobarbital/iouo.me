@@ -4,6 +4,7 @@ var { Map } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
+var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
 var _owers;
@@ -23,7 +24,7 @@ function ensure() {
 }
 
 function fetchFromStorage() {
-  var oldRows = localStorage.getItem('owers');
+  var oldRows = LocalStore.getOwers();
   if (oldRows) {
     process(JSON.parse(oldRows));
   }
@@ -45,7 +46,6 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
   switch(action.type) {
     case ActionTypes.RECEIVE_OWERS:
       process(action.rows);
-      localStorage.setItem('owers', JSON.stringify(action.rows));
       break;
 
     default:

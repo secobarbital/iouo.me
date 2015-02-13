@@ -4,6 +4,7 @@ var { Map, OrderedMap, fromJS } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
+var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
 var _transactions = Map();
@@ -24,7 +25,7 @@ function ensure(ower, owee) {
 }
 
 function fetchFromStorage(ower, owee) {
-  var oldRows = localStorage.getItem(`transactions/${ower}/${owee}`);
+  var oldRows = LocalStore.getTransactions(ower, owee);
   if (oldRows) {
     process(JSON.parse(oldRows));
   }
@@ -48,7 +49,6 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
     case ActionTypes.RECEIVE_TRANSACTIONS:
       var { ower, owee, rows } = action;
       process(rows);
-      localStorage.setItem(`transactions/${ower}/${owee}`, JSON.stringify(rows));
       break;
 
     default:
