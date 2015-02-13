@@ -1,5 +1,4 @@
 var assign = require('object-assign');
-var request = require('superagent');
 var { Map, OrderedMap, fromJS } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
@@ -47,8 +46,7 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_TRANSACTIONS:
-      var { ower, owee, rows } = action;
-      process(rows);
+      process(action.rows);
       break;
 
     default:

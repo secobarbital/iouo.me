@@ -1,5 +1,4 @@
 var assign = require('object-assign');
-var request = require('superagent');
 var { Map } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
@@ -45,8 +44,7 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_OWEES:
-      var { ower, rows } = action;
-      process(rows);
+      process(action.rows);
       break;
 
     default:

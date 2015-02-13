@@ -1,5 +1,4 @@
 var assign = require('object-assign');
-var request = require('superagent');
 var { Map } = require('immutable');
 
 var Dispatcher = require('../dispatcher');

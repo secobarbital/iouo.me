@@ -33,26 +33,24 @@ function getKey(ower, owee) {
 
 LocalStore.dispatchToken = Dispatcher.register(payload => {
   var { action } = payload;
+  var { ower, owee, rows } = action;
 
   switch(action.type) {
 
     case ActionTypes.RECEIVE_OWERS:
-      var { rows } = action;
       localStorage.setItem(getKey(), JSON.stringify(rows));
       break;
 
     case ActionTypes.RECEIVE_OWEES:
-      var { ower, rows } = action;
       localStorage.setItem(getKey(ower), JSON.stringify(rows));
       break;
 
     case ActionTypes.RECEIVE_TRANSACTIONS:
-      var { ower, owee, rows } = action;
       localStorage.setItem(getKey(ower, owee), JSON.stringify(rows));
       break;
 
     default:
   }
-})
+});
 
 module.exports = LocalStore;

@@ -49,4 +49,5 @@ router.get('/:ower/:owee', function(req, res, next) {
   };
   db.view('iouome', 'balances', params).pipe(res);
 });
+
 module.exports = router;
