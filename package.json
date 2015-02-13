@@ -6,9 +6,12 @@
   ],
   "version": "2.0.0",
   "private": true,
+  "main": "server.js",
+  "browser": "src/index.jsx",
   "scripts": {
     "start": "node ./bin/www",
-    "dev": "node ./devServer.js"
+    "build": "node_modules/.bin/browserify src/index.jsx -o public/bundle.js --extension=.jsx -t [ envify purge --NODE_ENV production ] -t 6to5ify -g uglifyify",
+    "watch": "node_modules/.bin/watchify src/index.jsx -o public/bundle.js --extension=.jsx -t 6to5ify -d -v"
   },
   "engines": {
     "iojs": "1.1.x",
@@ -34,11 +37,10 @@
     "superagent": "^0.21.0"
   },
   "devDependencies": {
-    "6to5-core": "^3.5.3",
-    "6to5-loader": "^3.0.0",
-    "http-proxy": "^1.8.1",
-    "react-hot-loader": "^1.1.4",
-    "webpack": "^1.5.3",
-    "webpack-dev-server": "^1.7.0"
+    "6to5ify": "^4.1.1",
+    "browserify": "^8.1.3",
+    "envify": "^3.2.0",
+    "uglifyify": "^3.0.1",
+    "watchify": "^2.3.0"
   }
 }
