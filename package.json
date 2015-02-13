@@ -11,7 +11,8 @@
   "scripts": {
     "start": "node ./bin/www",
     "build": "NODE_ENV=production node_modules/.bin/browserify src/index.jsx -o public/bundle.js --extension=.jsx -t envify -t [ reactify --es6 ] -p bundle-collapser/plugin -g uglifyify",
-    "watch": "node_modules/.bin/watchify src/index.jsx -o public/bundle.js --extension=.jsx -t 6to5ify -d -v"
+    "watch": "node_modules/.bin/watchify src/index.jsx -o public/bundle.js --extension=.jsx -t 6to5ify -d -v",
+    "postinstall": "npm run build"
   },
   "engines": {
     "iojs": "1.1.x",
