@@ -40,16 +40,13 @@ var Owees = React.createClass({
       .filter(amount => amount !== 0)
       .sortBy(amount => -amount)
       .map((amount, owee) => (
-        <BalanceRow
-          to="transactions" params={{ ower: ower, owee: owee }}
-          key={owee} subject={owee} amount={amount}
-        />
+        <BalanceRow key={owee} ower={ower} owee={owee} amount={amount} />
       )).toArray();
 
     return owees.size ? (
       <div>
         <Header>
-          <Link to="owers" className="icon icon-left-nav pull-left"></Link>
+          <Link to="owers" className="icon icon-left-nav pull-left" />
           <Title>@{ower}</Title>
         </Header>
         <Content>

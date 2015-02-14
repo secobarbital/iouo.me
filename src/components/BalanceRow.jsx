@@ -6,19 +6,12 @@ var TableViewCell = require('./TableViewCell');
 
 var CrossBalanceRow = React.createClass({
   render() {
-    var { subject, object, amount, to, params } = this.props;
-    var verb = 'is even with';
-    if (amount) verb = 'owes';
-    if (amount < 0) {
-      subject = this.props.object;
-      object = this.props.subject;
-    }
+    var { ower, owee, amount } = this.props;
+    var verb = amount ? 'owes' : 'is even';
     return (
       <TableViewCell style={styles.cell}>
-        <Link to={to} params={params}>
-          @<span style={styles.subject}>{subject}</span>
-          {verb}
-          @<span style={styles.object}>{object}</span>
+        <Link to="transactions" params={{ ower: ower, owee: owee }} style={styles.link}>
+          {amount > 0 && verb} @<span style={styles.subject}>{owee}</span> {amount <= 0 && verb}
           {getDisplayAmount(amount)}
         </Link>
       </TableViewCell>
@@ -28,16 +21,16 @@ var CrossBalanceRow = React.createClass({
 
 var BalanceRow = React.createClass({
   render() {
-    var { subject, object, amount, to, params } = this.props;
-    if (subject && object) return <CrossBalanceRow {...this.props} />;
+    var { ower, owee, amount } = this.props;
+    if (owee) return <CrossBalanceRow {...this.props} />;
 
     var verb = 'is even';
     if (amount > 0) verb = 'owes';
     if (amount < 0) verb = 'is owed';
     return (
       <TableViewCell style={styles.cell}>
-        <Link to={to} params={params} style={styles.link}>
-          @<span style={styles.subject}>{subject}</span> {verb}
+        <Link to="owees" params={{ ower: ower }} style={styles.link}>
+          @<span style={styles.subject}>{ower}</span> {verb}
           {getDisplayAmount(amount)}
         </Link>
       </TableViewCell>
@@ -59,9 +52,6 @@ function getDisplayAmount(amount) {
 
 var styles = {
   subject: {
-    'fontWeight': 'bold'
-  },
-  object: {
     'fontWeight': 'bold'
   },
   currency: {
