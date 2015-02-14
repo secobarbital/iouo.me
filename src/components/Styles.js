@@ -4,15 +4,18 @@ var Styles = {
       'fontWeight': 'bold'
     },
     currency: {
-      verticalAlign: 'top'
     },
     value: {
-      'fontFamily': 'Georgia,Palatino,serif',
-      'fontSize': '142.857143%',
-      'lineHeight': 1
     },
     amount: {
       'float': 'right'
+    },
+    cell: {
+      paddingRight: 15
+    },
+    link: {
+      paddingRight: 15,
+      marginRight: -15
     }
   }
 };

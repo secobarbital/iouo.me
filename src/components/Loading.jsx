@@ -2,9 +2,9 @@ var React = require('react');
 
 var Loading = React.createClass({
   render: () => (
-    <section className="container">
-      <p>Loading...</p>
-    </section>
+    <div className="content">
+      <p className="content-padded">Loading...</p>
+    </div>
   )
 });
 

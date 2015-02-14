@@ -1,27 +1,27 @@
-var React = require('react/addons');
+var React = require('react');
 var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 
 var Header = require('./Header');
-var styles = require('./Styles').balance;
+var Title = require('./Title');
+var bStyles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
 var { OwerActions } = require('../actions');
 
 var OwerRow = React.createClass({
   render() {
     var { ower, amount } = this.props;
-    console.log('ower', ower, amount)
     var value = Math.abs(amount);
     var verb = 'is even';
     if (amount > 0) verb = 'owes';
     if (amount < 0) verb = 'is owed';
     return (
-      <li className="table-view-cell">
-        <Link className="navigate-right" to="owees" params={{ ower: ower }}>
-          @<span style={styles.subject}>{ower}</span> {verb}
-          <span style={styles.amount}>
-            <span style={styles.currency}>$ </span>
-            <span style={styles.value}>
+      <li className="table-view-cell" style={bStyles.cell}>
+        <Link to="owees" params={{ ower: ower }} style={bStyles.link}>
+          @<span style={bStyles.subject}>{ower}</span> {verb}
+          <span style={bStyles.amount}>
+            <span style={bStyles.currency}>$ </span>
+            <span style={bStyles.value}>
               <FormattedNumber value={value} format="USD" />
             </span>
           </span>
@@ -53,14 +53,20 @@ var Owers = React.createClass({
       .map((amount, ower) => (
         <OwerRow key={ower} ower={ower} amount={amount} />
       )).toArray();
-    return (
+    return owers.size ? (
       <div>
-        <Header/>
-        <ul className="table-view">
-          {owerRows}
-        </ul>
+        <Header>
+          <Link to="owe" className="icon icon-compose pull-right"></Link>
+          <Title>iouo.me</Title>
+        </Header>
+        <div className="content" style={styles.content}>
+          <p className="content-padded">Why pay when you can owe?</p>
+          <div className="card">
+            <ul className="table-view">{owerRows}</ul>
+          </div>
+        </div>
       </div>
-    );
+    ) : <Loading/>;
   },
 
   _onChange() {
@@ -71,5 +77,11 @@ var Owers = React.createClass({
     return { owers: OwerStore.getAll() };
   }
 });
+
+var styles = {
+  content: {
+    background: 'whitesmoke'
+  }
+};
 
 module.exports = Owers;
