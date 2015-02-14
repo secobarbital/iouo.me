@@ -1,59 +1,15 @@
-var React = require('react/addons');
+var React = require('react');
 var { Link, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
-var cx = React.addons.classSet;
 
+var Header = require('./Header');
+var Title = require('./Title');
+var Content = require('./Content');
 var Loading = require('./Loading');
-var styles = require('./Styles').balance;
+var TableView = require('./TableView');
+var BalanceRow = require('./BalanceRow');
 var { OweeActions } = require('../actions');
 var { OweeStore } = require('../stores');
-
-var OwerHeading = React.createClass({
-  render() {
-    var { ower, amount } = this.props;
-    var value = Math.abs(amount);
-    var verb = 'is even';
-    if (amount > 0) verb = 'owes';
-    if (amount < 0) verb = 'is owed';
-    return (
-      <div className="panel-heading">
-        @<span style={styles.subject}>{ower}</span> {verb}
-        <span style={styles.amount}>
-          <span style={styles.currency}>$ </span>
-          <span style={styles.value}>
-            <FormattedNumber value={value} format="USD" />
-          </span>
-        </span>
-      </div>
-    );
-  }
-});
-
-var OweeRow = React.createClass({
-  render() {
-    var { ower, owee, amount } = this.props;
-    var value = Math.abs(amount);
-    var classes = {
-      'list-group-item': true,
-      'list-group-item-success': amount < 0,
-      'list-group-item-danger': amount > 0
-    };
-    var verb = 'is even';
-    if (amount > 0) verb = 'owes';
-    if (amount < 0) verb = 'is owed';
-    return (
-      <Link className={cx(classes)} to="transactions" params={{ ower: ower, owee: owee }}>
-        @<span style={styles.subject}>{owee}</span> {verb}
-        <span style={styles.amount}>
-          <span style={styles.currency}>$ </span>
-          <span style={styles.value}>
-            <FormattedNumber value={value} format="USD" />
-          </span>
-        </span>
-      </Link>
-    );
-  }
-});
 
 var Owees = React.createClass({
   mixins: [State],
@@ -75,24 +31,38 @@ var Owees = React.createClass({
   render() {
     var { ower } = this.getParams();
     var { owees } = this.state;
-    var { loading } = require('./Loading');
     var total = owees.reduce((r, v) => r + v, 0);
+    var verb = 'is even';
+    if (total > 0) verb = 'owes';
+    if (total < 0) verb = 'is owed';
+    var value = Math.abs(total);
     var oweeRows = owees
       .filter(amount => amount !== 0)
       .sortBy(amount => -amount)
       .map((amount, owee) => (
-        <OweeRow key={owee} ower={ower} owee={owee} amount={amount} />
+        <BalanceRow
+          to="transactions" params={{ ower: ower, owee: owee }}
+          key={owee} subject={owee} amount={amount}
+        />
       )).toArray();
 
     return owees.size ? (
-      <section className="container">
-        <div className="panel panel-default">
-          <OwerHeading ower={ower} amount={total} />
-          <div className="list-group">
-            {oweeRows}
+      <div>
+        <Header>
+          <Link to="owers" className="icon icon-left-nav pull-left"></Link>
+          <Title>@{ower}</Title>
+        </Header>
+        <Content>
+          <p className="content-padded" style={styles.subtitle}>
+            {verb} $<FormattedNumber value={value} format="USD" />
+          </p>
+          <div className="card">
+            <TableView>
+              {oweeRows}
+            </TableView>
           </div>
-        </div>
-      </section>
+        </Content>
+      </div>
     ) : <Loading/>;
   },
 
@@ -105,5 +75,11 @@ var Owees = React.createClass({
     return { owees: OweeStore.get(ower) };
   }
 });
+
+var styles = {
+  subtitle: {
+    textAlign: 'center'
+  }
+}
 
 module.exports = Owees;
