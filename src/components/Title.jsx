@@ -1,10 +1,13 @@
 var React = require('react');
+var sx = require('../utils/styleSet');
 
 var Title = React.createClass({
   render() {
+    var { children, style, ...otherProps } = this.props;
+    style = sx(styles.root, style);
     return (
-      <h1 className="title" style={styles.root}>
-        {this.props.children}
+      <h1 className="title" style={sx(styles.root, style)}>
+        {children}
       </h1>
     );
   }

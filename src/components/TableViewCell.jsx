@@ -1,14 +1,14 @@
 var React = require('react');
 
-var Header = React.createClass({
+var TableViewCell = React.createClass({
   render() {
     var { children, ...otherProps } = this.props;
     return (
-      <header className="bar bar-nav">
+      <li className="table-view-cell" {...otherProps}>
         {children}
-      </header>
+      </li>
     );
   }
 });
 
-module.exports = Header;
+module.exports = TableViewCell;
