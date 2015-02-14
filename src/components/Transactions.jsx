@@ -4,38 +4,14 @@ var { Link, State } = require('react-router');
 var { FormattedNumber, FormattedRelative } = require('react-intl');
 var cx = React.addons.classSet;
 
+var Header = require('./Header');
+var Title = require('./Title');
+var Content = require('./Content');
+var TableView = require('./TableView');
+var TableViewCell = require('./TableViewCell');
+var sx = require('../utils/styleSet');
 var { TransactionActions } = require('../actions');
 var { TransactionStore } = require('../stores')
-
-var TransactionHeading = React.createClass({
-  render() {
-    var { ower, owee, amount } = this.props;
-    var owerLink = <Link to="owees" params={{ ower: ower }}>@{ower}</Link>;
-    var oweeLink = <Link to="owees" params={{ ower: owee }}>@{owee}</Link>;
-    var value = Math.abs(amount);
-    var content;
-    if (amount > 0) {
-      content = <span>{owerLink} owes {oweeLink}</span>
-    }
-    if (amount < 0) {
-      content = <span>{oweeLink} owes {owerLink}</span>
-    }
-    if (amount === 0) {
-      content = <span>{owerLink} and {oweeLink} are even</span>
-    }
-    return (
-      <div className="panel-heading">
-        {content}
-        <span style={styles.amount}>
-          <span style={styles.currency}>$ </span>
-          <span style={styles.value}>
-            <FormattedNumber value={value} format="USD" />
-          </span>
-        </span>
-      </div>
-    );
-  }
-});
 
 var TransactionRow = React.createClass({
   render() {
@@ -48,31 +24,22 @@ var TransactionRow = React.createClass({
     var screenName = tweet.getIn(['user', 'screen_name']);
     var createdAt = tweet.get('created_at');
     var left = screenName === ower;
-    var quoteClass = cx({
-      'blockquote-reverse': !left
+    var cellStyle = sx(!left && styles.right, styles.cell);
+    var avatarClass = cx({
+      'media-object': true,
+      'pull-left': left,
+      'pull-right': !left
     });
-    var mediaClass = cx({
-      'media-left': left,
-      'media-right': !left
-    });
-    var mediaObject = (
-      <div className={mediaClass}>
-          <img className="media-object" style={styles.avatar} src={avatar} />
-      </div>
-    );
     return (
-      <a href={link}>
-        <div className="media">
-          {!!left && mediaObject}
+      <TableViewCell className="media" style={cellStyle}>
+        <a href={link} style={styles.link}>
+          <img className={avatarClass} style={styles.avatar} src={avatar} />
           <div className="media-body">
-            <blockquote className={quoteClass} style={styles.quote}>
-              <p>{tweet.get('text')}</p>
-              <footer>{screenName} <cite><FormattedRelative value={createdAt} /></cite></footer>
-            </blockquote>
+            {tweet.get('text')}
+            <p>&mdash; {screenName} <FormattedRelative value={createdAt} /></p>
           </div>
-          {!left && mediaObject}
-        </div>
-      </a>
+        </a>
+      </TableViewCell>
     );
   }
 });
@@ -98,17 +65,28 @@ var Transactions = React.createClass({
     var { ower, owee } = this.getParams();
     var { transactions } = this.state;
     var total = transactions.reduce((r, v) => r + v.get('value'), 0);
+    var [ subject, object ] = total < 0 ? [ owee, ower ] : [ ower, owee ];
+    var value = Math.abs(total);
+
     var transactionRows = transactions
       .map(row => (
         <TransactionRow key={row.get('id')} ower={ower} owee={owee} row={row} />
       )).toArray();
     return (
-      <section className="container">
-        <div className="panel panel-default">
-          <TransactionHeading ower={ower} owee={owee} amount={total} />
-          {transactionRows}
-        </div>
-      </section>
+      <div>
+        <Header>
+          <Link to="owees" params={{ ower: ower }} className="icon icon-left-nav pull-left" />
+          <Title>@{subject}</Title>
+        </Header>
+        <Content>
+          <p className="content-padded" style={styles.subtitle}>
+            owes @{owee} $<FormattedNumber value={value} format="USD" />
+          </p>
+          <TableView>
+            {transactionRows}
+          </TableView>
+        </Content>
+      </div>
     );
   },
 
@@ -122,14 +100,26 @@ var Transactions = React.createClass({
   }
 });
 
-var styles = assign({
+var styles = {
+  right: {
+    textAlign: 'right'
+  },
+  cell: {
+    paddingRight: 15
+  },
+  link: {
+    marginRight: -15
+  },
+  subtitle: {
+    textAlign: 'center'
+  },
   avatar: {
-    width: 64,
-    height: 64
+    width: 42,
+    height: 42
   },
   quote: {
     border: 'none'
   }
-}, require('./Styles').balance);
+};
 
 module.exports = Transactions;

@@ -2,9 +2,10 @@ var React = require('react');
 
 var TableViewCell = React.createClass({
   render() {
-    var { children, ...otherProps } = this.props;
+    var { children, className, ...otherProps } = this.props;
+    className = className ? `table-view-cell ${className}` : 'table-view-cell';
     return (
-      <li className="table-view-cell" {...otherProps}>
+      <li className={className} {...otherProps}>
         {children}
       </li>
     );
