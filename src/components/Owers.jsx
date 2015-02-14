@@ -8,7 +8,6 @@ var Content = require('./Content');
 var TableView = require('./TableView');
 var BalanceRow = require('./BalanceRow');
 var Loading = require('./Loading');
-var bStyles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
 var { OwerActions } = require('../actions');
 
