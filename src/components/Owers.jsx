@@ -4,32 +4,13 @@ var { FormattedNumber } = require('react-intl');
 
 var Header = require('./Header');
 var Title = require('./Title');
+var Content = require('./Content');
+var TableView = require('./TableView');
+var BalanceRow = require('./BalanceRow');
+var Loading = require('./Loading');
 var bStyles = require('./Styles').balance;
 var { OwerStore } = require('../stores');
 var { OwerActions } = require('../actions');
-
-var OwerRow = React.createClass({
-  render() {
-    var { ower, amount } = this.props;
-    var value = Math.abs(amount);
-    var verb = 'is even';
-    if (amount > 0) verb = 'owes';
-    if (amount < 0) verb = 'is owed';
-    return (
-      <li className="table-view-cell" style={bStyles.cell}>
-        <Link to="owees" params={{ ower: ower }} style={bStyles.link}>
-          @<span style={bStyles.subject}>{ower}</span> {verb}
-          <span style={bStyles.amount}>
-            <span style={bStyles.currency}>$ </span>
-            <span style={bStyles.value}>
-              <FormattedNumber value={value} format="USD" />
-            </span>
-          </span>
-        </Link>
-      </li>
-    );
-  }
-});
 
 var Owers = React.createClass({
   getInitialState() {
@@ -51,7 +32,7 @@ var Owers = React.createClass({
       .filter(amount => amount !== 0)
       .sortBy(amount => -amount)
       .map((amount, ower) => (
-        <OwerRow key={ower} ower={ower} amount={amount} />
+        <BalanceRow key={ower} ower={ower} amount={amount} />
       )).toArray();
     return owers.size ? (
       <div>
@@ -59,12 +40,12 @@ var Owers = React.createClass({
           <Link to="owe" className="icon icon-compose pull-right"></Link>
           <Title>iouo.me</Title>
         </Header>
-        <div className="content" style={styles.content}>
+        <Content>
           <p className="content-padded">Why pay when you can owe?</p>
           <div className="card">
-            <ul className="table-view">{owerRows}</ul>
+            <TableView>{owerRows}</TableView>
           </div>
-        </div>
+        </Content>
       </div>
     ) : <Loading/>;
   },
@@ -77,11 +58,5 @@ var Owers = React.createClass({
     return { owers: OwerStore.getAll() };
   }
 });
-
-var styles = {
-  content: {
-    background: 'whitesmoke'
-  }
-};
 
 module.exports = Owers;
