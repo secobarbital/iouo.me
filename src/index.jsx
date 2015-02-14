@@ -14,10 +14,16 @@ var intlData = {
       }
     }
   }
+};
+
+if ('iouReady' in window) {
+  main();
+} else {
+  window.iouMain = main;
 }
 
-window.addEventListener('DOMContentLoaded', function() {
+function main() {
   Router.run(routes, Router.HistoryLocation, (Handler) => {
     React.render(<Handler {...intlData} />, document.body);
   });
-});
+}
