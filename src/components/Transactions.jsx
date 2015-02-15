@@ -80,7 +80,7 @@ var Transactions = React.createClass({
         </Header>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
-            owes @{owee} $<FormattedNumber value={value} format="USD" />
+            owes @{object} $<FormattedNumber value={value} format="USD" />
           </p>
           <TableView>
             {transactionRows}
