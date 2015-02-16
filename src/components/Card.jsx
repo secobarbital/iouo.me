@@ -1,14 +1,14 @@
 var React = require('react');
 
-var Header = React.createClass({
+var Card = React.createClass({
   render() {
     var { children, ...otherProps } = this.props;
     return (
-      <header className="bar bar-nav" {...otherProps}>
+      <div className="card" {...otherProps}>
         {children}
-      </header>
+      </div>
     );
   }
 });
 
-module.exports = Header;
+module.exports = Card;

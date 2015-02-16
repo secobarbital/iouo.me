@@ -6,6 +6,7 @@ var Header = require('./Header');
 var Title = require('./Title');
 var Content = require('./Content');
 var TableView = require('./TableView');
+var Card = require('./Card');
 var BalanceRow = require('./BalanceRow');
 var Loading = require('./Loading');
 var { OwerStore } = require('../stores');
@@ -41,9 +42,9 @@ var Owers = React.createClass({
         </Header>
         <Content>
           <p className="content-padded">Why pay when you can owe?</p>
-          <div className="card">
+          <Card>
             <TableView>{owerRows}</TableView>
-          </div>
+          </Card>
         </Content>
       </div>
     ) : <Loading/>;

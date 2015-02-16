@@ -5,6 +5,7 @@ var { FormattedNumber } = require('react-intl');
 var Header = require('./Header');
 var Footer = require('./Footer');
 var Button = require('./Button');
+var Card = require('./Card');
 var Title = require('./Title');
 var Content = require('./Content');
 var Loading = require('./Loading');
@@ -58,11 +59,11 @@ var Owees = React.createClass({
           <p className="content-padded" style={styles.subtitle}>
             {verb} $<FormattedNumber value={value} format="USD" />
           </p>
-          <div className="card">
+          <Card>
             <TableView>
               {oweeRows}
             </TableView>
-          </div>
+          </Card>
         </Content>
       </div>
     ) : <Loading/>;
@@ -87,6 +88,6 @@ var styles = {
   subtitle: {
     textAlign: 'center'
   }
-}
+};
 
 module.exports = Owees;

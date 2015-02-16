@@ -17,6 +17,6 @@ var styles = {
   root: {
     backgroundColor: 'whitesmoke'
   }
-}
+};
 
 module.exports = Content;
