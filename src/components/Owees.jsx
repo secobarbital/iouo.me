@@ -52,7 +52,7 @@ var Owees = React.createClass({
           <Title>@{ower}</Title>
         </Header>
         <Footer>
-          <Button positive block onClick={this.owe}>Owe @{ower}</Button>
+          <Button primary block onClick={this.owe}>Owe @{ower}</Button>
         </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>

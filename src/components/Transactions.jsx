@@ -80,7 +80,7 @@ var Transactions = React.createClass({
           <Title>@{subject}</Title>
         </Header>
         <Footer>
-          <Button positive block onClick={this.owe}>Owe @{owee}</Button>
+          <Button primary block onClick={this.owe}>Owe @{owee}</Button>
         </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
