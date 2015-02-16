@@ -10,7 +10,7 @@ var OwerActions = {
       type: ActionTypes.FETCH_OWERS
     });
 
-    var url = '/';
+    var url = '/api';
     request
       .get(url)
       .set('Accept', 'application/json')
