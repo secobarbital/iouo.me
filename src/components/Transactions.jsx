@@ -35,8 +35,8 @@ var TransactionRow = React.createClass({
         <a href={link} style={styles.link}>
           <img className={avatarClass} style={styles.avatar} src={avatar} />
           <div className="media-body">
+            <p>{screenName} &middot; <FormattedRelative value={createdAt} /></p>
             {tweet.get('text')}
-            <p>&mdash; {screenName} <FormattedRelative value={createdAt} /></p>
           </div>
         </a>
       </TableViewCell>
