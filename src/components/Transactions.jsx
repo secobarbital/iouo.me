@@ -6,6 +6,8 @@ var cx = React.addons.classSet;
 
 var Header = require('./Header');
 var Title = require('./Title');
+var Footer = require('./Footer');
+var Button = require('./Button');
 var Content = require('./Content');
 var TableView = require('./TableView');
 var TableViewCell = require('./TableViewCell');
@@ -78,6 +80,9 @@ var Transactions = React.createClass({
           <Link to="owees" params={{ ower: ower }} className="icon icon-left-nav pull-left" />
           <Title>@{subject}</Title>
         </Header>
+        <Footer>
+          <Button positive block onClick={this.owe}>Owe @{owee}</Button>
+        </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
             owes @{object} $<FormattedNumber value={value} format="USD" />
@@ -88,6 +93,11 @@ var Transactions = React.createClass({
         </Content>
       </div>
     );
+  },
+
+  owe() {
+    var { owee } = this.getParams();
+    location.href = `https://twitter.com/intent/tweet?text=@${owee}%20%23iou%20%24`;
   },
 
   _onChange() {

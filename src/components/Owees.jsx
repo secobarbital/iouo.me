@@ -3,6 +3,8 @@ var { Link, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 
 var Header = require('./Header');
+var Footer = require('./Footer');
+var Button = require('./Button');
 var Title = require('./Title');
 var Content = require('./Content');
 var Loading = require('./Loading');
@@ -49,6 +51,9 @@ var Owees = React.createClass({
           <Link to="owers" className="icon icon-left-nav pull-left" />
           <Title>@{ower}</Title>
         </Header>
+        <Footer>
+          <Button positive block onClick={this.owe}>Owe @{ower}</Button>
+        </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
             {verb} $<FormattedNumber value={value} format="USD" />
@@ -61,6 +66,11 @@ var Owees = React.createClass({
         </Content>
       </div>
     ) : <Loading/>;
+  },
+
+  owe() {
+    var { ower } = this.getParams();
+    location.href = `https://twitter.com/intent/tweet?text=@${ower}%20%23iou%20%24`;
   },
 
   _onChange() {
