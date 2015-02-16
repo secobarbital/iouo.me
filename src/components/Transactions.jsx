@@ -1,6 +1,5 @@
-var assign = require('object-assign');
 var React = require('react/addons');
-var { Link, State } = require('react-router');
+var { Link, Navigation, State } = require('react-router');
 var { FormattedNumber, FormattedRelative } = require('react-intl');
 var cx = React.addons.classSet;
 
@@ -47,7 +46,7 @@ var TransactionRow = React.createClass({
 });
 
 var Transactions = React.createClass({
-  mixins: [State],
+  mixins: [Navigation, State],
 
   getInitialState() {
     return this._getStateFromStores();
@@ -96,8 +95,8 @@ var Transactions = React.createClass({
   },
 
   owe() {
-    var { owee } = this.getParams();
-    location.href = `https://twitter.com/intent/tweet?text=@${owee}%20%23iou%20%24`;
+    var { ower, owee } = this.getParams();
+    this.transitionTo('oweSomeoneElse', { ower: ower, owee: owee });
   },
 
   _onChange() {

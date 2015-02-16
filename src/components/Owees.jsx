@@ -1,5 +1,5 @@
 var React = require('react');
-var { Link, State } = require('react-router');
+var { Link, Navigation, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 
 var Header = require('./Header');
@@ -14,7 +14,7 @@ var { OweeActions } = require('../actions');
 var { OweeStore } = require('../stores');
 
 var Owees = React.createClass({
-  mixins: [State],
+  mixins: [Navigation, State],
 
   getInitialState() {
     return this._getStateFromStores();
@@ -70,7 +70,7 @@ var Owees = React.createClass({
 
   owe() {
     var { ower } = this.getParams();
-    location.href = `https://twitter.com/intent/tweet?text=@${ower}%20%23iou%20%24`;
+    this.transitionTo('oweSomeone', { owee: ower });
   },
 
   _onChange() {
