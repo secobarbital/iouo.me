@@ -49,6 +49,6 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
 
     default:
   }
-})
+});
 
 module.exports = OwerStore;

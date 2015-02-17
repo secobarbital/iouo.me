@@ -25,6 +25,7 @@
     "connect-cachify": "0.0.17",
     "debug": "^2.1.1",
     "envify": "^3.2.0",
+    "event-stream": "^3.2.2",
     "events": "^1.0.2",
     "express": "^4.11.2",
     "flux": "^2.0.1",
@@ -33,6 +34,7 @@
     "keymirror": "^0.1.1",
     "morgan": "^1.5.1",
     "nano": "^6.0.2",
+    "node-jsx": "^0.12.4",
     "object-assign": "^2.0.0",
     "react": "^0.12.2",
     "react-intl": "^1.1.0",
@@ -40,6 +42,7 @@
     "reactify": "^1.0.0",
     "serve-favicon": "^2.2.0",
     "superagent": "^0.21.0",
+    "trumpet": "^1.7.0",
     "uglifyify": "^3.0.1"
   },
   "devDependencies": {

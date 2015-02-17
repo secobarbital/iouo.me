@@ -1,3 +1,6 @@
+require('node-jsx').install({ harmony: true });
+require.extensions['.jsx'] = require.extensions['.js'];
+
 var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
@@ -7,7 +10,7 @@ var compression = require('compression');
 var cachify = require('./config/cachify');
 var jade = require('./config/jade');
 var publicPath = path.join(__dirname, 'public');
-var routes = require('./routes/index');
+var routes = require('./routes/react');
 var api = require('./routes/api');
 
 var app = express();
@@ -23,7 +26,7 @@ app.use(cachify);
 app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'favicons')));
 
-app.use('/', routes);
+app.use(routes);
 app.use('/api', api);
 
 // catch 404 and forward to error handler
