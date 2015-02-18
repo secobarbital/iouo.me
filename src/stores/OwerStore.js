@@ -9,11 +9,10 @@ var { ActionTypes } = require('../constants');
 var _owers;
 
 var OwerStore = assign({}, Store, {
-  getAllWithInitialData(initialData) {
-    return process(Map(), initialData.rows);
-  },
-
-  getAll() {
+  getAll(data) {
+    if (data) {
+      return process(Map(), data.rows);
+    }
     ensure();
     return _owers;
   }

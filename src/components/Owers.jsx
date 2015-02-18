@@ -14,21 +14,10 @@ var { OwerActions } = require('../actions');
 
 var Owers = React.createClass({
   getInitialState() {
+    var { initialData } = this.props;
     return {
-      data: this.props.initialData
+      owers: OwerStore.getAll(initialData)
     };
-  },
-
-  componentWillMount() {
-    var { data } = this.state;
-    if (data) {
-      this.setState({
-        data: null,
-        owers: OwerStore.getAllWithInitialData(data)
-      });
-    } else {
-      this.setState(this._getStateFromStores());
-    }
   },
 
   componentDidMount() {
@@ -65,11 +54,9 @@ var Owers = React.createClass({
   },
 
   _onChange() {
-    this.setState(this._getStateFromStores());
-  },
-
-  _getStateFromStores() {
-    return { owers: OwerStore.getAll() };
+    this.setState({
+      owers: OwerStore.getAll()
+    });
   }
 });
 
