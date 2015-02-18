@@ -14,7 +14,21 @@ var { OwerActions } = require('../actions');
 
 var Owers = React.createClass({
   getInitialState() {
-    return this._getStateFromStores();
+    return {
+      data: this.props.initialData
+    };
+  },
+
+  componentWillMount() {
+    var { data } = this.state;
+    if (data) {
+      this.setState({
+        data: null,
+        owers: OwerStore.getAllWithInitialData(data)
+      });
+    } else {
+      this.setState(this._getStateFromStores());
+    }
   },
 
   componentDidMount() {

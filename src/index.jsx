@@ -1,20 +1,8 @@
 var React = require('react');
 var Router = require('react-router');
 
+var intlData = require('./intlData');
 var routes = require('./routes');
-
-var intlData = {
-  locales: 'en-US',
-  formats: {
-    number: {
-      USD: {
-        style: 'decimal',
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2
-      }
-    }
-  }
-};
 
 if ('iouReady' in window) {
   main();
@@ -23,7 +11,9 @@ if ('iouReady' in window) {
 }
 
 function main() {
+  var theData = JSON.parse(document.getElementById('theData').innerHTML);
   Router.run(routes, Router.HistoryLocation, (Handler) => {
-    React.render(<Handler {...intlData} />, document.body);
+    React.render(<Handler {...intlData} initialData={theData} />, document.body);
+    theData = null;
   });
 }

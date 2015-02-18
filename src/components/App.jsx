@@ -7,8 +7,18 @@ var Header = require('./Header');
 var App = React.createClass({
   mixins: [IntlMixin],
 
-  render: function() {
-    return <RouteHandler/>;
+  getInitialState() {
+    return {
+      data: this.props.initialData
+    };
+  },
+
+  componentDidMount() {
+    this.setState({ data: null });
+  },
+
+  render() {
+    return <RouteHandler initialData={this.state.data} />;
   }
 });
 

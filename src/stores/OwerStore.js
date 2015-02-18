@@ -9,6 +9,10 @@ var { ActionTypes } = require('../constants');
 var _owers;
 
 var OwerStore = assign({}, Store, {
+  getAllWithInitialData(initialData) {
+    return process(Map(), initialData.rows);
+  },
+
   getAll() {
     ensure();
     return _owers;
@@ -25,18 +29,25 @@ function ensure() {
 function fetchFromStorage() {
   var oldRows = LocalStore.getOwers();
   if (oldRows) {
-    process(oldRows);
+    _owers = merge(oldRows);
   }
 }
 
-function process(rows) {
-  _owers = _owers.withMutations(map => {
+function process(owers, rows) {
+  return owers.withMutations(map => {
     rows.forEach(row => {
       var { key, value } = row;
       map.setIn(key, value);
     });
   });
-  OwerStore.emitChange();
+}
+
+function merge(rows) {
+  var owers = process(_owers, rows);
+  if (owers !== _owers) {
+    _owers = owers;
+    OwerStore.emitChange();
+  }
 }
 
 OwerStore.dispatchToken = Dispatcher.register(payload => {
@@ -44,7 +55,7 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_OWERS:
-      process(action.rows);
+      merge(action.rows);
       break;
 
     default:
