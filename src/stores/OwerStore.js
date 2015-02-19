@@ -20,7 +20,6 @@ var OwerStore = assign({}, Store, {
 
 function ensure() {
   if (!_owers) {
-    _owers = Map();
     fetchFromStorage();
   }
 }
@@ -42,6 +41,9 @@ function process(owers, rows) {
 }
 
 function merge(rows) {
+  if (!_owers) {
+    _owers = Map();
+  }
   var owers = process(_owers, rows);
   if (owers !== _owers) {
     _owers = owers;

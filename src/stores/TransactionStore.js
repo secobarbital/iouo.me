@@ -9,7 +9,10 @@ var { ActionTypes } = require('../constants');
 var _transactions = Map();
 
 var TransactionStore = assign({}, Store, {
-  get(ower, owee) {
+  get(ower, owee, data) {
+    if (data) {
+      return process(OrderedMap(), data.rows);
+    }
     ensure(ower, owee);
     return _transactions.getIn([ower, owee]);
   }
@@ -26,19 +29,24 @@ function ensure(ower, owee) {
 function fetchFromStorage(ower, owee) {
   var oldRows = LocalStore.getTransactions(ower, owee);
   if (oldRows) {
-    process(oldRows);
+    merge([ower, owee], oldRows);
   }
 }
 
-function process(rows) {
-  _transactions = _transactions.withMutations(map => {
+function process(transactions, rows) {
+  return transactions.withMutations(map => {
     rows.forEach(row => {
-      var { key, doc } = row;
-      var keyPath = [].concat(key, doc._id);
-      map.setIn(keyPath, fromJS(row));
+      map.set(row.id, fromJS(row));
     });
   });
-  TransactionStore.emitChange();
+}
+
+function merge(keyPath, rows) {
+  var transactions = _transactions.updateIn(keyPath, map => process(map, rows));
+  if (transactions !== _transactions) {
+    _transactions = transactions;
+    TransactionStore.emitChange();
+  }
 }
 
 TransactionStore.dispatchToken = Dispatcher.register(payload => {
@@ -46,7 +54,8 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_TRANSACTIONS:
-      process(action.rows);
+      var { ower, owee, rows } = action;
+      merge([ower, owee], rows);
       break;
 
     default:

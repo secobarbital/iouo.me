@@ -48,7 +48,11 @@ var Transactions = React.createClass({
   mixins: [Navigation, State],
 
   getInitialState() {
-    return this._getStateFromStores();
+    var { initialData } = this.props;
+    var { ower, owee } = this.getParams();
+    return {
+      transactions: TransactionStore.get(ower, owee, initialData)
+    };
   },
 
   componentDidMount() {
@@ -99,12 +103,10 @@ var Transactions = React.createClass({
   },
 
   _onChange() {
-    this.setState(this._getStateFromStores());
-  },
-
-  _getStateFromStores() {
     var { ower, owee } = this.getParams();
-    return { transactions: TransactionStore.get(ower, owee) };
+    this.setState({
+      transactions: TransactionStore.get(ower, owee)
+    });
   }
 });
 

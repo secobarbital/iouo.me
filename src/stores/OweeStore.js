@@ -9,7 +9,10 @@ var { ActionTypes } = require('../constants');
 var _owees = Map();
 
 var OweeStore = assign({}, Store, {
-  get(ower) {
+  get(ower, data) {
+    if (data) {
+      return process(Map(), data.rows).get(ower);
+    }
     ensure(ower);
     return _owees.get(ower);
   }
@@ -17,7 +20,6 @@ var OweeStore = assign({}, Store, {
 
 function ensure(ower) {
   if (!_owees.get(ower)) {
-    _owees = _owees.set(ower, Map());
     fetchFromStorage(ower);
   }
 }
@@ -25,18 +27,25 @@ function ensure(ower) {
 function fetchFromStorage(ower) {
   var oldRows = LocalStore.getOwees(ower);
   if (oldRows) {
-    process(oldRows);
+    merge(oldRows);
   }
 }
 
-function process(rows) {
-  _owees = _owees.withMutations(map => {
+function process(owees, rows) {
+  return owees.withMutations(map => {
     rows.forEach(row => {
       var { key, value } = row;
       map.setIn(key, value);
     });
   });
-  OweeStore.emitChange();
+}
+
+function merge(rows) {
+  var owees = process(_owees, rows);
+  if (owees !== _owees) {
+    _owees = owees;
+    OweeStore.emitChange();
+  }
 }
 
 OweeStore.dispatchToken = Dispatcher.register(payload => {
@@ -44,7 +53,7 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
 
   switch(action.type) {
     case ActionTypes.RECEIVE_OWEES:
-      process(action.rows);
+      merge(action.rows);
       break;
 
     default:

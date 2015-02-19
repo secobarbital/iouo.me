@@ -18,7 +18,9 @@ var Owees = React.createClass({
   mixins: [Navigation, State],
 
   getInitialState() {
-    return this._getStateFromStores();
+    var { initialData } = this.props;
+    var { ower } = this.getParams();
+    return { owees: OweeStore.get(ower, initialData) };
   },
 
   componentDidMount() {
@@ -75,12 +77,8 @@ var Owees = React.createClass({
   },
 
   _onChange() {
-    this.setState(this._getStateFromStores());
-  },
-
-  _getStateFromStores() {
     var { ower } = this.getParams();
-    return { owees: OweeStore.get(ower) };
+    this.setState({ owees: OweeStore.get(ower) });
   }
 });
 
