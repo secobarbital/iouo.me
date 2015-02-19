@@ -24,9 +24,6 @@ db.balances = function(ower, owee, stale) {
       group_level: 1
     };
   }
-  if (stale) {
-    params.stale = 'update_after';
-  }
   return db.view('iouome', 'balances', params);
 }
 
