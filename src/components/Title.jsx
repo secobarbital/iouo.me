@@ -18,7 +18,8 @@ var styles = {
     paddingLeft: 44,
     paddingRight: 44,
     overflow: 'hidden',
-    textOverflow: 'ellipsis'
+    textOverflow: 'ellipsis',
+    color: '#222'
   }
 };
 
