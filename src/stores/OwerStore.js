@@ -6,12 +6,17 @@ var Store = require('./Store');
 var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
+var _inflight = false;
 var _owers;
 
 var OwerStore = assign({}, Store, {
   getAll() {
     ensure();
     return _owers;
+  },
+
+  getInflight() {
+    return _inflight;
   }
 });
 
@@ -43,7 +48,13 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
   var { action } = payload;
 
   switch(action.type) {
+    case ActionTypes.FETCH_OWERS:
+      _inflight = true;
+      OwerStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_OWERS:
+      _inflight = false;
       process(action.rows);
       break;
 

@@ -11,6 +11,7 @@ var TableView = require('./TableView');
 var Card = require('./Card');
 var BalanceRow = require('./BalanceRow');
 var Loading = require('./Loading');
+var Logotype = require('./Logotype');
 var { OwerStore } = require('../stores');
 var { OwerActions } = require('../actions');
 
@@ -21,7 +22,7 @@ var Owers = React.createClass({
 
   componentDidMount() {
     OwerStore.addChangeListener(this._onChange);
-    OwerActions.fetchOwers();
+    this._refresh();
   },
 
   componentWillUnmount() {
@@ -29,7 +30,7 @@ var Owers = React.createClass({
   },
 
   render() {
-    var { owers } = this.state;
+    var { owers, spin } = this.state;
     var owerRows = owers
       .filter(amount => amount !== 0)
       .sortBy(amount => -amount)
@@ -39,7 +40,7 @@ var Owers = React.createClass({
     return owers.size ? (
       <article>
         <Header>
-          <Title>I<i className="fa fa-refresh"></i>U</Title>
+          <Title><Logotype spin={spin} onClick={this._refresh} /></Title>
         </Header>
         <Footer>
           <Button primary block to="owe">Owe Someone</Button>
@@ -54,12 +55,19 @@ var Owers = React.createClass({
     ) : <Loading/>;
   },
 
+  _refresh() {
+    OwerActions.fetchOwers();
+  },
+
   _onChange() {
     this.setState(this._getStateFromStores());
   },
 
   _getStateFromStores() {
-    return { owers: OwerStore.getAll() };
+    return {
+      owers: OwerStore.getAll(),
+      spin: OwerStore.getInflight()
+    };
   }
 });
 
