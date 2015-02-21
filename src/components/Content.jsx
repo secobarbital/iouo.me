@@ -17,7 +17,7 @@ var Content = React.createClass({
 var styles = {
   root: {
     backgroundColor: 'whitesmoke',
-    color: '#333'
+    color: '#555'
   }
 };
 
