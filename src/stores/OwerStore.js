@@ -53,6 +53,11 @@ OwerStore.dispatchToken = Dispatcher.register(payload => {
       OwerStore.emitChange();
       break;
 
+    case ActionTypes.FUTCH_OWERS:
+      _inflight = false;
+      OwerStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_OWERS:
       _inflight = false;
       process(action.rows);

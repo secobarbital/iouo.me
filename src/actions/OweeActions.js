@@ -17,19 +17,27 @@ var OweeActions = {
       .set('Accept', 'application/json')
       .end(function(res) {
         var rows;
-        if (res.ok) {
+        if (res.ok && res.body && res.body.rows) {
           OweeActions.receiveOwees(ower, res.body.rows);
         } else {
-          console.error('Error in API request', url, res.text);
+          OweeActions.futchOwees(url, res);
         }
       });
+  },
+
+  futchOwees(url, res) {
+    Dispatcher.handleAction({
+      type: ActionTypes.FUTCH_OWEES,
+      url,
+      res
+    });
   },
 
   receiveOwees(ower, rows) {
     Dispatcher.handleAction({
       type: ActionTypes.RECEIVE_OWEES,
-      rows: rows,
-      ower: ower
+      rows,
+      ower
     })
   }
 

@@ -53,6 +53,11 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
       OweeStore.emitChange();
       break;
 
+    case ActionTypes.FUTCH_OWEES:
+      _inflight = false;
+      OweeStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_OWEES:
       _inflight = false;
       process(action.rows);

@@ -18,20 +18,28 @@ var TransactionActions = {
       .set('Accept', 'application/json')
       .end(function(res) {
         var rows;
-        if (res.ok && res.body) {
+        if (res.ok && res.body && res.body.rows) {
           TransactionActions.receiveTransactions(ower, owee, res.body.rows);
         } else {
-          console.error('Error in API request', url, res.text);
+          TransactionActions.futchTransactions(url, res);
         }
       });
+  },
+
+  futchTransactions(url, res) {
+    Dispatcher.handleAction({
+      type: ActionTypes.FUTCH_TRANSACTIONS,
+      url,
+      res
+    })
   },
 
   receiveTransactions(ower, owee, rows) {
     Dispatcher.handleAction({
       type: ActionTypes.RECEIVE_TRANSACTIONS,
-      rows: rows,
-      ower: ower,
-      owee: owee
+      rows,
+      ower,
+      owee
     });
   }
 

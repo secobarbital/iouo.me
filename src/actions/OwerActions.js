@@ -16,18 +16,26 @@ var OwerActions = {
       .set('Accept', 'application/json')
       .end(function(res) {
         var rows;
-        if (res.ok) {
+        if (res.ok && res.body && res.body.rows) {
           OwerActions.receiveOwers(res.body.rows);
         } else {
-          console.error('Error in API request', url, res.text);
+          OwerActions.futchOwers(url, res);
         }
       });
+  },
+
+  futchOwers(url, res) {
+    Dispatcher.handleAction({
+      type: ActionTypes.FUTCH_OWERS,
+      url,
+      res
+    });
   },
 
   receiveOwers(rows) {
     Dispatcher.handleAction({
       type: ActionTypes.RECEIVE_OWERS,
-      rows: rows
+      rows
     });
   }
 

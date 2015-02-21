@@ -55,6 +55,11 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
       TransactionStore.emitChange();
       break;
 
+    case ActionTypes.FUTCH_TRANSACTIONS:
+      _inflight = false;
+      TransactionStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_TRANSACTIONS:
       _inflight = false;
       process(action.rows);
