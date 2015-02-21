@@ -10,6 +10,7 @@ var Card = require('./Card');
 var Title = require('./Title');
 var Content = require('./Content');
 var Loading = require('./Loading');
+var Logotype = require('./Logotype');
 var TableView = require('./TableView');
 var BalanceRow = require('./BalanceRow');
 var { OweeActions } = require('../actions');
@@ -23,9 +24,8 @@ var Owees = React.createClass({
   },
 
   componentDidMount() {
-    var { ower } = this.getParams();
     OweeStore.addChangeListener(this._onChange);
-    OweeActions.fetchOwees(ower);
+    this._refresh();
   },
 
   componentWillUnmount() {
@@ -34,7 +34,7 @@ var Owees = React.createClass({
 
   render() {
     var { ower } = this.getParams();
-    var { owees } = this.state;
+    var { owees, spin } = this.state;
     var total = owees.reduce((r, v) => r + v, 0);
     var verb = 'is even';
     if (total > 0) verb = 'owes';
@@ -51,6 +51,7 @@ var Owees = React.createClass({
       <article>
         <Header>
           <BackButton to="owers" />
+          <Logotype style={styles.logo} spin={spin} onClick={this._refresh} />
           <Title>@{ower}</Title>
         </Header>
         <Footer>
@@ -72,19 +73,33 @@ var Owees = React.createClass({
     ) : <Loading/>;
   },
 
+  _refresh() {
+    var { ower } = this.getParams();
+    OweeActions.fetchOwees(ower);
+  },
+
   _onChange() {
     this.setState(this._getStateFromStores());
   },
 
   _getStateFromStores() {
     var { ower } = this.getParams();
-    return { owees: OweeStore.get(ower) };
+    return {
+      owees: OweeStore.get(ower),
+      spin: OweeStore.getInflight()
+    };
   }
 });
 
 var styles = {
   subtitle: {
     textAlign: 'center'
+  },
+  logo: {
+    float: 'right',
+    lineHeight: '44px',
+    zIndex: 20,
+    position: 'relative'
   }
 };
 

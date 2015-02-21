@@ -6,12 +6,17 @@ var Store = require('./Store');
 var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
+var _inflight = false;
 var _owees = Map();
 
 var OweeStore = assign({}, Store, {
   get(ower) {
     ensure(ower);
     return _owees.get(ower);
+  },
+
+  getInflight() {
+    return _inflight;
   }
 });
 
@@ -43,7 +48,13 @@ OweeStore.dispatchToken = Dispatcher.register(payload => {
   var { action } = payload;
 
   switch(action.type) {
+    case ActionTypes.FETCH_OWEES:
+      _inflight = true;
+      OweeStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_OWEES:
+      _inflight = false;
       process(action.rows);
       break;
 

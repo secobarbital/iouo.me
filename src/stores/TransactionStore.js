@@ -6,12 +6,17 @@ var Store = require('./Store');
 var LocalStore = require('./LocalStore');
 var { ActionTypes } = require('../constants');
 
+var _inflight = false;
 var _transactions = Map();
 
 var TransactionStore = assign({}, Store, {
   get(ower, owee) {
     ensure(ower, owee);
     return _transactions.getIn([ower, owee]);
+  },
+
+  getInflight() {
+    return _inflight;
   }
 });
 
@@ -45,7 +50,13 @@ TransactionStore.dispatchToken = Dispatcher.register(payload => {
   var { action } = payload;
 
   switch(action.type) {
+    case ActionTypes.FETCH_TRANSACTIONS:
+      _inflight = true;
+      TransactionStore.emitChange();
+      break;
+
     case ActionTypes.RECEIVE_TRANSACTIONS:
+      _inflight = false;
       process(action.rows);
       break;
 

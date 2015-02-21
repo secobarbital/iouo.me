@@ -11,6 +11,7 @@ var BackButton = require('./BackButton');
 var Content = require('./Content');
 var TableView = require('./TableView');
 var TableViewCell = require('./TableViewCell');
+var Logotype = require('./Logotype');
 var sx = require('../utils/styleSet');
 var { TransactionActions } = require('../actions');
 var { TransactionStore } = require('../stores')
@@ -53,9 +54,8 @@ var Transactions = React.createClass({
   },
 
   componentDidMount() {
-    var { ower, owee } = this.getParams();
     TransactionStore.addChangeListener(this._onChange);
-    TransactionActions.fetchTransactions(ower, owee);
+    this._refresh();
   },
 
   componentWillUnmount() {
@@ -64,7 +64,7 @@ var Transactions = React.createClass({
 
   render() {
     var { ower, owee } = this.getParams();
-    var { transactions } = this.state;
+    var { spin, transactions } = this.state;
     var total = transactions.reduce((r, v) => r + v.get('value'), 0);
     var [ subject, object ] = total < 0 ? [ owee, ower ] : [ ower, owee ];
     var value = Math.abs(total);
@@ -77,6 +77,7 @@ var Transactions = React.createClass({
       <article>
         <Header>
           <BackButton to="owees" params={{ ower }} />
+          <Logotype style={styles.logo} spin={spin} onClick={this._refresh} />
           <Title>@{subject}</Title>
         </Header>
         <Footer>
@@ -96,13 +97,21 @@ var Transactions = React.createClass({
     );
   },
 
+  _refresh() {
+    var { ower, owee } = this.getParams();
+    TransactionActions.fetchTransactions(ower, owee);
+  },
+
   _onChange() {
     this.setState(this._getStateFromStores());
   },
 
   _getStateFromStores() {
     var { ower, owee } = this.getParams();
-    return { transactions: TransactionStore.get(ower, owee) };
+    return {
+      transactions: TransactionStore.get(ower, owee),
+      spin: TransactionStore.getInflight()
+    };
   }
 });
 
@@ -125,6 +134,12 @@ var styles = {
   },
   quote: {
     border: 'none'
+  },
+  logo: {
+    float: 'right',
+    lineHeight: '44px',
+    zIndex: 20,
+    position: 'relative'
   }
 };
 
