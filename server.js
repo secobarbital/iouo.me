@@ -8,6 +8,7 @@ var cachify = require('./config/cachify');
 var jade = require('./config/jade');
 var publicPath = path.join(__dirname, 'public');
 var routes = require('./routes/index');
+var legacy = require('./routes/legacy');
 var api = require('./routes/api');
 
 var app = express();
@@ -24,7 +25,8 @@ app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'favicons')));
 
 app.use('/api', api);
-app.use('/', routes);
+app.use(legacy);
+app.use(routes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
