@@ -27,6 +27,18 @@ module.exports = {
         }
       },
       reduce: '_sum'
+    },
+    stats: {
+      map: function(doc) {
+        var ower, amount;
+
+        if (doc.ower && doc.amount) {
+          ower = doc.ower.username || doc.raw.user.screen_name;
+          amount = doc.amount;
+          emit(ower, amount);
+        }
+      },
+      reduce: '_stats'
     }
   }
 }
