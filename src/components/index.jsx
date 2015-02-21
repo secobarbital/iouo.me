@@ -8,10 +8,10 @@ var Owe = require('./Owe');
 var Loading = require('./Loading');
 
 module.exports = {
-  App: App,
-  Owers: Owers,
-  Owees: Owees,
-  Transactions: Transactions,
-  Owe: Owe,
-  Loading: Loading
+  App,
+  Owers,
+  Owees,
+  Transactions,
+  Owe,
+  Loading
 };

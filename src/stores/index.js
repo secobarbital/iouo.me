@@ -4,8 +4,8 @@ var TransactionStore = require('./TransactionStore');
 var LocalStore = require('./LocalStore');
 
 module.exports = {
-  OwerStore: OwerStore,
-  OweeStore: OweeStore,
-  TransactionStore: TransactionStore,
-  LocalStore: LocalStore
+  OwerStore,
+  OweeStore,
+  TransactionStore,
+  LocalStore
 };

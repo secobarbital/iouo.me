@@ -1,5 +1,5 @@
 var React = require('react');
-var { Link, RouteHandler } = require('react-router');
+var { RouteHandler } = require('react-router');
 var { IntlMixin } = require('react-intl');
 
 var Header = require('./Header');

@@ -3,6 +3,8 @@ var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
 
 var Header = require('./Header');
+var Footer = require('./Footer');
+var Button = require('./Button');
 var Title = require('./Title');
 var Content = require('./Content');
 var TableView = require('./TableView');
@@ -35,18 +37,20 @@ var Owers = React.createClass({
         <BalanceRow key={ower} ower={ower} amount={amount} />
       )).toArray();
     return owers.size ? (
-      <div>
+      <article>
         <Header>
-          <Link to="owe" className="icon icon-compose pull-right"></Link>
           <Title>iouo.me</Title>
         </Header>
+        <Footer>
+          <Button primary block to="owe">Owe Someone</Button>
+        </Footer>
         <Content>
           <p className="content-padded">Why pay when you can owe?</p>
           <Card>
             <TableView>{owerRows}</TableView>
           </Card>
         </Content>
-      </div>
+      </article>
     ) : <Loading/>;
   },
 

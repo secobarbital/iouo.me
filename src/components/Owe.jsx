@@ -1,7 +1,8 @@
 var React = require('react');
-var { Link, State } = require('react-router');
+var { State } = require('react-router');
 
 var Header = require('./Header');
+var BackButton = require('./BackButton');
 var Title = require('./Title');
 var Content = require('./Content');
 var Button = require('./Button');
@@ -20,9 +21,9 @@ var Owe = React.createClass({
       linkTarget = { to: 'home' };
     }
     return (
-      <div>
+      <article>
         <Header>
-          <Link {...linkTarget} className="icon icon-left-nav pull-left" />
+          <BackButton {...linkTarget} />
           <Title>Owe Someone</Title>
         </Header>
         <Content>
@@ -37,7 +38,8 @@ var Owe = React.createClass({
               </div>
               <div className="input-row">
                 <label htmlFor="tweetAmount" style={styles.label}>#iou $</label>
-                <input id="tweetAmount" name="amount" type="number" step="any" placeholder="amount" />
+                <input id="tweetAmount" name="amount" type="number" step="any"
+                  placeholder="amount" />
               </div>
               <div className="input-row">
                 <label htmlFor="tweetReason" style={styles.label}>for</label>
@@ -52,7 +54,7 @@ var Owe = React.createClass({
               </div>
             </form>
         </Content>
-      </div>
+      </article>
     );
   },
 

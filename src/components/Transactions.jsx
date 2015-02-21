@@ -7,6 +7,7 @@ var Header = require('./Header');
 var Title = require('./Title');
 var Footer = require('./Footer');
 var Button = require('./Button');
+var BackButton = require('./BackButton');
 var Content = require('./Content');
 var TableView = require('./TableView');
 var TableViewCell = require('./TableViewCell');
@@ -73,13 +74,15 @@ var Transactions = React.createClass({
         <TransactionRow key={row.get('id')} ower={ower} owee={owee} row={row} />
       )).toArray();
     return (
-      <div>
+      <article>
         <Header>
-          <Link to="owees" params={{ ower: ower }} className="icon icon-left-nav pull-left" />
+          <BackButton to="owees" params={{ ower }} />
           <Title>@{subject}</Title>
         </Header>
         <Footer>
-          <Button primary block onClick={this.owe}>Owe @{owee}</Button>
+          <Button primary block to="oweSomeoneElse" params={{ ower, owee }}>
+            Owe @{owee}
+          </Button>
         </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
@@ -89,13 +92,8 @@ var Transactions = React.createClass({
             {transactionRows}
           </TableView>
         </Content>
-      </div>
+      </article>
     );
-  },
-
-  owe() {
-    var { ower, owee } = this.getParams();
-    this.transitionTo('oweSomeoneElse', { ower: ower, owee: owee });
   },
 
   _onChange() {

@@ -5,6 +5,7 @@ var { FormattedNumber } = require('react-intl');
 var Header = require('./Header');
 var Footer = require('./Footer');
 var Button = require('./Button');
+var BackButton = require('./BackButton');
 var Card = require('./Card');
 var Title = require('./Title');
 var Content = require('./Content');
@@ -47,13 +48,15 @@ var Owees = React.createClass({
       )).toArray();
 
     return owees.size ? (
-      <div>
+      <article>
         <Header>
-          <Link to="owers" className="icon icon-left-nav pull-left" />
+          <BackButton to="owers" />
           <Title>@{ower}</Title>
         </Header>
         <Footer>
-          <Button primary block onClick={this.owe}>Owe @{ower}</Button>
+          <Button primary block to="oweSomeone" params={{ owee: ower }}>
+            Owe @{ower}
+          </Button>
         </Footer>
         <Content>
           <p className="content-padded" style={styles.subtitle}>
@@ -65,13 +68,8 @@ var Owees = React.createClass({
             </TableView>
           </Card>
         </Content>
-      </div>
+      </article>
     ) : <Loading/>;
-  },
-
-  owe() {
-    var { ower } = this.getParams();
-    this.transitionTo('oweSomeone', { owee: ower });
   },
 
   _onChange() {

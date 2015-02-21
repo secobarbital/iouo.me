@@ -1,4 +1,5 @@
 var React = require('react/addons');
+var { Link } = require('react-router');
 var cx = React.addons.classSet;
 
 var Button = React.createClass({
@@ -15,10 +16,11 @@ var Button = React.createClass({
       'btn-link': link,
       'btn-outlined': outlined
     };
+    var Element = 'to' in otherProps ? Link : 'button';
     return (
-      <button className={cx(classes)} {...otherProps}>
+      <Element className={cx(classes)} {...otherProps}>
         {children}
-      </button>
+      </Element>
     );
   }
 });
