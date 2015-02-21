@@ -18,8 +18,6 @@ var BackButton = React.createClass({
   }
 });
 
-module.exports = BackButton;
-
 var styles = {
   root: {
     position: 'relative',
@@ -29,4 +27,6 @@ var styles = {
     fontSize: 17,
     color: 'inherit'
   }
-}
+};
+
+module.exports = BackButton;
