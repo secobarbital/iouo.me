@@ -39,7 +39,7 @@ var Owers = React.createClass({
     return owers.size ? (
       <article>
         <Header>
-          <Title>iouo.me</Title>
+          <Title>I<i className="fa fa-refresh"></i>U</Title>
         </Header>
         <Footer>
           <Button primary block to="owe">Owe Someone</Button>
