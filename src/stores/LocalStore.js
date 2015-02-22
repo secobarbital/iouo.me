@@ -23,12 +23,12 @@ var LocalStore = assign({}, Store, {
 
 function getKey(ower, owee) {
   if (owee) {
-    return `transactions/${ower}/${owee}`;
+    return `owers/${ower}/owees/${owee}/transactions`;
   }
   if (ower) {
-    return `owees/${ower}`;
+    return `owers/${ower}/owees`;
   }
-  return 'ower';
+  return 'owers';
 }
 
 LocalStore.dispatchToken = Dispatcher.register(payload => {

@@ -11,7 +11,7 @@ var OweeActions = {
       ower: ower
     });
 
-    var url = `/api/${ower}`;
+    var url = `/api/owers/${ower}/owees`;
     request
       .get(url)
       .set('Accept', 'application/json')

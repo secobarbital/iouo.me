@@ -12,7 +12,7 @@ var TransactionActions = {
       owee: owee
     });
 
-    var url = `/api/${ower}/${owee}`;
+    var url = `/api/owers/${ower}/owees/${owee}/transactions`;
     request
       .get(url)
       .set('Accept', 'application/json')
