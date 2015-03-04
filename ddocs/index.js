@@ -5,7 +5,7 @@ exports.update = function() {
   ddocs.forEach(function(ddoc) {
     db.get(ddoc._id, function(err, doc) {
       if (err) {
-        if (err.status_code === 404) {
+        if (err.statusCode === 404) {
           return upload(ddoc);
         }
         return console.error('Error getting', ddoc._id, err.message);
