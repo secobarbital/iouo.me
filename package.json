@@ -40,6 +40,7 @@
     "reactify": "^1.0.0",
     "serve-favicon": "^2.2.0",
     "superagent": "^0.21.0",
+    "twitter": "^1.2.1",
     "uglifyify": "^3.0.1"
   },
   "devDependencies": {
@@ -48,7 +49,12 @@
   "browserify": {
     "transform": [
       "envify",
-      [ "reactify", { "es6": true } ]
+      [
+        "reactify",
+        {
+          "es6": true
+        }
+      ]
     ]
   }
 }
