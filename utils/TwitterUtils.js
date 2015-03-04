@@ -20,52 +20,44 @@ var TwitterUtils = {
     });
   },
 
-  search: function(cb) {
+  search: function() {
     var params = { q: '#iou' };
     if (sinceId && fullSearchAt > Date.now() - 86400000) {
-      return performSearch(sinceId, cb);
+      return performSearch(sinceId);
     }
     fullSearchAt = Date.now();
-    IouUtils.lastId(function(err, lastId) {
-      if (err) {
-        return cb('TwitterUtils.search: ' + err);
-      }
-      performSearch(lastId, cb);
-    });
+    return IouUtils.lastId()
+      .then(performSearch);
   }
 };
 
-function performSearch(sinceId, maxId, cb) {
-  if (typeof(maxId) === 'function') {
-    cb = maxId;
-    maxId = null;
-  }
-  var params = {
-    q: '#iou',
-    result_type: 'recent',
-    count: 100,
-    include_entities: true
-  };
-  if (sinceId) params.since_id = sinceId;
-  if (maxId) params.max_id = maxId;
-  twitter.get('search/tweets', params, function(error, data) {
-    if (error) {
-      return cb('TwitterUtils.performSearch: ' + error);
-    }
-    var meta = data.search_metadata;
-    var nextResults = meta.next_results;
-    var refreshUrl = meta.refresh_url;
-    var refreshParams = qs.parse(refreshUrl.slice(1));
-    data.statuses.forEach(processTweet);
-    if (sinceId > refreshParams.since_id) {
-      sinceId = refreshParams.since_id;
-    }
-    if (nextResults) {
-      let nextParams = qs.parse(nextResults.slice(1));
-      performSearch(sinceId, nextParams.max_id, cb);
-    } else {
-      cb();
-    }
+function performSearch(sinceId, maxId) {
+  return new Promise(function(resolve, reject) {
+    var params = {
+      q: '#iou',
+      result_type: 'recent',
+      count: 100,
+      include_entities: true
+    };
+    if (sinceId) params.since_id = sinceId;
+    if (maxId) params.max_id = maxId;
+    twitter.get('search/tweets', params, function(err, data) {
+      if (err) return reject(err);
+      var meta = data.search_metadata;
+      var nextResults = meta.next_results;
+      var refreshUrl = meta.refresh_url;
+      var refreshParams = qs.parse(refreshUrl.slice(1));
+      data.statuses.forEach(processTweet);
+      if (sinceId > refreshParams.since_id) {
+        sinceId = refreshParams.since_id;
+      }
+      if (nextResults) {
+        let nextParams = qs.parse(nextResults.slice(1));
+        resolve(performSearch(sinceId, nextParams.max_id));
+      } else {
+        resolve();
+      }
+    });
   });
 }
 
