@@ -10,21 +10,23 @@ var publicPath = path.join(__dirname, 'public');
 var routes = require('./routes/index');
 var legacy = require('./routes/legacy');
 var api = require('./routes/api');
+var ping = require('./routes/ping');
 
 var app = express();
 
-// view engine setup
+app.set('x-powered-by', false);
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'jade');
 
 app.use(compression());
-app.use(favicon(__dirname + '/favicons/favicon.ico'));
+app.use(favicon(path.join(__dirname, 'favicons', 'favicon.ico')));
 app.use(logger('dev'));
 app.use(cachify);
 app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'favicons')));
 
 app.use('/api', api);
+app.use('/ping', ping);
 app.use(legacy);
 app.use(routes);
 
