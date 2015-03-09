@@ -5,8 +5,8 @@ var qs = require('querystring');
 var IouUtils = require('./IouUtils');
 var twitter = require('../config/twitter');
 
-var sinceId;
-var fullSearchAt;
+var _sinceId;
+var _fullSearchAt;
 
 var TwitterUtils = {
   stream: function() {
@@ -22,10 +22,10 @@ var TwitterUtils = {
 
   search: function() {
     var params = { q: '#iou' };
-    if (sinceId && fullSearchAt > Date.now() - 86400000) {
-      return performSearch(sinceId);
+    if (_sinceId && _fullSearchAt > Date.now() - 86400000) {
+      return performSearch(_sinceId);
     }
-    fullSearchAt = Date.now();
+    _fullSearchAt = Date.now();
     return IouUtils.lastId()
       .then(performSearch);
   }
@@ -56,8 +56,8 @@ function performSearch(sinceId, maxId) {
       var refreshUrl = meta.refresh_url;
       var refreshParams = qs.parse(refreshUrl.slice(1));
       data.statuses.forEach(processTweet);
-      if (sinceId > refreshParams.since_id) {
-        sinceId = refreshParams.since_id;
+      if (_sinceId < refreshParams.since_id) {
+        _sinceId = refreshParams.since_id;
       }
       if (nextResults) {
         let nextParams = qs.parse(nextResults.slice(1));
@@ -78,7 +78,9 @@ function processTweet(tweet) {
     if (doc.ower && doc.owee && doc.amount) {
       let via = extractVia(tweet);
       if (via) doc.via = via;
+      console.log('inserting', tweet.id_str);
       db.insert(doc, function(err, res) {
+        console.log('inserted', tweet.id_str, err, res);
         if (err) reject(err);
         else resolve(res);
       });
