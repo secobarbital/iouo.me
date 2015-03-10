@@ -15,8 +15,8 @@
     "postinstall": "npm run build"
   },
   "engines": {
-    "iojs": "1.2.x",
-    "npm": "2.5.x"
+    "iojs": "1.4.x",
+    "npm": "2.6.x"
   },
   "dependencies": {
     "browserify": "^8.1.3",
