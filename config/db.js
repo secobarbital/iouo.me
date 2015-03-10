@@ -1,3 +1,4 @@
+var request = require('superagent');
 var supercouch = require('supercouch');
 
 var url = process.env.COUCHDB_URL || process.env.CLOUDANT_URL || 'http://localhost:5984';
@@ -20,8 +21,8 @@ db.insert = function(body, fn) {
 
 db.view = function(design, view, params, fn) {
   if (isFn(params)) fn = params, params = null;
-  var path = `${process.env.CLOUDANT_DATABASE}/_design/${design}/_view/${view}`;
-  var req = couch.request('get', path);
+  var path = `${url}/${dbName}/_design/${design}/_view/${view}`;
+  var req = request.get(path);
   if (params) req.query(params);
   if (isFn(fn)) req.end(fn);
   return req;
