@@ -1,6 +1,7 @@
 extends layout
 
 block bundlejs
+  | !{rollbar}
   | !{cachify_js('/bundle.js', { defer: true, async: true })}
   script.
     window.addEventListener('DOMContentLoaded', function() {

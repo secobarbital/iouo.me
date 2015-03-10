@@ -6,6 +6,7 @@ var compression = require('compression');
 
 var cachify = require('./config/cachify');
 var jade = require('./config/jade');
+var rollbar = require('./config/rollbar');
 var publicPath = path.join(__dirname, 'public');
 var routes = require('./routes/index');
 var legacy = require('./routes/legacy');
@@ -38,6 +39,8 @@ app.use(function(req, res, next) {
 });
 
 // error handlers
+
+app.use(rollbar.errorHandlerWithToken);
 
 // development error handler
 // will print stacktrace
