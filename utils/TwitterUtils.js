@@ -1,5 +1,7 @@
 'use strict';
 
+var request = require('superagent');
+
 var qs = require('querystring');
 
 var IouUtils = require('./IouUtils');
@@ -49,45 +51,42 @@ function performSingleSearch(sinceId, maxId) {
 }
 
 function performSearch(sinceId, maxId) {
-  performSingleSearch(sinceId, maxId)
+  return performSingleSearch(sinceId, maxId)
     .then(function(data) {
       var meta = data.search_metadata;
       var nextResults = meta.next_results;
       var refreshUrl = meta.refresh_url;
       var refreshParams = qs.parse(refreshUrl.slice(1));
-      data.statuses.forEach(processTweet);
+      var processes = Promise.all(data.statuses.map(processTweet));
       if (_sinceId < refreshParams.since_id) {
         _sinceId = refreshParams.since_id;
       }
       if (nextResults) {
         let nextParams = qs.parse(nextResults.slice(1));
-        return performSearch(sinceId, nextParams.max_id);
+        return Promise.all([
+          processes,
+          performSearch(sinceId, nextParams.max_id)
+        ]);
+      } else {
+        return processes;
       }
     });
 }
 
 function processTweet(tweet) {
-  return new Promise(function(resolve, reject) {
-    var doc = {
-      _id: `twitter/${tweet.id_str}`,
-      raw: tweet,
-      ower: extractOwer(tweet),
-      owee: extractOwee(tweet),
-      amount: extractAmount(tweet)
-    };
-    if (doc.ower && doc.owee && doc.amount) {
-      let via = extractVia(tweet);
-      if (via) doc.via = via;
-      console.log('inserting', tweet.id_str);
-      db.insert(doc, function(err, res) {
-        console.log('inserted', tweet.id_str, err, res);
-        if (err) reject(err);
-        else resolve(res);
-      });
-    } else {
-      resolve();
-    }
-  });
+  var doc = {
+    raw: tweet,
+    ower: extractOwer(tweet),
+    owee: extractOwee(tweet),
+    amount: extractAmount(tweet)
+  };
+  if (doc.ower && doc.owee && doc.amount) {
+    let via = extractVia(tweet);
+    if (via) doc.via = via;
+    return db.pinsert(doc);
+  } else {
+    return Promise.resolve();
+  }
 }
 
 function extractOwer(tweet) {
