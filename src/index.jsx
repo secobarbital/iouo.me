@@ -1,5 +1,5 @@
-if (!global.Intl) {
-  global.Intl = require('intl/Intl.en');
+if ('Intl' in window) {
+  window.Intl = require('intl/Intl.en');
 }
 var React = require('react');
 var Router = require('react-router');
