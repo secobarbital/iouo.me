@@ -1,5 +1,5 @@
-if ('Intl' in window) {
-  window.Intl = require('intl/Intl.en');
+if (!global.Intl) {
+  global.Intl = require('intl/Intl.en');
 }
 var React = require('react');
 var Router = require('react-router');
@@ -19,10 +19,10 @@ var intlData = {
   }
 };
 
-if ('iouReady' in window) {
+if (global.iouReady) {
   main();
 } else {
-  window.iouMain = main;
+  global.iouMain = main;
 }
 
 function main() {
