@@ -4,12 +4,17 @@ var db = require('../config/db');
 
 var router = express.Router();
 
-router.get('/owers', function(req, res, next) {
+function jsonRes(req, res, next) {
+  res.type('json');
+  next();
+}
+
+router.get('/owers', jsonRes, function(req, res, next) {
   var params = { group_level: 1 };
   db.view('iouome', 'balances', params).pipe(res);
 });
 
-router.get('/owers/:ower/owees', function(req, res, next) {
+router.get('/owers/:ower/owees', jsonRes, function(req, res, next) {
   var ower = req.params.ower;
   var params = {
     group_level: 2,
@@ -19,7 +24,7 @@ router.get('/owers/:ower/owees', function(req, res, next) {
   db.view('iouome', 'balances', params).pipe(res);
 });
 
-router.get('/owers/:ower/owees/:owee/transactions', function(req, res, next) {
+router.get('/owers/:ower/owees/:owee/transactions', jsonRes, function(req, res, next) {
   var ower = req.params.ower;
   var owee = req.params.owee;
   var params = {
