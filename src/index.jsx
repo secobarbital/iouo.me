@@ -1,3 +1,6 @@
+if (!global.Intl) {
+  global.Intl = require('intl/Intl.en');
+}
 var React = require('react');
 var Router = require('react-router');
 
