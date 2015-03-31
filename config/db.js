@@ -1,49 +1,40 @@
 var request = require('superagent');
-var supercouch = require('supercouch');
 
-var url = process.env.COUCHDB_URL || process.env.CLOUDANT_URL || 'http://localhost:5984';
-var dbName = process.env.COUCHDB_DATABASE || process.env.CLOUDANT_DATABASE || 'iouome'
-var couch = supercouch(url);
-var db = couch.db(dbName);
-var insertWithoutEncodeId = db.insert.bind(db);
+var dbUrl = process.env.COUCHDB_URL || process.env.CLOUDANT_URL || 'http://localhost:5984';
+var dbName = process.env.COUCHDB_DATABASE || process.env.CLOUDANT_DATABASE || 'iouome';
 
-function isFn (fn) {
-  return '[object Function]' === Object.prototype.toString.call(fn);
-}
+var db = {
+  insert: function(body, cb) {
+    var id = body._id;
+    var req = id ? request.put : request.post;
+    req = req([dbUrl, dbName, encodeURIComponent(id)].join('/'))
+    .send(body);
+    return cb ? req.end(cb) : req;
+  },
 
-db.insert = function(body, fn) {
-  var req = insertWithoutEncodeId(body);
-  var reqOpts = req.reqOpts;
-  reqOpts.path = reqOpts.path.map(encodeURIComponent);
-  if (isFn(fn)) req.end(fn);
-  return req;
-}
+  view: function(design, view, params, cb) {
+    var req = request.get([dbUrl, dbName, '_design', design, '_view', view].join('/'))
+    .query(params);
+    return cb ? req.end(cb) : req;
+  },
 
-db.view = function(design, view, params, fn) {
-  if (isFn(params)) fn = params, params = null;
-  var path = `${url}/${dbName}/_design/${design}/_view/${view}`;
-  var req = request.get(path);
-  if (params) req.query(params);
-  if (isFn(fn)) req.end(fn);
-  return req;
-}
-
-db.pinsert = function(doc) {
-  return new Promise(function(resolve, reject) {
-    db.insert(doc, function(err, res) {
-      if (err) reject(err);
-      else resolve(res);
+  pinsert: function(doc) {
+    return new Promise(function(resolve, reject) {
+      insert(doc, function(err, res) {
+        if (err) reject(err);
+        else resolve(res);
+      });
     });
-  });
-}
+  },
 
-db.pview = function(design, view, params) {
-  return new Promise(function(resolve, reject) {
-    db.view(design, view, params, function(err, res) {
-      if (err) reject(err);
-      else resolve(res);
+  pview: function(design, view, params) {
+    return new Promise(function(resolve, reject) {
+      view(design, view, params, function(err, res) {
+        if (err) reject(err);
+        else resolve(res);
+      });
     });
-  });
-}
+  }
+};
 
 module.exports = db;

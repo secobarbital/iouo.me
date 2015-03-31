@@ -34,7 +34,6 @@
     "keymirror": "^0.1.1",
     "morgan": "^1.5.2",
     "object-assign": "^2.0.0",
-    "promise": "^6.1.0",
     "react": "^0.12.2",
     "react-intl": "^1.2.0",
     "react-router": "^0.12.4",
@@ -42,7 +41,6 @@
     "rollbar": "^0.4.5",
     "serve-favicon": "^2.2.0",
     "superagent": "^0.21.0",
-    "supercouch": "^0.2.4",
     "twitter": "^1.2.5",
     "uglifyify": "^3.0.1"
   },
