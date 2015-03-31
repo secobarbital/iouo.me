@@ -33,6 +33,7 @@
     "jade": "^1.9.2",
     "keymirror": "^0.1.1",
     "morgan": "^1.5.2",
+    "nano": "^6.1.2",
     "object-assign": "^2.0.0",
     "react": "^0.12.2",
     "react-intl": "^1.2.0",
