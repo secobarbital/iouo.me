@@ -1,5 +1,5 @@
 var assign = require('object-assign');
-var { Map, OrderedMap, fromJS } = require('immutable');
+var { Map, fromJS } = require('immutable');
 
 var Dispatcher = require('../dispatcher');
 var Store = require('./Store');
@@ -23,7 +23,7 @@ var TransactionStore = assign({}, Store, {
 function ensure(ower, owee) {
   var keyPath = [ower, owee];
   if (!_transactions.getIn(keyPath)) {
-    _transactions = _transactions.setIn(keyPath, OrderedMap());
+    _transactions = _transactions.setIn(keyPath, Map());
     fetchFromStorage(ower, owee);
   }
 }

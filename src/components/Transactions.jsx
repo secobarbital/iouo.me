@@ -70,6 +70,7 @@ var Transactions = React.createClass({
     var value = Math.abs(total);
 
     var transactionRows = transactions
+      .sortBy(row => row.getIn(['doc', 'raw', 'created_at']))
       .map(row => (
         <TransactionRow key={row.get('id')} ower={ower} owee={owee} row={row} />
       )).toArray();
