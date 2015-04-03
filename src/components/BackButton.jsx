@@ -13,12 +13,8 @@ var BackButton = React.createClass({
     className = `fa fa-chevron-left${className}`;
     style = sx(styles.root, style);
     return (
-      <Link className={className} style={style} onClick={this.back} {...otherProps} />
+      <Link className={className} style={style} {...otherProps} />
     );
-  },
-
-  back(e) {
-    if (this.goBack()) e.preventDefault();
   }
 });
 
