@@ -11,6 +11,7 @@ var publicPath = path.join(__dirname, 'public');
 var routes = require('./routes/index');
 var legacy = require('./routes/legacy');
 var api = require('./routes/api');
+var image = require('./routes/image');
 var ping = require('./routes/ping');
 
 var app = express();
@@ -27,6 +28,7 @@ app.use(express.static(publicPath));
 app.use(express.static(path.join(__dirname, 'favicons')));
 
 app.use('/api', api);
+app.use('/image', image);
 app.use('/ping', ping);
 app.use(legacy);
 app.use(routes);

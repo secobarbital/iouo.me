@@ -23,7 +23,7 @@ var TransactionRow = React.createClass({
     var tweet = row.getIn(['doc', 'raw']);
     var screenName = tweet.getIn(['user', 'screen_name']);
     var link = `http://twitter.com/${screenName}/status/${tweet.get('id_str')}`
-    var avatar = tweet.getIn(['user', 'profile_image_url']);
+    var avatar = `/image/twitter/w_42,h_42,c_fill/${tweet.getIn(['user', 'id_str'])}.jpg`;
     var createdAt = tweet.get('created_at');
     var left = screenName === ower;
     var cellStyle = sx(!left && styles.right, styles.cell);
