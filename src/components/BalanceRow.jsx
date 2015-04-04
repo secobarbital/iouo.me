@@ -1,6 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
 var { Link } = require('react-router');
 var { FormattedNumber } = require('react-intl');
+var PureRenderMixin = React.addons.PureRenderMixin;
 
 var TableViewCell = require('./TableViewCell');
 
@@ -20,6 +21,8 @@ var CrossBalanceRow = React.createClass({
 });
 
 var BalanceRow = React.createClass({
+  mixins: [PureRenderMixin],
+
   render() {
     var { ower, owee, amount } = this.props;
     if (owee) return <CrossBalanceRow {...this.props} />;

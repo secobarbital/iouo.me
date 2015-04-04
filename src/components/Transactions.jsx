@@ -2,6 +2,7 @@ var React = require('react/addons');
 var { Link, Navigation, State } = require('react-router');
 var { FormattedNumber, FormattedRelative } = require('react-intl');
 var cx = React.addons.classSet;
+var PureRenderMixin = React.addons.PureRenderMixin;
 
 var Header = require('./Header');
 var Title = require('./Title');
@@ -17,6 +18,8 @@ var { TransactionActions } = require('../actions');
 var { TransactionStore } = require('../stores')
 
 var TransactionRow = React.createClass({
+  mixins: [PureRenderMixin],
+
   render() {
     var { ower, owee, row } = this.props;
     var amount = row.get('value');
@@ -47,7 +50,7 @@ var TransactionRow = React.createClass({
 });
 
 var Transactions = React.createClass({
-  mixins: [Navigation, State],
+  mixins: [Navigation, State, PureRenderMixin],
 
   getInitialState() {
     return this._getStateFromStores();

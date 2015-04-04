@@ -1,6 +1,7 @@
-var React = require('react');
+var React = require('react/addons');
 var { Link, Navigation, State } = require('react-router');
 var { FormattedNumber } = require('react-intl');
+var PureRenderMixin = React.addons.PureRenderMixin;
 
 var Header = require('./Header');
 var Footer = require('./Footer');
@@ -17,7 +18,7 @@ var { OweeActions } = require('../actions');
 var { OweeStore } = require('../stores');
 
 var Owees = React.createClass({
-  mixins: [Navigation, State],
+  mixins: [Navigation, State, PureRenderMixin],
 
   getInitialState() {
     return this._getStateFromStores();
