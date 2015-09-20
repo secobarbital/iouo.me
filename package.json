@@ -8,9 +8,12 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prebrowserify": "mkdir -p dist",
-    "browserify": "browserify src/main.js -t babelify --outfile dist/main.js",
-    "start": "npm install && npm run browserify"
+    "standard": "node_modules/.bin/standard --global fetch",
+    "prebrowserify": "mkdir -p dist && npm run standard",
+    "browserify": "browserify src/main.js -t babelify -o dist/main.js",
+    "prewatchify": "mkdir -p dist",
+    "watchify": "watchify src/main.js -t babelify -o dist/main.js -d -v",
+    "start": "npm install && npm run watchify"
   },
   "dependencies": {
     "@cycle/core": "^3.1.0",
@@ -24,6 +27,7 @@
     "babel": "^5.8.23",
     "babelify": "^6.3.0",
     "browserify": "^11.1.0",
-    "standard": "^5.3.1"
+    "standard": "^5.3.1",
+    "watchify": "^3.4.0"
   }
 }
