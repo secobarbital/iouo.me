@@ -15,7 +15,6 @@ export default function owers ({ Fetch, URL }) {
 
   const vtree$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
-    .startWith({ rows: [] })
     .map(data => data.rows
       .sort((a, b) => a.value - b.value)
       .map(row => {
@@ -28,10 +27,10 @@ export default function owers ({ Fetch, URL }) {
     .map(owers => {
       let owerRows = owers
         .map(ower => (
-          <a key={ower} href={`/${ower.name}`}>
+          <a key={ower.name} href={`/owers/${ower.name}`}>
             <dt>{ower.name}</dt>
             <dd>{ower.amount.toFixed(2)}</dd>
-            </a>
+          </a>
         )
       )
       return (
@@ -41,6 +40,11 @@ export default function owers ({ Fetch, URL }) {
         </section>
       )
     })
+    .startWith(
+      <section>
+        <h1>Loading...</h1>
+      </section>
+    )
 
   return {
     DOM: vtree$,

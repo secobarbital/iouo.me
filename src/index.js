@@ -8,13 +8,19 @@ import { makeFetchDriver } from '@cycle/fetch'
 import { makeNavigationDriver } from 'cycle-navigation-driver'
 import { makePreventDefaultDriver } from './preventDefaultDriver'
 import owers from './owers'
+import owees from './owees'
 
 function main (responses) {
   const { DOM, Fetch, URL } = responses
 
-  const owersRequests = owers(responses)
 
-  const fetchRequest$ = owersRequests.Fetch
+  const owersRequests = owers(responses)
+  const oweesRequests = owees(responses)
+
+  const fetchRequest$ = Rx.Observable.merge(
+    owersRequests.Fetch,
+    oweesRequests.Fetch
+  )
 
   const localLinkClick$ = DOM.select('a').events('click')
     .filter(e => e.currentTarget.host === location.host)
@@ -23,11 +29,13 @@ function main (responses) {
     .map(e => e.currentTarget.pathname)
 
   const vtree$ = Rx.Observable.combineLatest(
-    URL, owersRequests.DOM,
-    (url, owersPage) => {
+    URL, owersRequests.DOM, oweesRequests.DOM,
+    (url, owersPage, oweesPage) => {
       switch(url) {
         case '/':
           return owersPage
+        case '/owers/secobarbital':
+          return oweesPage
         default:
           return <h1>Not Found</h1>
       }
