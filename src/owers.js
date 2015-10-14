@@ -2,9 +2,18 @@
 
 import { hJSX } from '@cycle/dom'
 
-export default function owers (fetch$) {
-  return fetch$
-    .mergeAll()
+export default function owers ({ Fetch, URL }) {
+  const fetch$ = Fetch.byKey('owers').mergeAll()
+  const url$ = URL.filter(url => url === '/')
+
+  const fetchRequest$ = url$.map(url => {
+    return {
+      key: 'owers',
+      url: '/owers.json'
+    }
+  })
+
+  const vtree$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
     .startWith({ rows: [] })
     .map(data => data.rows
@@ -18,7 +27,13 @@ export default function owers (fetch$) {
     )
     .map(owers => {
       let owerRows = owers
-        .map(ower => <a key={ower} href={`/${ower.name}`}><dt>{ower.name}</dt><dd>{ower.amount.toFixed(2)}</dd></a>)
+        .map(ower => (
+          <a key={ower} href={`/${ower.name}`}>
+            <dt>{ower.name}</dt>
+            <dd>{ower.amount.toFixed(2)}</dd>
+            </a>
+        )
+      )
       return (
         <section>
           <h1>IOU</h1>
@@ -26,4 +41,9 @@ export default function owers (fetch$) {
         </section>
       )
     })
+
+  return {
+    DOM: vtree$,
+    Fetch: fetchRequest$
+  }
 }
