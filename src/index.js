@@ -7,12 +7,12 @@ import { makeDOMDriver, hJSX } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makeNavigationDriver } from 'cycle-navigation-driver'
 import { makePreventDefaultDriver } from './preventDefaultDriver'
+import switchPath from 'switch-path'
 import owers from './owers'
 import owees from './owees'
 
 function main (responses) {
   const { DOM, Fetch, URL } = responses
-
 
   const owersRequests = owers(responses)
   const oweesRequests = owees(responses)
@@ -30,16 +30,15 @@ function main (responses) {
 
   const vtree$ = Rx.Observable.combineLatest(
     URL, owersRequests.DOM, oweesRequests.DOM,
-    (url, owersPage, oweesPage) => {
-      switch(url) {
-        case '/':
-          return owersPage
-        case '/owers/secobarbital':
-          return oweesPage
-        default:
-          return <h1>Not Found</h1>
+    (path, owersPage, oweesPage) => {
+      const routes = {
+        '/': owersPage,
+        '/owers/:ower': oweesPage
       }
-    })
+      const { value } = switchPath(path, routes)
+      return value
+    }
+  )
 
   return {
     DOM: vtree$,
@@ -49,7 +48,7 @@ function main (responses) {
   }
 }
 
-let [ requests, responses ] = run(main, {
+run(main, {
   DOM: makeDOMDriver('main'),
   Fetch: makeFetchDriver(),
   URL: makeNavigationDriver(),
