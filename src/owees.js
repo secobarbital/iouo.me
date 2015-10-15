@@ -2,8 +2,6 @@
 
 import { Rx } from '@cycle/core'
 import { hJSX } from '@cycle/dom'
-import switchPath from 'switch-path'
-import routes from './routes'
 
 export default function owees ({ Fetch, Route }) {
   const page = 'owees'
