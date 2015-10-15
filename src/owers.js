@@ -1,19 +1,31 @@
 /** @jsx hJSX */
 
+import { Rx } from '@cycle/core'
 import { hJSX } from '@cycle/dom'
 
-export default function owers ({ Fetch, URL }) {
-  const fetch$ = Fetch.byKey('owers').mergeAll()
-  const url$ = URL.filter(url => url === '/')
+export default function owers ({ Fetch, Route }) {
+  const page = 'owers'
+  const fetch$ = Fetch.byKey(page).switch()
+  const route$ = Route.filter(route => route.name === page)
 
-  const fetchRequest$ = url$.map(url => {
-    return {
-      key: 'owers',
-      url: '/owers.json'
-    }
-  })
+  const fetchRequest$ = route$
+    .map(route => {
+      return {
+        key: route.name,
+        url: '/owers.json'
+      }
+    })
 
-  const vtree$ = fetch$
+  const loading$ = route$
+    .startWith({})
+    .map(route => (
+      <section>
+        <h1>IOU</h1>
+        <p>Loading...</p>
+      </section>
+    ))
+
+  const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
     .map(data => data.rows
       .sort((a, b) => a.value - b.value)
@@ -24,8 +36,10 @@ export default function owers ({ Fetch, URL }) {
         }
       })
     )
+
+  const vtree$ = data$
     .map(owers => {
-      let owerRows = owers
+      const owerRows = owers
         .map(ower => (
           <a key={ower.name} href={`/owers/${ower.name}`}>
             <dt>{ower.name}</dt>
@@ -40,14 +54,9 @@ export default function owers ({ Fetch, URL }) {
         </section>
       )
     })
-    .startWith(
-      <section>
-        <h1>Loading...</h1>
-      </section>
-    )
 
   return {
-    DOM: vtree$,
+    DOM: Rx.Observable.merge(loading$, vtree$),
     Fetch: fetchRequest$
   }
 }

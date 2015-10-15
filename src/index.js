@@ -2,20 +2,22 @@
 
 require('es6-promise').polyfill()
 import 'whatwg-fetch'
+import switchPath from 'switch-path'
 import { run, Rx } from '@cycle/core'
 import { makeDOMDriver, hJSX } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makeNavigationDriver } from 'cycle-navigation-driver'
 import { makePreventDefaultDriver } from './preventDefaultDriver'
-import switchPath from 'switch-path'
+import routes from './routes'
 import owers from './owers'
 import owees from './owees'
 
-function main (responses) {
-  const { DOM, Fetch, URL } = responses
+function main ({ DOM, Fetch, URL }) {
+  const Route = URL
+    .map(path => switchPath(path, routes).value)
 
-  const owersRequests = owers(responses)
-  const oweesRequests = owees(responses)
+  const owersRequests = owers({ Fetch, Route })
+  const oweesRequests = owees({ Fetch, Route })
 
   const fetchRequest$ = Rx.Observable.merge(
     owersRequests.Fetch,
@@ -29,14 +31,13 @@ function main (responses) {
     .map(e => e.currentTarget.pathname)
 
   const vtree$ = Rx.Observable.combineLatest(
-    URL, owersRequests.DOM, oweesRequests.DOM,
-    (path, owersPage, oweesPage) => {
-      const routes = {
-        '/': owersPage,
-        '/owers/:ower': oweesPage
+    Route, owersRequests.DOM, oweesRequests.DOM,
+    (route, owersPage, oweesPage) => {
+      const pages = {
+        'owers': owersPage,
+        'owees': oweesPage
       }
-      const { value } = switchPath(path, routes)
-      return value
+      return pages[route.name]
     }
   )
 

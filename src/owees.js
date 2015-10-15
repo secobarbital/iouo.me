@@ -1,21 +1,39 @@
 /** @jsx hJSX */
 
+import { Rx } from '@cycle/core'
 import { hJSX } from '@cycle/dom'
+import switchPath from 'switch-path'
+import routes from './routes'
 
-export default function owees ({ Fetch, URL }) {
-  const fetch$ = Fetch.byKey('owees').mergeAll()
-  const url$ = URL.filter(url => url === '/owers/secobarbital')
+export default function owees ({ Fetch, Route }) {
+  const page = 'owees'
+  const fetch$ = Fetch.byKey(page).switch()
+  const route$ = Route.filter(route => route.name === page)
 
-  const fetchRequest$ = url$.map(url => {
-    return {
-      key: 'owees',
-      url: '/secobarbital.json'
-    }
-  })
+  const fetchRequest$ = route$
+    .map(route => {
+      return {
+        key: route.name,
+        url: `/${route.params.ower}.json`
+      }
+    })
 
-  const vtree$ = fetch$
+  const loading$ = route$
+    .map(route => (
+      <section>
+        <h1>IOU: {route.params.ower}</h1>
+        <p>Loading...</p>
+      </section>
+    ))
+    .startWith(
+      <section>
+        <h1>IOU</h1>
+        <p>Loading...</p>
+      </section>
+    )
+
+  const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
-    .startWith({ rows: [] })
     .map(data => data.rows
       .sort((a, b) => a.value - b.value)
       .map(row => {
@@ -26,25 +44,26 @@ export default function owees ({ Fetch, URL }) {
         }
       })
     )
-    .map(owees => {
-      let oweeRows = owees
-        .map(owee => (
-          <a key={`${owee.ower}/${owee.name}`} href={`/transactions/${owee.ower}/${owee.name}`}>
-            <dt>{owee.name}</dt>
-            <dd>{owee.amount.toFixed(2)}</dd>
-            </a>
-        )
-      )
+
+  const vtree$ = data$
+    .withLatestFrom(route$, (owees, route) => {
+      const ower = route.params.ower
+      const oweeRows = owees.map(owee => (
+        <a key={`${owee.ower}/${owee.name}`} href={`/transactions/${owee.ower}/${owee.name}`}>
+          <dt>{owee.name}</dt>
+          <dd>{owee.amount.toFixed(2)}</dd>
+        </a>
+      ))
       return (
         <section>
-          <h1>IOU</h1>
+          <h1>IOU: {ower}</h1>
           <dl>{oweeRows}</dl>
         </section>
       )
     })
 
   return {
-    DOM: vtree$,
+    DOM: Rx.Observable.merge(loading$, vtree$),
     Fetch: fetchRequest$
   }
 }
