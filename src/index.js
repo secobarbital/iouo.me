@@ -10,6 +10,7 @@ import { makePreventDefaultDriver } from './preventDefaultDriver'
 import route from './route'
 import owers from './owers'
 import owees from './owees'
+import transactions from './transactions'
 import notFound from './notfound'
 
 function main ({ DOM, Fetch, URL }) {
@@ -17,11 +18,13 @@ function main ({ DOM, Fetch, URL }) {
 
   const owersRequests = owers({ Fetch, Route })
   const oweesRequests = owees({ Fetch, Route })
+  const transactionsRequests = transactions({ Fetch, Route })
   const notFoundRequests = notFound()
 
   const fetchRequest$ = Rx.Observable.merge(
     owersRequests.Fetch,
-    oweesRequests.Fetch
+    oweesRequests.Fetch,
+    transactionsRequests.Fetch
   )
 
   const localLinkClick$ = DOM.select('a').events('click')
@@ -31,11 +34,12 @@ function main ({ DOM, Fetch, URL }) {
     .map(e => e.currentTarget.pathname)
 
   const vtree$ = Rx.Observable.combineLatest(
-    Route, owersRequests.DOM, oweesRequests.DOM, notFoundRequests.DOM,
-    (route, owersPage, oweesPage, notFoundPage) => {
+    Route, owersRequests.DOM, oweesRequests.DOM, transactionsRequests.DOM, notFoundRequests.DOM,
+    (route, owersPage, oweesPage, transactionsPage, notFoundPage) => {
       const pages = {
         'owers': owersPage,
         'owees': oweesPage,
+        'transactions': transactionsPage,
         'notfound': notFoundPage
       }
       return pages[route.name]

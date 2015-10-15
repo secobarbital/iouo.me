@@ -8,7 +8,7 @@ export default function route (path$) {
   const router = wayfarer('/notfound')
   router.on('/', r('owers'))
   router.on('/owers/:ower', r('owees'))
-  router.on('/ledger/:ower/:owee', r('ledger'))
+  router.on('/transactions/:ower/:owee', r('transactions'))
   router.on('/notfound', r('notfound'))
 
   path$
