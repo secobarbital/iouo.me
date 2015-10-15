@@ -11,9 +11,9 @@
     "standard": "node_modules/.bin/standard --global fetch",
     "prebrowserify": "mkdir -p dist && npm run standard",
     "browserify": "browserify src/index.js -t babelify -o dist/iouome.js",
-    "prewatchify": "mkdir -p dist",
-    "watchify": "watchify src/index.js -t babelify -o dist/iouome.js -d -v --poll",
-    "start": "npm install && npm run watchify"
+    "prewatch": "mkdir -p dist",
+    "watch": "watchify src/index.js -t babelify -o dist/iouome.js -d -v --poll",
+    "start": "npm install && npm run watch"
   },
   "dependencies": {
     "@cycle/core": "^3.1.0",
