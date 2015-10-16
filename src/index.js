@@ -5,7 +5,7 @@ import 'whatwg-fetch'
 import { run, Rx } from '@cycle/core'
 import { makeDOMDriver } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
-import { makeNavigationDriver } from 'cycle-navigation-driver'
+import { makePushStateDriver } from 'cycle-navigation-driver'
 import { makePreventDefaultDriver } from './preventDefaultDriver'
 import route from './route'
 import owers from './owers'
@@ -13,8 +13,8 @@ import owees from './owees'
 import transactions from './transactions'
 import notFound from './notfound'
 
-function main ({ DOM, Fetch, URL }) {
-  const Route = route(URL)
+function main ({ DOM, Fetch, Path }) {
+  const Route = route(Path)
 
   const owersRequests = owers({ Fetch, Route })
   const oweesRequests = owees({ Fetch, Route })
@@ -49,7 +49,7 @@ function main ({ DOM, Fetch, URL }) {
   return {
     DOM: vtree$,
     Fetch: fetchRequest$,
-    URL: navigate$,
+    Path: navigate$,
     preventDefault: localLinkClick$
   }
 }
@@ -57,6 +57,6 @@ function main ({ DOM, Fetch, URL }) {
 run(main, {
   DOM: makeDOMDriver('main'),
   Fetch: makeFetchDriver(),
-  URL: makeNavigationDriver(),
+  Path: makePushStateDriver(),
   preventDefault: makePreventDefaultDriver()
 })
