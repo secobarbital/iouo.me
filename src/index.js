@@ -1,20 +1,27 @@
-/** @jsx hJSX */
-
 require('es6-promise').polyfill()
 import 'whatwg-fetch'
 import { run, Rx } from '@cycle/core'
 import { makeDOMDriver } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makePushStateDriver } from 'cycle-pushstate-driver'
+import { makeRouter } from 'cycle-route'
+
 import { makePreventDefaultDriver } from './preventDefaultDriver'
-import route from './route'
+import routes from './routes'
 import owers from './owers'
 import owees from './owees'
 import transactions from './transactions'
 import notFound from './notfound'
 
 function main ({ DOM, Fetch, Path }) {
-  const Route = route(Path)
+  const router = makeRouter(routes)
+  const Route = Path.map(router)
+
+  const localLinkClick$ = DOM.select('a').events('click')
+    .filter(e => e.currentTarget.host === global.location.host)
+
+  const navigate$ = localLinkClick$
+    .map(e => e.currentTarget.pathname)
 
   const owersRequests = owers({ Fetch, Route })
   const oweesRequests = owees({ Fetch, Route })
@@ -26,12 +33,6 @@ function main ({ DOM, Fetch, Path }) {
     oweesRequests.Fetch,
     transactionsRequests.Fetch
   )
-
-  const localLinkClick$ = DOM.select('a').events('click')
-    .filter(e => e.currentTarget.host === global.location.host)
-
-  const navigate$ = localLinkClick$
-    .map(e => e.currentTarget.pathname)
 
   const vtree$ = Rx.Observable.combineLatest(
     Route, owersRequests.DOM, oweesRequests.DOM, transactionsRequests.DOM, notFoundRequests.DOM,
