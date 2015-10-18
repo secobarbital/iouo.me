@@ -4,10 +4,10 @@ import { run, Rx } from '@cycle/core'
 import { makeDOMDriver } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makePushStateDriver } from 'cycle-pushstate-driver'
+import vtreeSwitcher from 'cycle-vtree-switcher'
 
 import { makePreventDefaultDriver } from './preventDefaultDriver'
 import routes from './routes'
-import router from './router'
 
 function main (responses) {
   const { DOM, Fetch, Path } = responses
@@ -18,7 +18,7 @@ function main (responses) {
   const navigate$ = localLinkClick$
     .map(e => e.currentTarget.pathname)
 
-  const [vtree$, requestMap] = router(routes, responses)
+  const [vtree$, requestMap] = vtreeSwitcher(routes, responses)
   const requests = Object.keys(requestMap).map(name => requestMap[name])
   const fetchRequest$s = requests
     .map(req => req.Fetch)
