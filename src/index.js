@@ -4,18 +4,13 @@ import { run, Rx } from '@cycle/core'
 import { makeDOMDriver } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makePushStateDriver } from 'cycle-pushstate-driver'
-import { makeRouter } from 'cycle-route'
 
 import { makePreventDefaultDriver } from './preventDefaultDriver'
 import routes from './routes'
-import owers from './owers'
-import owees from './owees'
-import transactions from './transactions'
-import notFound from './notfound'
+import router from './router'
 
-function main ({ DOM, Fetch, Path }) {
-  const router = makeRouter(routes)
-  const Route = Path.map(router)
+function main (responses) {
+  const { DOM, Fetch, Path } = responses
 
   const localLinkClick$ = DOM.select('a').events('click')
     .filter(e => e.currentTarget.host === global.location.host)
@@ -23,29 +18,13 @@ function main ({ DOM, Fetch, Path }) {
   const navigate$ = localLinkClick$
     .map(e => e.currentTarget.pathname)
 
-  const owersRequests = owers({ Fetch, Route })
-  const oweesRequests = owees({ Fetch, Route })
-  const transactionsRequests = transactions({ Fetch, Route })
-  const notFoundRequests = notFound()
+  const [vtree$, requestMap] = router(routes, responses)
+  const requests = Object.keys(requestMap).map(name => requestMap[name])
+  const fetchRequest$s = requests
+    .map(req => req.Fetch)
+    .filter(req => req)
 
-  const fetchRequest$ = Rx.Observable.merge(
-    owersRequests.Fetch,
-    oweesRequests.Fetch,
-    transactionsRequests.Fetch
-  )
-
-  const vtree$ = Rx.Observable.combineLatest(
-    Route, owersRequests.DOM, oweesRequests.DOM, transactionsRequests.DOM, notFoundRequests.DOM,
-    (route, owersPage, oweesPage, transactionsPage, notFoundPage) => {
-      const pages = {
-        'owers': owersPage,
-        'owees': oweesPage,
-        'transactions': transactionsPage,
-        'notfound': notFoundPage
-      }
-      return pages[route.name]
-    }
-  )
+  const fetchRequest$ = Rx.Observable.merge(...fetchRequest$s)
 
   return {
     DOM: vtree$,
