@@ -16,12 +16,13 @@
     "start": "npm install && npm run watch"
   },
   "dependencies": {
-    "@cycle/core": "^3.1.0",
-    "@cycle/dom": "^5.3.1",
+    "@cycle/core": "^4.0.0",
+    "@cycle/dom": "^6.0.0",
     "@cycle/fetch": "^1.0.0",
-    "cycle-pushstate-driver": "^1.0.2",
+    "cycle-pushstate-driver": "^2.0.0",
+    "cycle-vtree-switcher": "0.0.1",
     "es6-promise": "^3.0.2",
-    "whatwg-fetch": "^0.9.0"
+    "whatwg-fetch": "^0.10.0"
   },
   "engines": {
     "node": "4.1.x",
