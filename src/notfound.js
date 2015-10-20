@@ -1,6 +1,6 @@
 /** @jsx hJSX */
 
-import { Rx } from '@cycle/core'
+import Rx from 'rx'
 import { hJSX } from '@cycle/dom'
 
 export default function notfound () {

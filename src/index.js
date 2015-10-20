@@ -1,16 +1,16 @@
 require('es6-promise').polyfill()
 import 'whatwg-fetch'
-import { run, Rx } from '@cycle/core'
+import Rx from 'rx'
+import { run } from '@cycle/core'
 import { makeDOMDriver } from '@cycle/dom'
 import { makeFetchDriver } from '@cycle/fetch'
 import { makePushStateDriver } from 'cycle-pushstate-driver'
 import vtreeSwitcher from 'cycle-vtree-switcher'
 
-import { makePreventDefaultDriver } from './preventDefaultDriver'
 import routes from './routes'
 
 function main (responses) {
-  const { DOM, Fetch, Path } = responses
+  const { DOM } = responses
 
   const localLinkClick$ = DOM.select('a').events('click')
     .filter(e => e.currentTarget.host === global.location.host)
@@ -19,10 +19,10 @@ function main (responses) {
     .map(e => e.currentTarget.pathname)
 
   const [vtree$, requestMap] = vtreeSwitcher(routes, responses)
-  const requests = Object.keys(requestMap).map(name => requestMap[name])
-  const fetchRequest$s = requests
-    .map(req => req.Fetch)
-    .filter(req => req)
+  const requestss = Object.keys(requestMap).map(name => requestMap[name])
+  const fetchRequest$s = requestss
+    .map(requests => requests.Fetch)
+    .filter(request$ => request$)
 
   const fetchRequest$ = Rx.Observable.merge(...fetchRequest$s)
 
@@ -30,7 +30,7 @@ function main (responses) {
     DOM: vtree$,
     Fetch: fetchRequest$,
     Path: navigate$,
-    preventDefault: localLinkClick$
+    PreventDefault: localLinkClick$
   }
 }
 
@@ -38,5 +38,5 @@ run(main, {
   DOM: makeDOMDriver('main'),
   Fetch: makeFetchDriver(),
   Path: makePushStateDriver(),
-  preventDefault: makePreventDefaultDriver()
+  PreventDefault: prevented$ => prevented$.subscribe(e => e.preventDefault())
 })
