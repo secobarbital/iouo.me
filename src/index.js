@@ -35,7 +35,7 @@ function main (responses) {
 }
 
 run(main, {
-  DOM: makeDOMDriver('main'),
+  DOM: makeDOMDriver('article'),
   Fetch: makeFetchDriver(),
   Path: makePushStateDriver(),
   PreventDefault: prevented$ => prevented$.subscribe(e => e.preventDefault())
