@@ -9,10 +9,10 @@ export default function owers ({ Fetch, Route }) {
   const route$ = Route.filter(route => route.name === page)
 
   const fetchRequest$ = route$
-    .map(route => {
+    .map(({ name }) => {
       return {
-        key: route.name,
-        url: '/owers.json'
+        key: name,
+        url: 'https://cors.5apps.com/?uri=http://stage.iouo.me/api/owers'
       }
     })
 

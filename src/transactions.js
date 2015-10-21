@@ -9,10 +9,10 @@ export default function transactions ({ Fetch, Route }) {
   const route$ = Route.filter(route => route.name === page)
 
   const fetchRequest$ = route$
-    .map(route => {
+    .map(({ name, params: { ower, owee } }) => {
       return {
-        key: route.name,
-        url: `/${route.params.ower}-${route.params.owee}.json`
+        key: name,
+        url: `https://cors.5apps.com/?uri=http://stage.iouo.me/api/owers/${ower}/owees/${owee}/transactions`
       }
     })
 

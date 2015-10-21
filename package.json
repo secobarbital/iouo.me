@@ -8,7 +8,7 @@
   "private": true,
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "standard": "standard",
+    "standard": "standard src",
     "prebrowserify": "mkdir -p dist && npm run standard",
     "browserify": "browserify src/index.js -t babelify -g uglifyify -o dist/iouome.js",
     "prewatch": "mkdir -p dist",
