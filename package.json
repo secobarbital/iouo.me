@@ -16,8 +16,8 @@
     "start": "npm install && npm run watch"
   },
   "dependencies": {
-    "@cycle/core": "^5.0.0",
-    "@cycle/dom": "^7.0.0",
+    "@cycle/core": "^5.0.1",
+    "@cycle/dom": "^7.1.1",
     "@cycle/fetch": "^4.0.0",
     "cycle-pushstate-driver": "^3.0.0",
     "cycle-vtree-switcher": "^1.0.0",
