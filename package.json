@@ -9,9 +9,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "standard": "standard src",
-    "prebrowserify": "mkdir -p dist && npm run standard",
+    "prebrowserify": "npm run standard",
     "browserify": "browserify src/index.js -t babelify -g uglifyify -o dist/iouome.js",
-    "prewatch": "mkdir -p dist",
     "watch": "watchify src/index.js -t babelify -o dist/iouome.js -d -v --poll",
     "start": "npm install && npm run watch"
   },
