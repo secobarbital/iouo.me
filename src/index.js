@@ -10,33 +10,34 @@ import vtreeSwitcher from 'cycle-vtree-switcher'
 import routes from './routes'
 
 function main (responses) {
-  const { DOM } = responses
+  const { dom } = responses
 
-  const localLinkClick$ = DOM.select('a').events('click')
+  const localLinkClick$ = dom.select('a').events('click')
     .filter(e => e.currentTarget.host === global.location.host)
 
   const navigate$ = localLinkClick$
     .map(e => e.currentTarget.pathname)
 
   const [vtree$, requestMap] = vtreeSwitcher(routes, responses)
-  const requestss = Object.keys(requestMap).map(name => requestMap[name])
-  const fetchRequest$s = requestss
-    .map(requests => requests.Fetch)
+  const pageNames = Object.keys(requestMap)
+
+  const fetchRequest$s = pageNames
+    .map(name => requestMap[name].fetch)
     .filter(request$ => request$)
 
   const fetchRequest$ = Rx.Observable.merge(...fetchRequest$s)
 
   return {
-    DOM: vtree$,
-    Fetch: fetchRequest$,
-    Path: navigate$,
-    PreventDefault: localLinkClick$
+    dom: vtree$,
+    fetch: fetchRequest$,
+    path: navigate$,
+    preventDefault: localLinkClick$
   }
 }
 
 run(main, {
-  DOM: makeDOMDriver('article'),
-  Fetch: makeFetchDriver(),
-  Path: makePushStateDriver(),
-  PreventDefault: prevented$ => prevented$.subscribe(e => e.preventDefault())
+  dom: makeDOMDriver('article'),
+  fetch: makeFetchDriver(),
+  path: makePushStateDriver(),
+  preventDefault: prevented$ => prevented$.subscribe(e => e.preventDefault())
 })

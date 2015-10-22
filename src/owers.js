@@ -3,10 +3,10 @@
 import Rx from 'rx'
 import { hJSX } from '@cycle/dom'
 
-export default function owers ({ Fetch, Route }) {
+export default function owers (allRoute$, { fetch }) {
   const page = 'owers'
-  const fetch$ = Fetch.byKey(page).switch()
-  const route$ = Route.filter(route => route.name === page)
+  const fetch$ = fetch.byKey(page).switch()
+  const route$ = allRoute$.filter(route => route.name === page)
 
   const fetchRequest$ = route$
     .map(({ name }) => {
@@ -17,7 +17,6 @@ export default function owers ({ Fetch, Route }) {
     })
 
   const loading$ = route$
-    .startWith({})
     .map(route => (
       <section>
         <h1>IOU</h1>
@@ -56,7 +55,7 @@ export default function owers ({ Fetch, Route }) {
     })
 
   return {
-    DOM: Rx.Observable.merge(loading$, vtree$),
-    Fetch: fetchRequest$
+    dom: Rx.Observable.merge(loading$, vtree$),
+    fetch: fetchRequest$
   }
 }

@@ -3,10 +3,10 @@
 import Rx from 'rx'
 import { hJSX } from '@cycle/dom'
 
-export default function owees ({ Fetch, Route }) {
+export default function owees (allRoute$, { fetch }) {
   const page = 'owees'
-  const fetch$ = Fetch.byKey(page).switch()
-  const route$ = Route.filter(route => route.name === page)
+  const fetch$ = fetch.byKey(page).switch()
+  const route$ = allRoute$.filter(route => route.name === page)
 
   const fetchRequest$ = route$
     .map(({ name, params: { ower } }) => {
@@ -23,12 +23,6 @@ export default function owees ({ Fetch, Route }) {
         <p>Loading...</p>
       </section>
     ))
-    .startWith(
-      <section>
-        <h1>IOU</h1>
-        <p>Loading...</p>
-      </section>
-    )
 
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
@@ -61,7 +55,7 @@ export default function owees ({ Fetch, Route }) {
     })
 
   return {
-    DOM: Rx.Observable.merge(loading$, vtree$),
-    Fetch: fetchRequest$
+    dom: Rx.Observable.merge(loading$, vtree$),
+    fetch: fetchRequest$
   }
 }

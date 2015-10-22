@@ -1,14 +1,16 @@
 /** @jsx hJSX */
 
-import Rx from 'rx'
 import { hJSX } from '@cycle/dom'
 
-export default function notfound () {
-  return {
-    DOM: Rx.Observable.just(
+export default function notfound (route$) {
+  const vtree$ = route$
+    .map(route => (
       <section>
         <h1>Not Found</h1>
       </section>
-    )
+    ))
+
+  return {
+    dom: vtree$
   }
 }
