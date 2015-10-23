@@ -6,6 +6,6 @@ import notfound from './notfound'
 export default {
   '/': owers,
   '/owers/:ower': owees,
-  '/transactions/:ower/:owee': transactions,
+  '/owers/:ower/owees/:owee': transactions,
   '*': notfound
 }

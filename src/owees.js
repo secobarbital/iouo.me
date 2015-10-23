@@ -41,7 +41,7 @@ export default function owees (allRoute$, { fetch }) {
     .withLatestFrom(route$, (owees, route) => {
       const ower = route.params.ower
       const oweeRows = owees.map(owee => (
-        <a key={`${owee.ower}/${owee.name}`} href={`/transactions/${owee.ower}/${owee.name}`}>
+        <a key={`${owee.ower}/${owee.name}`} href={`/owers/${owee.ower}/owees/${owee.name}`}>
           <dt>{owee.name}</dt>
           <dd>{owee.amount.toFixed(2)}</dd>
         </a>
