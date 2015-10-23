@@ -18,6 +18,7 @@
     "@cycle/core": "^5.0.1",
     "@cycle/dom": "^7.1.1",
     "@cycle/fetch": "^4.0.0",
+    "classnames": "^2.2.0",
     "cycle-pushstate-driver": "^3.0.0",
     "cycle-vtree-switcher": "^2.0.0",
     "es6-promise": "^3.0.2",

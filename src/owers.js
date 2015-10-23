@@ -1,7 +1,14 @@
-/** @jsx hJSX */
-
 import Rx from 'rx'
-import { hJSX } from '@cycle/dom'
+import { h } from '@cycle/dom'
+
+import balanceRow from './balanceRow'
+import button from './button'
+import content from './content'
+import header from './header'
+import footer from './footer'
+import loading from './loading'
+import logoType from './logoType'
+import title from './title'
 
 export default function owers (allRoute$, { fetch }) {
   const page = 'owers'
@@ -16,14 +23,6 @@ export default function owers (allRoute$, { fetch }) {
       }
     })
 
-  const loading$ = route$
-    .map(route => (
-      <section>
-        <h1>IOU</h1>
-        <p>Loading...</p>
-      </section>
-    ))
-
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
     .map(data => data.rows
@@ -35,27 +34,41 @@ export default function owers (allRoute$, { fetch }) {
         }
       })
     )
+    .shareReplay(1)
+
+  const loading$ = Rx.Observable.merge(
+    route$.map(route => true),
+    data$.map(data => false)
+  )
 
   const vtree$ = data$
-    .map(owers => {
+    .withLatestFrom(loading$, (owers, loading) => {
       const owerRows = owers
-        .map(ower => (
-          <a key={ower.name} href={`/owers/${ower.name}`}>
-            <dt>{ower.name}</dt>
-            <dd>{ower.amount.toFixed(2)}</dd>
-          </a>
-        )
-      )
+        .map(({ name, amount }) => balanceRow({ key: name, ower: name, amount }))
+
       return (
-        <section>
-          <h1>IOU</h1>
-          <dl>{owerRows}</dl>
-        </section>
+        h('article', [
+          header(
+            title(
+              logoType({ spin: loading })
+            )
+          ),
+          footer(
+            button({ primary: true, block: true, href: '/owe' }, 'Owe Someone')
+          ),
+          content([
+            h('p.content-padded', 'Why pay when you can owe?'),
+            h('.card', [
+              h('ul.table-view', owerRows)
+            ])
+          ])
+        ])
       )
     })
+    .startWith(loading())
 
   return {
-    dom: Rx.Observable.merge(loading$, vtree$),
+    dom: vtree$,
     fetch: fetchRequest$
   }
 }
