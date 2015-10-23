@@ -26,7 +26,7 @@ export default function owers (allRoute$, { fetch }) {
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
     .map(data => data.rows
-      .sort((a, b) => a.value - b.value)
+      .sort((a, b) => b.value - a.value)
       .map(row => {
         return {
           name: row.key[0],
