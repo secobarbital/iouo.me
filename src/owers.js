@@ -41,8 +41,8 @@ export default function owers (allRoute$, { fetch }) {
     data$.map(data => false)
   )
 
-  const vtree$ = data$
-    .withLatestFrom(loading$, (owers, loading) => {
+  const vtree$ = Rx.Observable.combineLatest(data$, route$)
+    .withLatestFrom(loading$, ([ owers, route ], loading) => {
       const owerRows = owers
         .map(({ name, amount }) => balanceRow({ key: name, ower: name, amount }))
 
