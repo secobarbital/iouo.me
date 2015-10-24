@@ -1,7 +1,5 @@
-/** @jsx hJSX */
-
 import Rx from 'rx'
-import { h, hJSX } from '@cycle/dom'
+import { h } from '@cycle/dom'
 
 import backButton from './backButton'
 import balanceRow from './balanceRow'
@@ -49,7 +47,7 @@ export default function owees (allRoute$, { fetch }) {
     .withLatestFrom(loading$, ([ owees, route ], loading) => {
       const ower = route.params.ower
       const oweeRows = owees
-        .filter(owee => owee.ower === ower && owee.name !== ower)
+        .filter(owee => owee.ower === ower && owee.name !== ower && owee.amount)
         .map(({ ower, name, amount }) => (
           balanceRow({ key: name, ower, owee: name, amount })
         ))
