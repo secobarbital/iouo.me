@@ -105,9 +105,7 @@ export default function transactions (allRoute$, { fetch }) {
             h('p.content-padded', { style: styles.subtitle }, [
               ` owes @${object} $${Math.abs(total).toFixed(2)}`
             ]),
-            h('.card', [
-              h('ul.table-view', txnRows)
-            ])
+            h('ul.table-view', txnRows)
           ])
         ])
       )
