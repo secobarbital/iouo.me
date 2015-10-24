@@ -23,6 +23,7 @@
     "cycle-pushstate-driver": "^3.0.0",
     "cycle-vtree-switcher": "^2.0.0",
     "es6-promise": "^3.0.2",
+    "human-readable-time": "^0.2.3",
     "rx": "^4.0.6",
     "whatwg-fetch": "^0.10.0"
   },

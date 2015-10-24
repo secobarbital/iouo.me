@@ -1,7 +1,43 @@
-/** @jsx hJSX */
-
+import cx from 'classnames'
+import hrt from 'human-readable-time'
 import Rx from 'rx'
-import { hJSX } from '@cycle/dom'
+import { h } from '@cycle/dom'
+
+import backButton from './backButton'
+import balanceRow from './balanceRow'
+import button from './button'
+import content from './content'
+import header from './header'
+import footer from './footer'
+import loading from './loading'
+import logoType from './logoType'
+import title from './title'
+
+function transactionRow (txn) {
+  const { tweetId, createdAt, userId, userName, ower, owee, amount, text } = txn
+  const left = amount > 0
+  const link = `http://twitter.com/${userName}/status/${tweetId}`
+  const avatar = `http://res.cloudinary.com/hkbr2rtli/image/twitter/w_42,h_42,c_fill/${userId}.jpg`
+  const pullClass = cx({ 'pull-left': left, 'pull-right': !left })
+  const dirStyle = left ? styles.left : styles.right
+  const cellStyle = { ...dirStyle, ...styles.cell }
+
+  return (
+    h('li.table-view-cell.media', { key: tweetId, style: cellStyle }, [
+      h('a', { href: link, style: styles.link }, [
+        h('img.media-object', { src: avatar, className: pullClass, style: styles.avatar }),
+        h('div.media-body', [
+          h('p', [
+            userName,
+            ' ', String.fromCharCode(0xb7), ' ',
+            hrt(new Date(createdAt), '%relative% ago')
+          ]),
+          text
+        ])
+      ])
+    ])
+  )
+}
 
 export default function transactions (allRoute$, { fetch }) {
   const page = 'transactions'
@@ -16,49 +52,100 @@ export default function transactions (allRoute$, { fetch }) {
       }
     })
 
-  const loading$ = route$
-    .map(route => (
-      <section>
-        <h1>IOU: {route.params.ower} {route.params.owee}</h1>
-        <p>Loading...</p>
-      </section>
-    ))
-
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
-    .map(data => data.rows
-      .map(row => {
-        const tweet = row.doc.raw
-        return {
-          id: tweet.id_str,
-          created_at: tweet.created_at,
-          name: row.doc.raw.user.screen_name,
-          text: row.doc.raw.text
-        }
-      })
-      .sort((a, b) => a.created_at - b.created_at)
+    .map(({ rows }) => {
+      return {
+        total: rows.reduce((m, row) => m + row.value, 0),
+        txns: rows
+          .map(row => {
+            const tweet = row.doc.raw
+            return {
+              tweetId: tweet.id_str,
+              createdAt: new Date(tweet.created_at),
+              userId: tweet.user.id_str,
+              userName: tweet.user.screen_name,
+              ower: row.key[0],
+              owee: row.key[1],
+              amount: row.value,
+              text: tweet.text
+            }
+          })
+          .sort((a, b) => b.createdAt - a.createdAt)
+      }
+    }
     )
+    .shareReplay(1)
 
-  const vtree$ = data$
-    .withLatestFrom(route$, (transactions, route) => {
-      const ower = route.params.ower
-      const owee = route.params.owee
-      const transactionRows = transactions.map(txn => (
-        <a key={txn.id} href={`http://twitter.com/${txn.name}/status/${txn.id}`}>
-          <dt>{txn.name} {txn.created_at}</dt>
-          <dd>{txn.text}</dd>
-        </a>
-      ))
+  const loading$ = Rx.Observable.merge(
+    route$.map(route => true),
+    data$.map(data => false)
+  )
+
+  const vtree$ = Rx.Observable.combineLatest(data$, route$)
+    .withLatestFrom(loading$, ([ data, route ], loading) => {
+      const { ower, owee } = route.params
+      const { total, txns } = data
+      const [ subject, object ] = total > 0 ? [ ower, owee ] : [ owee, ower ]
+      const txnRows = txns
+        .filter(txn => txn.ower === ower && txn.owee === owee)
+        .map(transactionRow)
+
       return (
-        <section>
-          <h1>IOU: {ower} {owee}</h1>
-          <dl>{transactionRows}</dl>
-        </section>
+        h('article', [
+          header([
+            backButton({ href: `/owers/${ower}` }),
+            logoType({ spin: loading, style: styles.logo }),
+            title(`@${subject}`)
+          ]),
+          footer(
+            button({ primary: true, block: true, href: `/owe/${owee}` }, `Owe @${owee}`)
+          ),
+          content([
+            h('p.content-padded', { style: styles.subtitle }, [
+              ` owes @${object} $${Math.abs(total).toFixed(2)}`
+            ]),
+            h('.card', [
+              h('ul.table-view', txnRows)
+            ])
+          ])
+        ])
       )
     })
+    .startWith(loading())
 
   return {
-    dom: Rx.Observable.merge(loading$, vtree$),
+    dom: vtree$,
     fetch: fetchRequest$
+  }
+}
+
+const styles = {
+  left: {
+  },
+  right: {
+    'text-align': 'right'
+  },
+  cell: {
+    'padding-right': '15px'
+  },
+  link: {
+    'margin-right': '-15px'
+  },
+  subtitle: {
+    'text-align': 'center'
+  },
+  avatar: {
+    'width': '42px',
+    'height': '42px'
+  },
+  quote: {
+    'border': 'none'
+  },
+  logo: {
+    'float': 'right',
+    'line-height': '44px',
+    'z-index': 20,
+    'position': 'relative'
   }
 }
