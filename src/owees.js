@@ -26,7 +26,7 @@ export default function owees (allRoute$, { fetch }) {
 
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
-    .map(data => data.rows
+    .map(({ rows }) => rows
       .sort((a, b) => a.value - b.value)
       .map(row => {
         return {
@@ -36,15 +36,23 @@ export default function owees (allRoute$, { fetch }) {
         }
       })
     )
+    .map(owees => {
+      return {
+        total: owees.reduce((m, owee) => m + owee.amount, 0),
+        owees
+      }
+    })
+    .startWith({ total: 0, owees: [] })
     .shareReplay(1)
 
   const loading$ = Rx.Observable.merge(
     route$.map(route => true),
     data$.map(data => false)
   )
+  .startWith(true)
 
   const vtree$ = Rx.Observable.combineLatest(data$, route$)
-    .withLatestFrom(loading$, ([ owees, route ], loading) => {
+    .withLatestFrom(loading$, ([ { total, owees }, route ], loading) => {
       const ower = route.params.ower
       const oweeRows = owees
         .filter(owee => owee.ower === ower && owee.name !== ower && owee.amount)
@@ -63,10 +71,14 @@ export default function owees (allRoute$, { fetch }) {
             button({ primary: true, block: true, href: `/owe/${ower}` }, `Owe @${ower}`)
           ),
           content([
-            h('p.content-padded', 'Why pay when you can owe?'),
-            h('.card', [
+            h('p.content-padded', { style: styles.subtitle }, loading ? '...' : [
+              total < 0 ? 'is owed' : 'owes',
+              ' ',
+              total ? `$${Math.abs(total).toFixed(2)}` : 'nothing'
+            ]),
+            owees.length ? h('.card', [
               h('ul.table-view', oweeRows)
-            ])
+            ]) : ''
           ])
         ])
       )

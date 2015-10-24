@@ -54,33 +54,39 @@ export default function transactions (allRoute$, { fetch }) {
 
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
-    .map(({ rows }) => {
-      return {
-        total: rows.reduce((m, row) => m + row.value, 0),
-        txns: rows
-          .map(row => {
-            const tweet = row.doc.raw
-            return {
-              tweetId: tweet.id_str,
-              createdAt: new Date(tweet.created_at),
-              userId: tweet.user.id_str,
-              userName: tweet.user.screen_name,
-              ower: row.key[0],
-              owee: row.key[1],
-              amount: row.value,
-              text: tweet.text
-            }
-          })
-          .sort((a, b) => b.createdAt - a.createdAt)
-      }
-    }
+    .map(({ rows }) => rows
+      .map(row => {
+        const tweet = row.doc.raw
+        return {
+          tweetId: tweet.id_str,
+          createdAt: new Date(tweet.created_at),
+          userId: tweet.user.id_str,
+          userName: tweet.user.screen_name,
+          ower: row.key[0],
+          owee: row.key[1],
+          amount: row.value,
+          text: tweet.text
+        }
+      })
+      .sort((a, b) => b.createdAt - a.createdAt)
     )
+    .map(txns => {
+      return {
+        total: txns.reduce((m, txn) => m + txn.amount, 0),
+        txns: txns
+      }
+    })
+    .startWith({
+      total: 0,
+      txns: []
+    })
     .shareReplay(1)
 
   const loading$ = Rx.Observable.merge(
     route$.map(route => true),
     data$.map(data => false)
   )
+  .startWith(true)
 
   const vtree$ = Rx.Observable.combineLatest(data$, route$)
     .withLatestFrom(loading$, ([ data, route ], loading) => {
@@ -102,10 +108,12 @@ export default function transactions (allRoute$, { fetch }) {
             button({ primary: true, block: true, href: `/owe/${owee}` }, `Owe @${owee}`)
           ),
           content([
-            h('p.content-padded', { style: styles.subtitle }, [
-              ` owes @${object} $${Math.abs(total).toFixed(2)}`
+            h('p.content-padded', { style: styles.subtitle }, loading ? `@${object}` : [
+              total ?
+                `owes @${object} $${Math.abs(total).toFixed(2)}` :
+                `is even with @${object}`
             ]),
-            h('ul.table-view', txnRows)
+            txns.length ? h('ul.table-view', txnRows) : ''
           ])
         ])
       )

@@ -34,12 +34,14 @@ export default function owers (allRoute$, { fetch }) {
         }
       })
     )
+    .startWith([])
     .shareReplay(1)
 
   const loading$ = Rx.Observable.merge(
     route$.map(route => true),
     data$.map(data => false)
   )
+  .startWith(true)
 
   const vtree$ = Rx.Observable.combineLatest(data$, route$)
     .withLatestFrom(loading$, ([ owers, route ], loading) => {
@@ -58,9 +60,9 @@ export default function owers (allRoute$, { fetch }) {
           ),
           content([
             h('p.content-padded', 'Why pay when you can owe?'),
-            h('.card', [
+            owers.length ? h('.card', [
               h('ul.table-view', owerRows)
-            ])
+            ]) : ''
           ])
         ])
       )
