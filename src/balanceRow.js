@@ -13,11 +13,11 @@ function getDisplayAmount (amount) {
 
 function crossBalanceRow({ key, ower, owee, amount }) {
   const preVerb = amount > 0 ? 'owes' : ''
-  const postVerb = amount < 0 ? 'owes' : amount ? 'is even' : ''
+  const postVerb = amount < 0 ? 'owes' : amount ? '' : 'is even'
 
   return (
     h('li.table-view-cell', { style: styles.cell }, [
-      h('a', { href: `/owers/${ower}/owees/${owee}`, style: styles.link}, [
+      h('a', { href: `/owers/${ower}/owees/${owee}`, style: styles.link }, [
         preVerb,
         preVerb && ' ',
         '@',
