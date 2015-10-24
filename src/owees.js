@@ -1,7 +1,17 @@
 /** @jsx hJSX */
 
 import Rx from 'rx'
-import { hJSX } from '@cycle/dom'
+import { h, hJSX } from '@cycle/dom'
+
+import backButton from './backButton'
+import balanceRow from './balanceRow'
+import button from './button'
+import content from './content'
+import header from './header'
+import footer from './footer'
+import loading from './loading'
+import logoType from './logoType'
+import title from './title'
 
 export default function owees (allRoute$, { fetch }) {
   const page = 'owees'
@@ -16,14 +26,6 @@ export default function owees (allRoute$, { fetch }) {
       }
     })
 
-  const loading$ = route$
-    .map(route => (
-      <section>
-        <h1>IOU: {route.params.ower}</h1>
-        <p>Loading...</p>
-      </section>
-    ))
-
   const data$ = fetch$
     .flatMap(res => res.ok ? res.json() : Promise.resolve({ rows: [] }))
     .map(data => data.rows
@@ -36,26 +38,57 @@ export default function owees (allRoute$, { fetch }) {
         }
       })
     )
+    .shareReplay(1)
 
-  const vtree$ = data$
-    .withLatestFrom(route$, (owees, route) => {
+  const loading$ = Rx.Observable.merge(
+    route$.map(route => true),
+    data$.map(data => false)
+  )
+
+  const vtree$ = Rx.Observable.combineLatest(data$, route$)
+    .withLatestFrom(loading$, ([ owees, route ], loading) => {
       const ower = route.params.ower
-      const oweeRows = owees.map(owee => (
-        <a key={`${owee.ower}/${owee.name}`} href={`/owers/${owee.ower}/owees/${owee.name}`}>
-          <dt>{owee.name}</dt>
-          <dd>{owee.amount.toFixed(2)}</dd>
-        </a>
-      ))
+      const oweeRows = owees
+        .filter(owee => owee.ower === ower && owee.name !== ower)
+        .map(({ ower, name, amount }) => (
+          balanceRow({ key: name, ower, owee: name, amount })
+        ))
+
       return (
-        <section>
-          <h1>IOU: {ower}</h1>
-          <dl>{oweeRows}</dl>
-        </section>
+        h('article', [
+          header([
+            backButton({ href: '/' }),
+            logoType({ spin: loading, style: styles.logo }),
+            title(`@${ower}`)
+          ]),
+          footer(
+            button({ primary: true, block: true, href: `/owe/${ower}` }, `Owe @${ower}`)
+          ),
+          content([
+            h('p.content-padded', 'Why pay when you can owe?'),
+            h('.card', [
+              h('ul.table-view', oweeRows)
+            ])
+          ])
+        ])
       )
     })
+    .startWith(loading())
 
   return {
-    dom: Rx.Observable.merge(loading$, vtree$),
+    dom: vtree$,
     fetch: fetchRequest$
+  }
+}
+
+const styles = {
+  subtitle: {
+    'text-align': 'center'
+  },
+  logo: {
+    'float': 'right',
+    'line-height': '44px',
+    'z-index': 20,
+    'position': 'relative'
   }
 }

@@ -11,6 +11,25 @@ function getDisplayAmount (amount) {
   )
 }
 
+function crossBalanceRow({ key, ower, owee, amount }) {
+  const preVerb = amount > 0 ? 'owes' : ''
+  const postVerb = amount < 0 ? 'owes' : amount ? 'is even' : ''
+
+  return (
+    h('li.table-view-cell', { style: styles.cell }, [
+      h('a', { href: `/owers/${ower}/owees/${owee}`, style: styles.link}, [
+        preVerb,
+        preVerb && ' ',
+        '@',
+        h('span', { style: styles.subject }, owee),
+        postVerb && ' ',
+        postVerb,
+        getDisplayAmount(amount)
+      ])
+    ])
+  )
+}
+
 export default function balanceRow ({ key, ower, owee, amount }) {
   if (owee) return crossBalanceRow(...arguments)
 

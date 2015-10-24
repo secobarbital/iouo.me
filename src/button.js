@@ -12,7 +12,7 @@ export default function button (props, children) {
     href
   } = props
   const tag = href ? 'a' : 'button'
-  const classNames = cx({
+  const className = cx({
     'btn': true,
     'btn-primary': primary,
     'btn-positive': positive,
@@ -22,5 +22,5 @@ export default function button (props, children) {
     'btn-outlined': outlined
   })
 
-  return h(tag, { classNames, href }, children)
+  return h(tag, { className, href }, children)
 }
