@@ -1,0 +1,25 @@
+{
+  "name": "iouo.me",
+  "version": "2.0.0",
+  "description": "Why pay when you can owe?",
+  "main": "index.js",
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/secobarbital/iouo.me.git"
+  },
+  "author": "Seggy Umboh <seg@seg.gy>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/secobarbital/iouo.me/issues"
+  },
+  "homepage": "https://github.com/secobarbital/iouo.me#readme",
+  "dependencies": {
+    "next": "^1.2.3"
+  }
+}
