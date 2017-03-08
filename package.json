@@ -22,6 +22,7 @@
   "dependencies": {
     "accounting": "^0.4.1",
     "isomorphic-fetch": "^2.2.1",
-    "next": "^1.2.3"
+    "next": "^1.2.3",
+    "react-bootstrap": "^0.30.8"
   }
 }

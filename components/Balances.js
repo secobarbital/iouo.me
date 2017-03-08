@@ -1,15 +1,17 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import { ListGroup } from 'react-bootstrap'
 
 import Balance from './Balance'
+import Layout from './Layout'
 
 export default ({ balances }) => (
   <Layout>
     <section>
-      <div className="list-group">
+      <ListGroup>
         {balances && balances.map((balance) => <Balance key={balance.key[0]} balance={balance} />)}
-      </div>
+      </ListGroup>
     </section>
   </Layout>
 )
