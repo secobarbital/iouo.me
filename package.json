@@ -20,6 +20,8 @@
   },
   "homepage": "https://github.com/secobarbital/iouo.me#readme",
   "dependencies": {
+    "accounting": "^0.4.1",
+    "isomorphic-fetch": "^2.2.1",
     "next": "^1.2.3"
   }
 }
