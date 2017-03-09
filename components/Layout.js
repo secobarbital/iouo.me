@@ -1,6 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
+import { Button, Navbar } from 'react-bootstrap'
 
 export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => (
   <div>
@@ -14,17 +15,17 @@ export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => 
       <link rel="stylesheet" href="/static/iouo.min.css" />
     </Head>
     <nav className="navbar" role="navigation">
-      <div className="navbar-header">
+      <Navbar.Header>
         <Link href="/">
           <a className="navbar-brand">
             <span className="logotype">IOU</span>
           </a>
         </Link>
-      </div>
+      </Navbar.Header>
     </nav>
     {children}
     <footer>
-      <Link href="/owe"><a className="btn btn-primary btn-block">Owe someone</a></Link>
+      <Link href="/owe"><Button bsStyle="primary" block>Owe someone</Button></Link>
     </footer>
   </div>
 )
