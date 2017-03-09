@@ -21,8 +21,8 @@
   "homepage": "https://github.com/secobarbital/iouo.me#readme",
   "dependencies": {
     "accounting": "^0.4.1",
-    "btoa": "^1.1.2",
     "fetch-ponyfill": "^4.0.0",
+    "isomorphic-base64": "^1.0.2",
     "next": "^1.2.3",
     "react-bootstrap": "^0.30.8",
     "url-parse": "^1.1.8"

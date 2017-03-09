@@ -1,6 +1,6 @@
-import btoa from 'btoa'
-import parse, { qs } from 'url-parse'
 import fetchPonyfill from 'fetch-ponyfill'
+import parse, { qs } from 'url-parse'
+import { btoa } from 'isomorphic-base64'
 
 const { fetch, Headers } = fetchPonyfill()
 
