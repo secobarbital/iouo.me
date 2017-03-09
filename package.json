@@ -21,8 +21,13 @@
   "homepage": "https://github.com/secobarbital/iouo.me#readme",
   "dependencies": {
     "accounting": "^0.4.1",
-    "isomorphic-fetch": "^2.2.1",
+    "btoa": "^1.1.2",
+    "fetch-ponyfill": "^4.0.0",
     "next": "^1.2.3",
-    "react-bootstrap": "^0.30.8"
+    "react-bootstrap": "^0.30.8",
+    "url-parse": "^1.1.8"
+  },
+  "devDependencies": {
+    "babel-plugin-transform-define": "^1.2.0"
   }
 }

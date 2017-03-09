@@ -1,13 +1,11 @@
 import React from 'react'
-import 'isomorphic-fetch'
 
+import db from '../config/db'
 import Balances from '../components/Balances'
 
 export default class extends React.Component {
   static async getInitialProps () {
-    const res = await fetch('/_design/iouome/_view/balances?group_level=1')
-    const json = await res.json()
-    const { rows } = json
+    const { rows } = await db.view('iouome', 'balances', { group_level: 1 })
     return { balances: rows }
   }
   render () {
