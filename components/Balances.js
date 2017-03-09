@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { ListGroup } from 'react-bootstrap'
+import ListGroup from 'react-bootstrap/lib/ListGroup'
 
 import Balance from './Balance'
 import Layout from './Layout'

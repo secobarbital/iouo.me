@@ -1,7 +1,8 @@
 import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
-import { Button, Navbar } from 'react-bootstrap'
+import Button from 'react-bootstrap/lib/Button'
+import Navbar from 'react-bootstrap/lib/Navbar'
 
 export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => (
   <div>
