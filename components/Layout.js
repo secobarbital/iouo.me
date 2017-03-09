@@ -11,12 +11,13 @@ export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => 
       <link rel="apple-touch-icon-precomposed" href="/static/apple-touch-icon-precomposed.png" />
       <link rel="shortcut icon" href="/static/apple-touch-icon.png" />
       <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" />
+      <link rel="stylesheet" href="/static/iouo.min.css" />
     </Head>
     <nav className="navbar" role="navigation">
       <div className="navbar-header">
-        <Link className="navbar-brand" href="/">
+        <a className="navbar-brand" href="/">
           <span className="logotype">IOU</span>
-        </Link>
+        </a>
       </div>
     </nav>
     {children}
