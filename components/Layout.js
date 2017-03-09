@@ -15,14 +15,16 @@ export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => 
     </Head>
     <nav className="navbar" role="navigation">
       <div className="navbar-header">
-        <a className="navbar-brand" href="/">
-          <span className="logotype">IOU</span>
-        </a>
+        <Link href="/">
+          <a className="navbar-brand">
+            <span className="logotype">IOU</span>
+          </a>
+        </Link>
       </div>
     </nav>
     {children}
     <footer>
-      <Link className="btn btn-primary btn-block" href="/owe">Owe someone</Link>
+      <Link href="/owe"><a className="btn btn-primary btn-block">Owe someone</a></Link>
     </footer>
   </div>
 )
