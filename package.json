@@ -2,7 +2,6 @@
   "name": "iouo.me",
   "version": "2.0.0",
   "description": "Why pay when you can owe?",
-  "main": "index.js",
   "scripts": {
     "dev": "next",
     "build": "next build",
