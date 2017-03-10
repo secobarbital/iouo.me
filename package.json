@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "description": "Why pay when you can owe?",
   "scripts": {
-    "dev": "next",
+    "dev": "node server.js",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -23,7 +23,9 @@
     "babel-plugin-transform-define": "^1.2.0",
     "fetch-ponyfill": "^4.0.0",
     "isomorphic-base64": "^1.0.2",
-    "next": "^1.2.3",
+    "next": "^2.0.0-beta.36",
+    "react": "^15.4.2",
+    "react-dom": "^15.4.2",
     "url-parse": "^1.1.8"
   }
 }
