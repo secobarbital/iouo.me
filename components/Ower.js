@@ -7,7 +7,7 @@ export default ({ balance }) => {
   const [ower] = balance.key
   const amount = balance.value.toFixed(2)
   const verb = amount > 0 ? 'owes' : 'is owed'
-  const link = `/balances/${ower}`
+  const link = `/${ower}`
   return (
     <Link href={link}>
       <a className="list-group-item"  href={link}>

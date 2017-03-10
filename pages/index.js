@@ -1,7 +1,7 @@
 import React from 'react'
 
 import db from '../config/db'
-import Balances from '../components/Balances'
+import Owers from '../components/Owers'
 
 export default class extends React.Component {
   static async getInitialProps () {
@@ -11,6 +11,6 @@ export default class extends React.Component {
   }
   render () {
     const { balances } = this.props
-    return <Balances balances={balances} />
+    return <Owers balances={balances} />
   }
 }
