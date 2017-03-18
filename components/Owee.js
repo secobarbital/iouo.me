@@ -7,7 +7,7 @@ export default ({ row }) => {
   const [ower, owee] = row.key
   const amount = row.value.toFixed(2)
   const verb = amount > 0 ? 'owes' : 'is owed'
-  const href = `/transactions?ower={ower}&owee={owee}`
+  const href = `/transactions?ower=${ower}&owee=${owee}`
   const route =  `/transactions/${ower}/${owee}`
   if (amount > 0) {
     return (
