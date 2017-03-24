@@ -23,7 +23,7 @@
     "babel-plugin-transform-define": "^1.2.0",
     "fetch-ponyfill": "^4.0.0",
     "isomorphic-base64": "^1.0.2",
-    "next": "^2.0.0-beta.36",
+    "next": "^2.0.0-beta.39",
     "react": "^15.4.2",
     "react-dom": "^15.4.2",
     "url-parse": "^1.1.8"
