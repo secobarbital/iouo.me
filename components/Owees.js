@@ -6,6 +6,11 @@ import Amount from './Amount'
 import Layout from './Layout'
 import Owee from './Owee'
 
+function oweUrl (owee) {
+  const text = encodeURIComponent(`@${owee} #iou $`)
+  return `https://twitter.com/intent/tweet?text=${text}`
+}
+
 export default ({ rows, ower, total }) => (
   <Layout>
     <section className="balances">
@@ -22,5 +27,8 @@ export default ({ rows, ower, total }) => (
         </div>
       </div>
     </section>
+    <footer>
+      <a className="btn btn-primary btn-block" href={oweUrl(ower)}>Owe @{ower}</a>
+    </footer>
   </Layout>
 )

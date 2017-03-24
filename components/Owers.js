@@ -12,5 +12,8 @@ export default ({ rows }) => (
         {rows && rows.map((row) => <Ower key={row.key[0]} row={row} />)}
       </div>
     </section>
+    <footer>
+      <Link href="/owe"><a className="btn btn-primary btn-block">Owe someone</a></Link>
+    </footer>
   </Layout>
 )

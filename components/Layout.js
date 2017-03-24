@@ -23,8 +23,5 @@ export default ({ children, title = 'iouo.me - why pay when you can owe?' }) => 
       </div>
     </nav>
     {children}
-    <footer>
-      <Link href="/owe"><a className="btn btn-primary btn-block">Owe someone</a></Link>
-    </footer>
   </div>
 )
