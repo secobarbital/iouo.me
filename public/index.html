@@ -58,7 +58,10 @@
             }.bind(this))
         },
         _refresh: function(rows) {
-          this.$components = rows.map(function(item) {
+          this._items = rows
+        },
+        $update: function(rows) {
+          this.$components = this._items.map(function(item) {
             var name = item.key[0]
             var value = item.value
             return {
