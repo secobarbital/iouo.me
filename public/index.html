@@ -11,7 +11,11 @@
         id: "owers",
         class: "list pl0 mt0 measure center",
         _items: [],
-        $components: [],
+        $components: [
+          {
+            $text: "Loading..."
+          }
+        ],
         _avatar: function(name) {
           return {
             $type: "img",
@@ -44,16 +48,17 @@
           }
         },
         $init: function() {
-          fetch("/iouome/_design/iouome/_view/balances?reduce=true&group_level=1")
+          fetch("http://localhost:5984/iouome/_design/iouome/_view/balances?reduce=true&group_level=1")
             .then(function(res) { return res.json() })
             .then(function(json) {
-              this._items = json.rows.sort(
+              var rows = json.rows.sort(
                 function(a, b) { return b.value - a.value }
               )
+              this._refresh(rows)
             }.bind(this))
         },
-        $update: function() {
-          this.$components = this._items.map(function(item) {
+        _refresh: function(rows) {
+          this.$components = rows.map(function(item) {
             var name = item.key[0]
             var value = item.value
             return {
