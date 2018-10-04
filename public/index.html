@@ -1,0 +1,92 @@
+<html lang="en">
+  <head>
+    <title>I Owe You - You Owe Me</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tachyons/4.11.1/tachyons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cell/1.2.0/cell.min.js"></script>
+    <script>
+      var el = {
+        $cell: true,
+        $type: "ul",
+        id: "owers",
+        class: "list pl0 mt0 measure center",
+        _items: [],
+        $components: [],
+        _avatar: function(name) {
+          return {
+            $type: "img",
+            class: "w2 h2 w3-ns h3-ns br-100",
+            src: "https://twitter.com/" + name + "/profile_image?size=bigger",
+          }
+        },
+        _lhs: function(name) {
+          return {
+            class: "pl3 flex-auto",
+            $components: [
+              {
+                $type: "span",
+                class: "f6 db black-70",
+                $text: name
+              }
+            ]
+          }
+        },
+        _rhs: function(value) {
+          var verb = value > 0 ? "owes" : "is owed"
+          var amount = Math.abs(value).toFixed(2)
+          return {
+            $components: [
+              {
+                class: "f6 link blue hover-dark-gray",
+                $text: verb + " $" + amount
+              }
+            ]
+          }
+        },
+        $init: function() {
+          fetch("/iouome/_design/iouome/_view/balances?reduce=true&group_level=1")
+            .then(function(res) { return res.json() })
+            .then(function(json) {
+              this._items = json.rows.sort(
+                function(a, b) { return b.value - a.value }
+              )
+            }.bind(this))
+        },
+        $update: function() {
+          this.$components = this._items.map(function(item) {
+            var name = item.key[0]
+            var value = item.value
+            return {
+              $type: "li",
+              class: "flex items-center lh-copy pa3 ph0-l bb b--black-10",
+              $components: [
+                this._avatar(name),
+                this._lhs(name),
+                this._rhs(value)
+              ]
+            }
+          }.bind(this))
+        }
+      }
+    </script>
+  </head>
+  <body>
+    <header class="bg-white black-80 tc pv4 avenir">
+      <a href="" class="bg-black-80 ba b--black dib pa3 w2 h2 br-100">
+        <svg class="white" data-icon="skull" viewBox="0 0 32 32" style="fill:currentcolor"><title>skull icon</title><path d="M16 0 C6 0 2 4 2 14 L2 22 L6 24 L6 30 L26 30 L26 24 L30 22 L30 14 C30 4 26 0 16 0 M9 12 A4.5 4.5 0 0 1 9 21 A4.5 4.5 0 0 1 9 12 M23 12 A4.5 4.5 0 0 1 23 21 A4.5 4.5 0 0 1 23 12"></path></svg>
+      </a>
+      <h1 class="mt2 mb0 baskerville i fw1 f1">Title</h1>
+      <h2 class="mt2 mb0 f6 fw4 ttu tracked">Your amazing subtitle</h2>
+      <nav class="bt bb tc mw7 center mt4">
+        <a class="f6 f5-l link bg-animate black-80 hover-bg-lightest-blue dib pa3 ph4-l" href="/">Home</a>
+        <a class="f6 f5-l link bg-animate black-80 hover-bg-light-green dib pa3 ph4-l" href="/portfolio">Portfolio</a>
+        <a class="f6 f5-l link bg-animate black-80 hover-bg-light-blue dib pa3 ph4-l" href="/shop">Shop</a>
+        <a class="f6 f5-l link bg-animate black-80 hover-bg-light-pink dib pa3 ph4-l" href="/about">About</a>
+        <a class="f6 f5-l link bg-animate black-80 hover-bg-light-yellow dib pa3 ph4-l" href="/contact">Contact</a>
+      </nav>
+    </header>
+    <section>
+      <ul id="owers"></ul>
+    </section>
+  </body>
+</html>
