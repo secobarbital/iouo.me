@@ -1,0 +1,22 @@
+{
+  "name": "iouo.me",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/secobarbital/iouo.me.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/secobarbital/iouo.me/issues"
+  },
+  "homepage": "https://github.com/secobarbital/iouo.me#readme",
+  "devDependencies": {
+    "couchdb-bootstrap": "^14.2.0"
+  }
+}
