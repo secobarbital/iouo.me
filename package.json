@@ -7,15 +7,19 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
-    "couchdb-bootstrap": "^14.2.0"
+    "couchdb-bootstrap": "^14.2.0",
+    "dotenv": "^6.1.0"
   },
+  "devDependencies": {},
   "engines": {
     "node": "10.13.0",
     "npm": "6.4.1",
     "yarn": "1.12.1"
   },
-  "devDependencies": {},
   "main": "index.js",
+  "scripts": {
+    "bootstrap": "bin/bootstrap.js"
+  },
   "repository": "https://github.com/secobarbital/iouo.me.git",
   "author": "Seggy Umboh <seg@seg.gy>",
   "license": "MIT"
