@@ -11,8 +11,7 @@ const route = pathMatch()
 const owees = route('/balances/:ower')
 const transactions = route('/transactions/:ower/:owee')
 
-app.prepare()
-.then(() => {
+app.prepare().then(() => {
   createServer((req, res) => {
     const { pathname } = parse(req.url)
     const oweesParams = owees(pathname)
@@ -27,8 +26,8 @@ app.prepare()
     }
     handle(req, res)
   })
-  .listen(3000, (err) => {
+  .listen(port, (err) => {
     if (err) throw err
-    console.log('> Ready on http://localhost:3000')
+    console.log(`> Ready on http://localhost:${port}`)
   })
 })

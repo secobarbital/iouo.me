@@ -19,14 +19,14 @@
   },
   "homepage": "https://github.com/secobarbital/iouo.me#readme",
   "dependencies": {
-    "accounting": "^0.4.1",
-    "babel-plugin-transform-define": "^1.2.0",
-    "fetch-ponyfill": "^4.0.0",
-    "isomorphic-base64": "^1.0.2",
-    "next": "^2.0.0-beta.39",
-    "react": "^15.4.2",
-    "react-dom": "^15.4.2",
-    "react-timeago": "^3.2.0",
-    "url-parse": "^1.1.8"
+    "accounting-js": "1.1.1",
+    "isomorphic-base64": "1.0.2",
+    "isomorphic-unfetch": "3.0.0",
+    "next": "7.0.2",
+    "path-match": "1.2.4",
+    "react": "16.7.0",
+    "react-dom": "16.7.0",
+    "react-timeago": "4.3.0",
+    "url-parse": "1.4.4"
   }
 }

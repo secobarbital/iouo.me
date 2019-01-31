@@ -1,5 +1,4 @@
-import React from 'react'
-import accounting from 'accounting'
+import accounting from 'accounting-js'
 
 export default ({ amount }) => (
    <span>

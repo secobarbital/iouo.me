@@ -1,8 +1,11 @@
-import fetchPonyfill from 'fetch-ponyfill'
+import fetch from 'isomorphic-unfetch'
 import parse, { qs } from 'url-parse'
 import { btoa } from 'isomorphic-base64'
 
-const { fetch, Headers } = fetchPonyfill()
+import {
+  COUCHDB_URL_READONLY,
+  COUCHDB_NAME
+} from '.'
 
 const parsed = parse(`${COUCHDB_URL_READONLY}/${COUCHDB_NAME}`, true)
 const { auth } = parsed
@@ -11,12 +14,12 @@ parsed.set('password', '')
 const base = parsed.toString()
 
 async function get (url) {
-  const headers = new Headers()
-  if (auth) {
-    headers.append('Authorization', `Basic ${btoa(auth)}`)
-  }
-  const res = await fetch(url, { headers })
-  return res.json()
+  const options = auth
+    ? { headers: { Authorization: `Basic ${btoa(auth)}` } }
+    : {}
+  const res = await fetch(url, options)
+  const json = await res.json()
+  return json
 }
 
 export default {
