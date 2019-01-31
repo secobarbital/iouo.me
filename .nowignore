@@ -1,0 +1,7 @@
+.DS_Store
+.env*
+.next
+.node-version
+attic
+node_modules
+npm-debug.log

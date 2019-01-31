@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "builds": [
+    { "src": "next.config.js", "use": "@now/next" }
+  ],
+  "routes": [
+    { "src": "/balances/(?<ower>[^/]*)", "dest": "/balances?ower=$ower" },
+    { "src": "/transactions/(?<ower>[^/]*)/(?<owee>[^/]*)", "dest": "/transactions?ower=$ower,owee=$owee" }
+  ]
+}

@@ -1,13 +1,12 @@
 import fetch from 'isomorphic-unfetch'
+import getConfig from 'next/config'
 import parse, { qs } from 'url-parse'
 import { btoa } from 'isomorphic-base64'
 
-import {
-  COUCHDB_URL_READONLY,
-  COUCHDB_NAME
-} from '.'
+const { publicRuntimeConfig } = getConfig()
+const { couchdbName, couchdbUrl } = publicRuntimeConfig
 
-const parsed = parse(`${COUCHDB_URL_READONLY}/${COUCHDB_NAME}`, true)
+const parsed = parse(`${couchdbUrl}/${couchdbName}`, true)
 const { auth } = parsed
 parsed.set('username', '')
 parsed.set('password', '')

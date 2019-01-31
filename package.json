@@ -3,9 +3,9 @@
   "version": "2.0.0",
   "description": "Why pay when you can owe?",
   "scripts": {
-    "dev": "node server.js",
+    "dev": "next",
     "build": "next build",
-    "start": "NODE_ENV=production node server.js",
+    "start": "next start",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
