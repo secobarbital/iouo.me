@@ -9,7 +9,7 @@ export default ({ ower, owee, total, row }) => {
   const textClass = `media-body text-${dir}`
   return (
     <a className="list-group-item media list-group-link list-group-media" href={href}>
-      <img className={avatarClass} src={tweet.user.profile_image_url} />
+      <img className={avatarClass} src={tweet.user.profile_image_url_https} />
       <div className={textClass}>
         <div>{tweet.text}</div>
         <small className="text-muted">
