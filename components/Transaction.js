@@ -16,6 +16,16 @@ export default ({ ower, owee, total, row }) => {
           &mdash; {tweet.user.screen_name} <TimeAgo date={tweet.created_at} />
         </small>
       </div>
+      <style jsx>{`
+        img {
+          height: 40px;
+          width: 50px;
+        }
+
+        .list-group-media {
+          margin-top: 0;
+        }
+      `}</style>
     </a>
   )
 }
