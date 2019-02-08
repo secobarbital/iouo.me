@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "alias": [
+    "iouo.me"
+  ],
+  "routes": [
+   { "src": "/(.*)", "status": 301, "headers": { "Location": "https://www.iouo.me/$1" }}
+  ]
+}

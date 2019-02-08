@@ -1,5 +1,8 @@
 {
   "version": 2,
+  "alias": [
+    "www.iouo.me"
+  ],
   "builds": [
     { "src": "package.json", "use": "@now/next" }
   ],
