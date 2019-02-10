@@ -1,16 +1,16 @@
-import Link from 'next/link'
+import Link from "next/link";
 
-import Amount from './Amount'
+import Amount from "./Amount";
 
 export default ({ row }) => {
-  const [ower] = row.key
-  const amount = row.value.toFixed(2)
-  const verb = amount > 0 ? 'owes' : 'is owed'
-  const as = `/balances/${ower}`
+  const [ower] = row.key;
+  const amount = row.value.toFixed(2);
+  const verb = amount > 0 ? "owes" : "is owed";
+  const as = `/balances/${ower}`;
   const href = {
-    pathname: '/balances',
+    pathname: "/balances",
     query: { ower }
-  }
+  };
   return (
     <Link href={href} as={as}>
       <a className="list-group-item list-group-link">
@@ -21,5 +21,5 @@ export default ({ row }) => {
         </div>
       </a>
     </Link>
-  )
-}
+  );
+};

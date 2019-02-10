@@ -1,8 +1,6 @@
 {
   "version": 2,
-  "alias": [
-    "www.iouo.me"
-  ],
+  "alias": ["www.iouo.me"],
   "builds": [
     { "src": "www/package.json", "use": "@now/next" },
     { "src": "api/**/*.js", "use": "@now/node" }
@@ -10,7 +8,10 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/balances/(?<ower>[^/]*)", "dest": "/www/balances?ower=$ower" },
-    { "src": "/transactions/(?<ower>[^/]*)/(?<owee>[^/]*)", "dest": "/www/transactions?ower=$ower&owee=$owee" },
+    {
+      "src": "/transactions/(?<ower>[^/]*)/(?<owee>[^/]*)",
+      "dest": "/www/transactions?ower=$ower&owee=$owee"
+    },
     { "src": "/(.*)", "dest": "/www/$1", "headers": { "x-request-path": "$1" } }
   ]
 }

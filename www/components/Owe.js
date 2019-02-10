@@ -1,19 +1,19 @@
-import Layout from './Layout'
+import Layout from "./Layout";
 
 export default class extends React.Component {
-  state = { name: '', amount: '' };
+  state = { name: "", amount: "" };
 
-  onChangeName = (event) => {
-    this.setState({ name: event.target.value })
+  onChangeName = event => {
+    this.setState({ name: event.target.value });
   };
 
-  onChangeAmount = (event) => {
-    this.setState({ amount: event.target.value })
+  onChangeAmount = event => {
+    this.setState({ amount: event.target.value });
   };
 
-  render () {
-    const { name, amount } = this.state
-    const text = `@${name} #iou $${amount}`
+  render() {
+    const { name, amount } = this.state;
+    const text = `@${name} #iou $${amount}`;
     return (
       <Layout>
         <section>
@@ -48,11 +48,13 @@ export default class extends React.Component {
                   />
                 </div>
               </div>
-              <button className="btn btn-default" type="submit">Tweet It</button>
+              <button className="btn btn-default" type="submit">
+                Tweet It
+              </button>
             </fieldset>
           </form>
         </section>
       </Layout>
-    )
+    );
   }
 }

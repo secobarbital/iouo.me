@@ -1,5 +1,3 @@
-import Owe from '../../components/Owe'
+import Owe from "../../components/Owe";
 
-export default () => (
-  <Owe />
-)
+export default () => <Owe />;
