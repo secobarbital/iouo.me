@@ -2,9 +2,7 @@ import fetch from "isomorphic-unfetch";
 import parse, { qs } from "url-parse";
 import { btoa } from "isomorphic-base64";
 
-import { COUCHDB_NAME, COUCHDB_URL_READONLY } from ".";
-
-const parsed = parse(`${COUCHDB_URL_READONLY}/${COUCHDB_NAME}`, true);
+const parsed = parse(`${process.env.COUCHDB_URL_READONLY}/${process.env.COUCHDB_NAME}`, true);
 const { auth } = parsed;
 parsed.set("username", "");
 parsed.set("password", "");

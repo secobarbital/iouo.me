@@ -2,6 +2,8 @@
   "name": "www.iouo.me",
   "version": "3.0.0",
   "description": "Web frontend for iouo.me",
+  "license": "ISC",
+  "private": true,
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -12,7 +14,7 @@
     "accounting-js": "1.1.1",
     "isomorphic-base64": "1.0.2",
     "isomorphic-unfetch": "3.0.0",
-    "next": "8.0.0-canary.19",
+    "next": "8.0.0",
     "path-match": "1.2.4",
     "react": "16.8.1",
     "react-dom": "16.8.1",

@@ -1,0 +1,7 @@
+{
+    "name": "api.iouo.me",
+    "version": "3.0.0",
+    "description": "API for iouo.me",
+    "license": "ISC",
+    "private": true
+}
