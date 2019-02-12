@@ -5,6 +5,11 @@
     { "src": "www/package.json", "use": "@now/next" },
     { "src": "api/**/*.js", "use": "@now/node" }
   ],
+  "build": {
+    "env": {
+      "COUCHDB_URL_READONLY": "@couchdb-url-readonly"
+    }
+  },
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
     { "src": "/balances/(?<ower>[^/]*)", "dest": "/www/balances?ower=$ower" },
