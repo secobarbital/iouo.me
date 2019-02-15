@@ -1,4 +1,4 @@
-import db from "../../config/db";
+import db from "../../../common/config/db";
 import Owees from "../../components/Owees";
 
 const Balances = ({ err, ower, rows, total }) =>

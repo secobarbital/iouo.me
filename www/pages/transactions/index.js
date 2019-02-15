@@ -1,4 +1,4 @@
-import db from "../../config/db";
+import db from "../../../common/config/db";
 import Transactions from "../../components/Transactions";
 
 const TransactionsPage = ({ err, ower, owee, rows, total }) =>

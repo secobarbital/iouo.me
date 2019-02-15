@@ -1,4 +1,4 @@
-import db from "../config/db";
+import db from "../../common/config/db";
 import Owers from "../components/Owers";
 
 const Home = ({ err, rows }) =>
